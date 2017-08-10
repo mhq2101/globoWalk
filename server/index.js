@@ -1,11 +1,11 @@
-console.log('hello jonathan')
-
 const path = require('path');
 
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const volleyball = require('volleyball');
+
+const db = require('../db')
 
 app.use(volleyball);
 
@@ -23,7 +23,7 @@ app.get('*', function (req, res) {
 
 app.listen(2001, function () {
   console.log("Your server, listening on port 2001");
-});
+})
 
 app.use(function (err, req, res, next) {
   console.error(err);
