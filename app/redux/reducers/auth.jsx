@@ -4,7 +4,7 @@ import store from '../../store';
 
 /* --------------- INITIAL STATE --------------- */
 
-const initialState = "";
+const initialState = {};
 
 /* --------------- ACTIONS --------------- */
 
@@ -24,16 +24,18 @@ export const signup = (email, password) => {
 };
 
 export const login = (username, password) => {
-  return dispatch =>
-    axios.post('/api/auth/login', { username, password })
-      .then(response => {
-        const user = response.data;
-        dispatch(authenticated(user));
-      })
-      .then(() => browserHistory.push('/vr'))
-      .catch(err => {
-        console.error(err)
-      });
+    console.log("we're here")
+    return dispatch =>
+        axios.post('/api/auth/login', { username, password })
+        .then(response => {
+            console.log("response", response.data)
+            const user = response.data;
+            dispatch(authenticated(user));
+        })
+        //.then(() => browserHistory.push('/vr'))
+        .catch(err => {
+            console.error(err)
+        });
 };
 
 export const logout = () =>
@@ -49,7 +51,7 @@ export const whoami = () => {
         const user = response.data;
         dispatch(authenticated(user));
       })
-      .catch(failed => console.error(err));
+      .catch(err => console.error(err));
 };
 
 /* --------------- REDUCER --------------- */
