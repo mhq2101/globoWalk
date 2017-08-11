@@ -14,6 +14,10 @@ const passport = require('passport');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const dbStore = new SequelizeStore({ db: db });
 
+if (process.env.NODE_ENV !== 'production') {
+  require('../localSecrets'); // this will mutate the process.env object with your secrets.
+}
+
 // sync so that our session table gets created
 dbStore.sync();
 
@@ -24,7 +28,6 @@ app.use(volleyball);
 app.use(session({
   secret: process.env.SESSION_SECRET || 'a wildly insecure secret',
   resave: false,
-  saveUninitialized: false,
   saveUninitialized: false
 }));
 

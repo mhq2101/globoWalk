@@ -1,6 +1,8 @@
 const auth = require('express').Router();
 const passport = require('passport');
 
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 const User = require('../../db').model('user');
 
 passport.serializeUser((user, done) => {
@@ -20,7 +22,6 @@ passport.deserializeUser((id, done) => {
 auth.get('/users', (req, res, next) => {
   User.findAll()
   .then((users) => {
-    console.log("asdasd")
     res.json(users)
   })
   .catch(error => console.error(error))
@@ -29,6 +30,52 @@ auth.get('/users', (req, res, next) => {
 auth.get('/me', (req, res, next) => {
   res.json(req.user);
 });
+
+//OAuth Google
+auth.get('/google/login', 
+  passport.authenticate('google', {
+    scope: 'email'
+  })
+);
+
+// collect our google configuration into an object
+const googleConfig = {
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: '/api/auth/google/callback'
+};
+
+// configure the strategy with our config object, and write the function that passport will invoke after google sends
+// us the user's profile and access token
+passport.use(
+  new GoogleStrategy(googleConfig, 
+    function (token, refreshToken, profile, done) {
+      const googleId = profile.id;
+      const name = profile.displayName;
+      const email = profile.emails[0].value;
+
+  User.findOne({where: { googleId: googleId  }})
+    .then(function (user) {
+      if (!user) {
+        return User.create({ name, email, googleId })
+          .then(function (user) {
+            done(null, user);
+          });
+      } else {
+        done(null, user);
+      }
+    })
+    .catch(done);
+  })
+);
+
+//OAuth Google Callback - handle the callback after Google has authenticated the user
+auth.get('/google/callback', 
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  })
+);
 
 auth.post('/signup', (req, res, next) => {
   User.create(req.body)

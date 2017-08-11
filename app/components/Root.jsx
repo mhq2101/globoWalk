@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router, Route, browserHistory, IndexRedirect, Switch } from 'react-router';
+import { Route, browserHistory, IndexRedirect, Switch } from 'react-router';
 import Home from './Home'
 
 // import App from './components/App';
@@ -13,14 +13,6 @@ import Home from './Home'
 
 export default class Root extends React.Component {
 
-    // componentDidMount() {
-    //     const guitarsThunk = fetchAllGuitars();
-    //     store.dispatch(guitarsThunk);
-
-    //     const brandsThunk = fetchAllBrands();
-    //     store.dispatch(brandsThunk);
-
-    // }
     render() {
         return (
             <div>

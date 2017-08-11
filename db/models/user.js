@@ -16,6 +16,9 @@ const User = db.define('user', {
   salt: {
     type: Sequelize.STRING
   },
+  googleId: {
+    type: Sequelize.STRING
+  },
 }, {
   hooks: {
     beforeCreate: setSaltAndPassword,
@@ -36,6 +39,13 @@ User.encryptPassword = function (plainText, salt) {
     return hash.digest('hex');
 }
 
+function setSaltAndPassword (user) {
+  if (user.changed('password')) {
+    user.salt = User.generateSalt();
+    user.password = User.encryptPassword(user.password, user.salt);
+  }
+}
+
 
 //Instance Methods
 User.prototype.sanitize = function () {
@@ -44,14 +54,6 @@ User.prototype.sanitize = function () {
 
 User.prototype.correctPassword = function (candidatePassword) {
     return User.encryptPassword(candidatePassword, this.salt) === this.password;
-}
-
-
-function setSaltAndPassword (user) {
-  if (user.changed('password')) {
-    user.salt = User.generateSalt();
-    user.password = User.encryptPassword(user.password, user.salt);
-  }
 }
 
 module.exports = User
