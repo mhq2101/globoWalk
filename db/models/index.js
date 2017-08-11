@@ -1,3 +1,4 @@
 const Dummy = require('./dummy');
+const User = require('./user')
 
-module.exports = {Dummy};
+module.exports = {Dummy, User};
