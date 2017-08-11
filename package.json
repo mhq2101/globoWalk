@@ -29,6 +29,7 @@
     "lodash": "^4.17.4",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
     "pg": "^7.1.0",
     "pg-hstore": "^2.3.2",
     "react": "^15.6.1",
@@ -39,6 +40,7 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
+    "save": "^2.3.1",
     "sequelize": "^4.4.2",
     "volleyball": "^1.4.1"
   },

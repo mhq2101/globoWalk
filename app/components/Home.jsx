@@ -53,7 +53,7 @@ class Home extends React.Component {
                         <button type="submit">Log In</button>
                     </div>
                 </form>
-                <button type="submit" onSubmit={this.props.logout}>Logout</button>
+                <button type="submit" onClick={this.props.logout}>Logout</button>
                 <div>
                     <a target="_self" href="/api/auth/google/login">
                         <span className="fa fa-google" ></span>

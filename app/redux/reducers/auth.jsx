@@ -23,16 +23,15 @@ export const signup = (email, password) => {
       .catch(err => console.log(err.message));
 };
 
-export const login = (username, password) => {
+export const login = (email, password) => {
     console.log("we're here")
     return dispatch =>
-        axios.post('/api/auth/login', { username, password })
+        axios.post('/api/auth/login', { email, password })
         .then(response => {
-            console.log("response", response.data)
             const user = response.data;
             dispatch(authenticated(user));
         })
-        //.then(() => browserHistory.push('/vr'))
+        //.then(() => browserHistory.push('/'))
         .catch(err => {
             console.error(err)
         });

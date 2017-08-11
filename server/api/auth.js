@@ -27,10 +27,6 @@ auth.get('/users', (req, res, next) => {
   .catch(error => console.error(error))
 })
 
-auth.get('/me', (req, res, next) => {
-  res.json(req.user);
-});
-
 //OAuth Google
 auth.get('/google/login', 
   passport.authenticate('google', {
@@ -110,6 +106,10 @@ auth.post('/login', (req, res, next) => {
 auth.post('/logout', (req, res, next) => {
   req.logout();
   res.sendStatus(200);
+});
+
+auth.get('/me', (req, res, next) => {
+  res.json(req.user);
 });
 
 module.exports = auth;
