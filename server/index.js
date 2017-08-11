@@ -17,16 +17,10 @@ const dbStore = new SequelizeStore({ db: db });
 // sync so that our session table gets created
 dbStore.sync();
 
+//error logging middleware?
 app.use(volleyball);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
-app.use(express.static(path.join(__dirname, '../public')));
-
-app.use('/api', require('./apiRoutes'));
-
+// Set up session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET || 'a wildly insecure secret',
   resave: false,
@@ -34,9 +28,21 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// Body parsing middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Authentication middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
+//serve static files
+app.use(express.static(path.join(__dirname, '../public')));
+
+//routes
+app.use('/api', require('./api'));
+
+// Send index.html for anything else
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
