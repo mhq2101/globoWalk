@@ -9,7 +9,7 @@ class AframeTest extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			canvToImg: undefined,
+			panoImgSrc: undefined,
 			mapData: {}
 		};
 		this.getPanoramaData = this.getPanoramaData.bind(this);
@@ -17,6 +17,12 @@ class AframeTest extends React.Component {
 
 	componentWillMount() {
 		this.getPanoramaData(this.props.panoId);
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (this.props.panoId !== newProps.panoId) {
+			this.getPanoramaData(newProps.panoId);
+		}
 	}
 
 	getPanoramaData(panoId) {
@@ -28,16 +34,16 @@ class AframeTest extends React.Component {
 				crossOrigin: 'Anonymous'
 			})
 				.on('complete', canvas => {
-					let canvToImg = canvas.toDataURL('image/jpeg');
-					this.setState({ canvToImg, mapData });
+					let panoImgSrc = canvas.toDataURL('image/jpeg');
+					this.setState({ panoImgSrc, mapData });
 				});
 		});
 	}
 
 	render() {
-		if (!this.state.canvToImg) return <h1>Loading</h1>;
+		if (!this.state.panoImgSrc) return <h1>Loading</h1>;
 		return (
-			<GMapImage canvToImg={this.state.canvToImg} mapData={this.state.mapData} />);
+			<GMapImage panoImgSrc={this.state.panoImgSrc} mapData={this.state.mapData} />);
 	}
 }
 

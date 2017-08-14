@@ -1,6 +1,6 @@
 const SET_PANO_ID = 'SET_PANO_ID';
 
-const setPanoId = panoId => ({ type: SET_PANO_ID, panoId });
+export const setPanoId = panoId => ({ type: SET_PANO_ID, panoId });
 
 export const setCurrentPanoId = panoId => dispatch => {
 	dispatch(setPanoId(panoId));
