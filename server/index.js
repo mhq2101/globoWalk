@@ -1,9 +1,29 @@
 const path = require('path');
-
+const chalk = require('chalk');
+const http = require('http');
+const server = http.createServer();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const volleyball = require('volleyball');
+
+
+// const forceSSL = function (req, res, next) {
+//   if (req.headers['x-forwarded-proto'] !== 'https') {
+//     const clientIP = req.headers['x-forwarded-for'];
+//     const redirectTarget = ['https://', req.get('Host'), req.url].join('');
+//     console.log(chalk.blue(`Redirecting ${clientIP} to ${redirectTarget}`));
+//     return res.redirect(redirectTarget);
+//   }
+//   return next();
+// };
+
+// if (process.env.NODE_ENV === 'production') {
+//   console.log(chalk.blue('Production Environment detected, so redirect to HTTPS'));
+//   app.use(forceSSL);
+// }
+
+
 
 const db = require('../db')
 const session = require('express-session');
@@ -39,6 +59,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Setting up socket.io
+const socketio = require('socket.io');
+server.on('request', app);
+const io = socketio(server);
+require('./socket')(io);
+
 //serve static files
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -50,9 +76,16 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-app.listen(2001, function () {
-  console.log("Your server, listening on port 2001");
-})
+const port = process.env.PORT || 1337;
+server.listen(port, () => {
+  console.log(chalk.blue(`--- Listening on port ${port} ---`));
+});
+
+// app.listen(2001, function () {
+//   console.log("Your server, listening on port 2001");
+// })
+
+
 
 app.use(function (err, req, res, next) {
   console.error(err);

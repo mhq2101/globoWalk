@@ -4,6 +4,7 @@ import Audio from './Audio'
 import Home from './Home'
 import {fetchAudio} from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
+import {joinChatRoom} from '../webRTC/client.jsx'
 
 // import App from './components/App';
 // import Home from './components/Login/Home';
@@ -17,7 +18,8 @@ import store from '../store.jsx';
 export default class Root extends React.Component {
 
     componentDidMount() {
-      store.dispatch(fetchAudio())
+      // store.dispatch(fetchAudio())
+      joinChatRoom('lobby')
       
     }
 

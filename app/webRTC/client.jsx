@@ -1,8 +1,8 @@
-import store from '../redux/store';
-import { setUserMedia } from '../redux/reducers/audioStream';
-import store from '../redux/store';
+import store from '../store.jsx';
 import { setUserMedia, addPeer, deletePeer, clearPeers } from '../redux/reducers/webrtc-reducer';
-
+// import io from 'socket.io-client';
+// All A-Frame components need access to the socket instance
+// window.socket = io.connect(window.location.origin);
 /** You should probably use a different stun server doing commercial stuff **/
 /** Also see: https://gist.github.com/zziuni/3741933 **/
 const ICE_SERVERS = [
@@ -38,17 +38,19 @@ let peerMediaElements = {};  // keep track of our <audio> tags, indexed by peer_
 
 export function joinChatRoom (room, errorback) {
   // Get our microphone from the state
-  console.log(store.getState());
+  console.log("state", store.getState());
   const localMediaStream = store.getState().webrtc.get('localMediaStream');
 
   if (!room) {
     console.log('No room was provided');
     return;
   }
+  console.log(signalingSocket)
   if (signalingSocket === null) {
     signalingSocket = window.socket;
+    console.log('after', signalingSocket)
   }
-  if (localMediaStream != null) {  /* ie, if we've already been initialized */
+  if (localMediaStream !== null) {  /* ie, if we've already been initialized */
     signalingSocket.emit('joinChatRoom', room);
     return;
   }
@@ -68,6 +70,7 @@ export function joinChatRoom (room, errorback) {
     function () {
       console.log('Access denied for audio/video');
       window.alert('You chose not to provide access to your microphone, so real-time voice chat is unavailable.');
+      
       if (errorback) errorback();
     });
 }
@@ -125,6 +128,7 @@ export function addPeerConn (config) {
     remoteAudio.srcObject = event.stream;
   };
   /* Add our local stream */
+  //WHY??
   peerConnection.addStream(store.getState().webrtc.get('localMediaStream'));
   /* Only one side of the peer connection should create the
   * offer, the signaling server picks one to be the offerer.
@@ -221,28 +225,4 @@ export function disconnectUser () {
   });
   store.dispatch(clearPeers());
   peerMediaElements = {};
-}
-
-
-
-export default function mountAudio() {
-
-  const audioStream = store.getState().audioStream
-  if (audioStream !== null) {
-    return;
-  }
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-  console.log('Requesting access to local audio');
-  navigator.getUserMedia({ 'audio': true },
-    // On Success
-    function (stream) {
-      console.log('Access granted to audio');
-      store.dispatch(setUserMedia(stream));
-    },
-    // On Failure
-    function () {
-      console.log('Access denied for audio/video');
-      window.alert('You chose not to provide access to your microphone, so real-time voice chat is unavailable.');
-      if (errorback) errorback();
-    });
 }
