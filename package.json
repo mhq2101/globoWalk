@@ -48,6 +48,8 @@
     "redux-thunk": "^2.2.0",
     "save": "^2.3.1",
     "sequelize": "^4.4.2",
+    "socket.io": "^1.7.2",
+    "socket.io-client": "^1.7.2",
     "volleyball": "^1.4.1"
   },
   "devDependencies": {
