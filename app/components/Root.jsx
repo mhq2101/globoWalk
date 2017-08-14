@@ -1,7 +1,8 @@
 import React from 'react'
 import { Route, browserHistory, IndexRedirect, Switch } from 'react-router';
-import Home from './Home'
 
+import Home from './Home';
+import AframeTest from './AframeTest';
 // import App from './components/App';
 // import Home from './components/Login/Home';
 // import Login from './components/Login/Login';
@@ -13,16 +14,12 @@ import Home from './Home'
 
 export default class Root extends React.Component {
 
-    render() {
-        return (
-            <div>
-                <div>
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                    </Switch>
-                </div>
-
-            </div>
-        )
-    }
+	render() {
+		return (
+			<Switch>
+				<Route exact path="/" component={Home} />
+				<Route path="/aframe" component={AframeTest} />
+			</Switch>
+		)
+	}
 }

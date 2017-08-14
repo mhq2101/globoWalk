@@ -20,19 +20,9 @@ export default class AframeTest extends React.Component {
 				zoom: 3,
 				crossOrigin: 'Anonymous'
 			})
-				.on('start', () => {
-					// return (null);
-				})
-				.on('progress', () => {
-					console.log('loading');
-					// return (<h1>Loading</h1>);
-				})
 				.on('complete', image => {
 					let canvToImg = convertCanvasToImage(image);
-					console.log(canvToImg);
 					this.setState({ canvToImg });
-					// document.body.appendChild(canvToImg);
-					// return (canvToImg);
 				});
 		});
 	}
@@ -40,14 +30,12 @@ export default class AframeTest extends React.Component {
 	render() {
 		if (!this.state.canvToImg) return <h1>Loading</h1>;
 		return (
-			<div>
-				<Scene>
-					<a-assets>
-						<img id="panorama" src={this.state.canvToImg.src} />
-					</a-assets>
-					<Entity primitive="a-sky" src="#panorama" />
-				</Scene>
-			</div>);
+			<Scene vr-mode-ui="enabled: true;">
+				<a-assets>
+					<img id="panorama" src={this.state.canvToImg.src} />
+				</a-assets>
+				<Entity primitive="a-sky" src="#panorama" />
+			</Scene>);
 	}
 }
 
