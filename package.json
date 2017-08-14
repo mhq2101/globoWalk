@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/mhq2101/globoWalk#readme",
   "dependencies": {
+    "aframe": "^0.6.1",
+    "aframe-react": "^4.3.0",
     "axios": "^0.16.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
