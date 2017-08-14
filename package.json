@@ -5,7 +5,10 @@
   "main": "/server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack -w & nodemon ./server/index.js",
+    "start": "node server/index.js",
+    "start-watch": "npm-run-all --parallel webpack-watcher node-watcher",
+    "webpack-watcher": "webpack -w",
+    "node-watcher": "nodemon server/index.js",
     "db-init": "pg-init globoWalk",
     "postinstall": "npm run db-init"
   },
@@ -57,6 +60,7 @@
     "css-loader": "^0.28.4",
     "node-sass": "^4.5.3",
     "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "webpack": "^3.5.3"
