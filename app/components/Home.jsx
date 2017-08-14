@@ -7,6 +7,8 @@ import { login, logout, signup } from '../redux/reducers/auth';
 
 class Home extends React.Component {
 
+
+  
     render() {
         return (
             <div>

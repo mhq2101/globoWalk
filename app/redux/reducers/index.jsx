@@ -3,7 +3,7 @@ import dummy from './dummy.jsx';
 import auth from './auth';
 import audioStream from './audioStream';
 import audioContext from './audioContext';
-import webRtc from './webRtc';
+import webRtc from './webrtc-reducer';
 
 
 
@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
     auth: auth,
     audioStream: audioStream,
     audioCtx: audioContext,
-    webRtc: webRtc
+    webrtc: webRtc
 
 });
 
