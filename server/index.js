@@ -49,9 +49,9 @@ app.use('/api', require('./api'));
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
-
-app.listen(2001, function () {
-  console.log("Your server, listening on port 2001");
+const port = process.env.PORT || 1337;
+app.listen(port, function () {
+  console.log(`Your server, listening on port ${port}`);
 })
 
 app.use(function (err, req, res, next) {
