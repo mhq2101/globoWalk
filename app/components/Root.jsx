@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { connect } from 'react-redux';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import Audio from './Audio';
@@ -9,6 +10,13 @@ import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 // import {joinChatRoom} from '../webRTC/client.jsx';
 
+import Audio from './Audio';
+import Home from './Home';
+import { fetchAudio } from '../redux/reducers/audioStream.jsx';
+import store from '../store.jsx';
+import { joinChatRoom } from '../webRTC/client.jsx';
+import RenderGMapImage from './RenderGMapImage';
+import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import App from './components/App';
 // import Home from './components/Login/Home';
 // import Login from './components/Login/Login';
@@ -24,6 +32,13 @@ class Root extends React.Component {
     //joinChatRoom('lobby')
 
   }
+        
+  componentWillMount() {
+		this.props.setCurrentPanoId('dXZfBMex9_L7jO2JW3FTdA');
+		// store.dispatch(fetchAudio())
+		joinChatRoom('lobby');
+	}
+  
 
   render() {
     return (
@@ -41,6 +56,7 @@ class Root extends React.Component {
           />
           <Route exact path='/user' component={UserPage} />
           <Route exact path='/login' component={Login} />
+          <Route path="/aframe" component={RenderGMapImage} />
           <Route exact path='/audio' component={Audio} />
         </Switch>
       </div>
@@ -52,8 +68,6 @@ const mapState = ({ auth }) => ({
   auth
 });
 
-const mapDispatch = dispatch => ({
-
-});
+const mapDispatch = { setCurrentPanoId };
 
 export default withRouter(connect(mapState, mapDispatch)(Root))
