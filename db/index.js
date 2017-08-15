@@ -17,9 +17,9 @@ require('./models')
  
 // Sync the db, creating it if necessary
 function sync (force = process.env.NODE_ENV === 'testing') {
- return db.sync({ force: false })
+ return db.sync({ force: true })
    .then(ok => console.log(chalk.blue(`Synced models to db ${url}`)))
-   //.then(() => require('../server'))
+   .then(() => require('../server'))
    .catch(error => console.error(error))
 }
 

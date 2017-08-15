@@ -1,4 +1,9 @@
-const Dummy = require('./dummy');
-const User = require('./user')
+const Chatroom = require('./chatroom');
+const User = require('./user');
+const Session = require('./session');
 
-module.exports = {Dummy, User};
+
+Session.belongsTo(User);
+User.hasOne(Session);
+
+module.exports = {Chatroom, User, Session};

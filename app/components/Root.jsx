@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, browserHistory, Redirect, Switch } from 'react-router';
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import Audio from './Audio';
 import Home from './Home';
 import Login from './Login';
 import UserPage from './UserPage';
-import {fetchAudio} from '../redux/reducers/audioStream.jsx';
+import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 // import {joinChatRoom} from '../webRTC/client.jsx';
 
@@ -19,44 +19,41 @@ import store from '../store.jsx';
 
 class Root extends React.Component {
 
-    componentDidMount() {
-      // store.dispatch(fetchAudio())
-      //joinChatRoom('lobby')
-      
-    }
+  componentDidMount() {
+    // store.dispatch(fetchAudio())
+    //joinChatRoom('lobby')
 
-    render() {
-        return (
-            <div>
-                <div>
-                    <Switch>
-                        <Route exact path='/' render={() => (
-                            (this.props.auth.id) ? (
-                            <div>
-                                <Redirect to="/user"/>
-                                <UserPage />
-                            </div>
-                            ) : (
-                            <Home />
-                            )
-                            )}
-                        />
-                        <Route exact path='/login' component={Login} />
-                        <Route exact path='/audio' component={Audio} />
-                    </Switch>
-                </div>
+  }
 
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <Switch>
+          <Route exact path='/' render={() => (
+            (this.props.auth.id) ? (
+              <div>
+                <Redirect to="/user" />
+              </div>
+            ) : (
+                <Home />
+              )
+          )}
+          />
+          <Route exact path='/user' component={UserPage} />
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/audio' component={Audio} />
+        </Switch>
+      </div>
+    )
+  }
 }
 
 const mapState = ({ auth }) => ({
-    auth 
+  auth
 });
 
 const mapDispatch = dispatch => ({
-    
+
 });
 
-export default connect(mapState, mapDispatch)(Root)
+export default withRouter(connect(mapState, mapDispatch)(Root))

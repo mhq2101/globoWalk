@@ -1,33 +1,53 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import axios from 'axios'
-import {joinChatRoom} from '../webRTC/client.jsx'
+import {joinChatRoom, leaveChatRoom} from '../webRTC/client.jsx'
 import {updateChatroomName} from '../redux/reducers/chatroom'
 
 /* -------Component--------- */
 
 class UserPage extends React.Component {
 
+    constructor() {
+      super()
+      this.state = ({
+        canJoin: true
+      })
+    }
+
   
     render() {
+      let {canJoin} = this.state;
         return (
             <div>
                 <h1>Welcome User {this.props.auth.email}</h1>
-                {/* <form>
+                 <form onSubmit={(event) => {
+                    event.preventDefault()
+                    joinChatRoom(event.target.chatroom.value)
+                    this.setState({
+                      canJoin: false
+                    })
+                   }}>
                     <input
                         key="chatroom"
                         name="chatroom"
                         placeholder="create chatroom"
-                        onChange={this.props.handleChatroomChange}
-                        value={this.props.chatroom}
+                        
                     />
+                     <button type="submit" disabled={!canJoin}> Join Room </button>
                 </form>
-                <button type="submit" onClick={joinChatRoom(this.props.chatroom)}> Join Room {this.props.chatroom} </button> */}
-                <button type="submit" onClick={joinChatRoom("lobby")}> Join Room </button>
+                <button onClick={() => {
+                  leaveChatRoom()
+                  this.setState({
+                    canJoin: true
+                  })
+                    }} disabled={canJoin} > Leave Room </button>
             </div>
         )
     }
 }
+
+
 
 /*-------Container-----------*/
 

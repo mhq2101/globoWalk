@@ -51,6 +51,13 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// // Set up session middleware
+// app.use(require('cookie-session')({
+//   name: 'session',
+//   keys: [process.env.SESSION_SECRET || 'an insecure secret key']
+// }));
+
+
 // Body parsing middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

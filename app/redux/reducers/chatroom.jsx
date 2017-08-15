@@ -2,11 +2,12 @@
 
 const UPDATE_CHATROOM_NAME = 'UPDATE_CHATROOM_NAME';
 
-// ACTION CREATORS
+const SET_CURRENT_CHATROOM= 'SET_CURRENT_CHATROOM';
 
+// ACTION CREATORS
 export function updateChatroomName (chatroom) {
-  const action = { type: UPDATE_CHATROOM_NAME, chatroom };
-  return action;
+  return { type: SET_CURRENT_CHATROOM, chatroom };
+  
 }
 
 //Initial State
@@ -16,11 +17,11 @@ const initialState = {
 
 
 // REDUCER
-export default function chatroomReducer (state = initialState.chatroom, action) {
+export default function chatroomReducer (state = '', action) {
 
   switch (action.type) {
 
-    case UPDATE_CHATROOM_NAME:
+    case SET_CURRENT_CHATROOM:
       return action.chatroom;
 
     default:
