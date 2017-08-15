@@ -111,6 +111,9 @@ socket.on('addPeer', (config) => {
   console.log(config)
   addPeerConn(config);
 })
+// Adds a Peer to our DoM as their own Audio Element
+socket.on('addPeer', addPeerConn);
+
 // Removes Peer from DoM after they have disconnected or switched room
 socket.on('removePeer', removePeerConn);
 

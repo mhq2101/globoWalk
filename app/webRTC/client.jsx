@@ -38,17 +38,14 @@ let peerMediaElements = {};  // keep track of our <audio> tags, indexed by peer_
 
 export function joinChatRoom (room, errorback) {
   // Get our microphone from the state
-  console.log("state", store.getState());
   const localMediaStream = store.getState().webrtc.get('localMediaStream');
 
   if (!room) {
     console.log('No room was provided');
     return;
   }
-  console.log(signalingSocket)
   if (signalingSocket === null) {
     signalingSocket = window.socket;
-    console.log('after', signalingSocket)
   }
   if (localMediaStream !== null) {  /* ie, if we've already been initialized */
     signalingSocket.emit('joinChatRoom', room);

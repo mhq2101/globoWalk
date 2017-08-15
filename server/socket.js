@@ -92,15 +92,12 @@ module.exports = io => {
         store.dispatch(addRoom(room));
       }
       const roomOnState = store.getState().rooms.get(room);
-      console.log('afggh', roomOnState.valueSeq().toArray())
       
       roomOnState.valueSeq().toArray().forEach(peer => {
         // adds you to your peers
-        console.log("asdasd", peer)
         peer.emit('addPeer', { 'peer_id': socket.id, 'should_create_offer': false });
         // add your peers to you
         socket.emit('addPeer', { 'peer_id': peer.id, 'should_create_offer': true });
-        console.log('asdasd', peer.id)
       });
       store.dispatch(addSocketToRoom(room, socket));
       socket.join(room);
