@@ -19,7 +19,7 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 
 class Root extends React.Component {
 	componentWillMount() {
-		this.props.setCurrentPanoId('dXZfBMex9_L7jO2JW3FTdA');
+		this.props.setCurrentPanoId('bqcCYoJIe5gS-HNnRL2e1g');
 		// store.dispatch(fetchAudio())
 		joinChatRoom('lobby');
 	}

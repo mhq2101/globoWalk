@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import GMapImage from './GMapImage';
 import { setCurrentPanoImgSrc } from '../redux/reducers/panoImgSrc';
+import { setCurrentMapData } from '../redux/reducers/mapData';
 
 class RenderGMapImage extends React.Component {
 	constructor(props) {
@@ -26,6 +27,7 @@ class RenderGMapImage extends React.Component {
 	getPanoramaData(panoId) {
 		panoData(panoId, (err, mapData) => {
 			if (err) console.error(err);
+			this.props.setCurrentMapData(mapData);
 			panoLoad(panoId, {
 				tiles: mapData.tiles,
 				zoom: 3,
@@ -40,13 +42,12 @@ class RenderGMapImage extends React.Component {
 
 	render() {
 		if (!this.props.panoImgSrc) return <h1>Loading</h1>;
-		return (
-			<GMapImage />);
+		return (<GMapImage />);
 	}
 }
 
 const mapStateToProps = ({ panoId, panoImgSrc }) => ({ panoId, panoImgSrc });
 
-const mapDispatchToProps = { setCurrentPanoImgSrc };
+const mapDispatchToProps = { setCurrentPanoImgSrc, setCurrentMapData };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderGMapImage);
