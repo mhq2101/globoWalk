@@ -4,14 +4,12 @@ import panoData from 'google-panorama-by-id';
 import { connect } from 'react-redux';
 
 import GMapImage from './GMapImage';
+import { setCurrentPanoImgSrc } from '../redux/reducers/panoImgSrc';
 
-class AframeTest extends React.Component {
+class RenderGMapImage extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			panoImgSrc: undefined,
-			mapData: {}
-		};
+
 		this.getPanoramaData = this.getPanoramaData.bind(this);
 	}
 
@@ -34,19 +32,21 @@ class AframeTest extends React.Component {
 				crossOrigin: 'Anonymous'
 			})
 				.on('complete', canvas => {
-					let panoImgSrc = canvas.toDataURL('image/jpeg');
-					this.setState({ panoImgSrc, mapData });
+					const panoImg = canvas.toDataURL('image/jpeg');
+					this.props.setCurrentPanoImgSrc(panoImg);
 				});
 		});
 	}
 
 	render() {
-		if (!this.state.panoImgSrc) return <h1>Loading</h1>;
+		if (!this.props.panoImgSrc) return <h1>Loading</h1>;
 		return (
-			<GMapImage panoImgSrc={this.state.panoImgSrc} mapData={this.state.mapData} />);
+			<GMapImage />);
 	}
 }
 
-const mapStateToProps = state => ({ panoId: state.panoId });
+const mapStateToProps = ({ panoId, panoImgSrc }) => ({ panoId, panoImgSrc });
 
-export default connect(mapStateToProps)(AframeTest);
+const mapDispatchToProps = { setCurrentPanoImgSrc };
+
+export default connect(mapStateToProps, mapDispatchToProps)(RenderGMapImage);

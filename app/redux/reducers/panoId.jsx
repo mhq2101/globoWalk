@@ -1,12 +1,16 @@
+// ACTIONS
 const SET_PANO_ID = 'SET_PANO_ID';
 
-export const setPanoId = panoId => ({ type: SET_PANO_ID, panoId });
+// ACTION CREATORS
+const setPanoId = panoId => ({ type: SET_PANO_ID, panoId });
 
+// THUNKS
 export const setCurrentPanoId = panoId => dispatch => {
 	dispatch(setPanoId(panoId));
 };
 
-export default function (state = 'zp18ehA20-QAAAQzzZyilA', action) {
+// REDUCER
+export default function (state = '', action) {
 	switch (action.type) {
 		case SET_PANO_ID:
 			return action.panoId;
