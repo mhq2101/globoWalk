@@ -7,7 +7,7 @@ import Login from './Login';
 import UserPage from './UserPage';
 import {fetchAudio} from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
-import {joinChatRoom} from '../webRTC/client.jsx';
+// import {joinChatRoom} from '../webRTC/client.jsx';
 
 // import App from './components/App';
 // import Home from './components/Login/Home';

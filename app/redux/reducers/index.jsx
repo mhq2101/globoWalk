@@ -4,7 +4,7 @@ import auth from './auth';
 import audioStream from './audioStream';
 import audioContext from './audioContext';
 import webRtc from './webrtc-reducer';
-
+import chatroom from './chatroom';
 
 
 const rootReducer = combineReducers({
@@ -12,8 +12,8 @@ const rootReducer = combineReducers({
     auth: auth,
     audioStream: audioStream,
     audioCtx: audioContext,
-    webrtc: webRtc
-
+    webrtc: webRtc,
+    chatroom: chatroom
 });
 
 

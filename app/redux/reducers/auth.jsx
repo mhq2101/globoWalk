@@ -24,7 +24,6 @@ export const signup = (email, password) => {
 };
 
 export const login = (email, password) => {
-    console.log("we're here")
     return dispatch =>
         axios.post('/api/auth/login', { email, password })
         .then(response => {
