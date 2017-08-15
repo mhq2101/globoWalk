@@ -23,7 +23,7 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 class Root extends React.Component {
 
   componentDidMount() {
-    // store.dispatch(fetchAudio())
+    store.dispatch(fetchAudio())
     //joinChatRoom('lobby')
 
   }
