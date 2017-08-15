@@ -28,7 +28,7 @@ class GMapArrow extends React.Component {
 		return (
 			<Entity events={{
 				click: this.handleClick
-			}} primitive="a-box" position={`${3 * Math.sin(linkData.heading)}, 0, ${3 * Math.cos(linkData.heading)}`} rotation="0 45 0" color="#4CC3D9" />
+			}} primitive="a-sphere" scale="0.4 0.4 0.4" position={`${8 * Math.sin(linkData.heading)}, 0, ${8 * Math.cos(linkData.heading)}`} color="#4CC3D9" />
 		);
 	}
 }
