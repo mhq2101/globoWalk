@@ -16,15 +16,14 @@ export const authenticated = user => ({
   type: AUTHENTICATED, user
 });
 
-export const signup = (email, password) => {
+export const signup = (name, email, password) => {
   return dispatch =>
-    axios.post('/api/auth/signup', { email, password })
+    axios.post('/api/auth/signup', { name, email, password })
       .then(response => dispatch(login(email, password)))
       .catch(err => console.log(err.message));
 };
 
 export const login = (email, password) => {
-    console.log("we're here")
     return dispatch =>
         axios.post('/api/auth/login', { email, password })
         .then(response => {

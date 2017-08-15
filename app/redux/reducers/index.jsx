@@ -8,6 +8,7 @@ import auth from './auth';
 import panoId from './panoId';
 import panoImgSrc from './panoImgSrc';
 import mapData from './mapData';
+import chatroom from './chatroom';
 
 const rootReducer = combineReducers({
   dummy: dummy,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   audioStream: audioStream,
   audioCtx: audioContext,
   webrtc: webRtc,
+	chatroom: chatroom,
   panoId: panoId,
 	panoImgSrc: panoImgSrc,
 	mapData: mapData

@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import SOCKET from './socket'
 
 import './index.scss'
 
 import store from './store.jsx';
 import Root from './components/Root';
+
 
 ReactDOM.render(
     <Provider store={store}>

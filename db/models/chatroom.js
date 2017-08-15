@@ -1,26 +1,18 @@
+const Sequelize = require('sequelize');
+const db = require('../index');
 const crypto = require('crypto');
 const _ = require('lodash');
-const Sequelize = require('sequelize');
 
-const db = require('../index');
-
-const User = db.define('user', {
+const Chatroom = db.define('chatroom', {
   name: {
     type: Sequelize.STRING,
-    allowNull: false
-  },
-  email: {
-    type: Sequelize.STRING,
+    allowNull: false,
     unique: true,
-    allowNull: false
   },
   password: {
     type: Sequelize.STRING
   },
   salt: {
-    type: Sequelize.STRING
-  },
-  googleId: {
     type: Sequelize.STRING
   },
 }, {
@@ -34,10 +26,10 @@ const User = db.define('user', {
   //     hash.update(salt);
   //     return hash.digest('hex');
   //   },
-  //   setSaltAndPassword: function (user) {
-  //     if (user.changed('password')) {
-  //       user.salt = User.generateSalt();
-  //       user.password = User.encryptPassword(user.password, user.salt);
+  //   setSaltAndPassword: function (chatroom) {
+  //     if (chatroom.changed('password')) {
+  //       chatroom.salt = Chatroom.generateSalt();
+  //       chatroom.password = Chatroom.encryptPassword(chatroom.password, chatroom.salt);
   //     }
   //   }
   // },
@@ -52,37 +44,36 @@ const User = db.define('user', {
   hooks: {
     beforeCreate: setSaltAndPassword,
     beforeUpdate: setSaltAndPassword
-  }
+  },
 });
 
-
 // Class Methods
-User.generateSalt = function () {
+Chatroom.generateSalt = function () {
       return crypto.randomBytes(16).toString('base64');
 }
 
-User.encryptPassword = function (plainText, salt) {
+Chatroom.encryptPassword = function (plainText, salt) {
     const hash = crypto.createHash('sha1');
     hash.update(plainText);
     hash.update(salt);
     return hash.digest('hex');
 }
 
-function setSaltAndPassword (user) {
-  if (user.changed('password')) {
-    user.salt = User.generateSalt();
-    user.password = User.encryptPassword(user.password, user.salt);
+function setSaltAndPassword (chatroom) {
+  if (chatroom.changed('password')) {
+    chatroom.salt = Chatroom.generateSalt();
+    chatroom.password = Chatroom.encryptPassword(chatroom.password, chatroom.salt);
   }
 }
 
 
 // Instance Methods
-User.prototype.sanitize = function () {
+Chatroom.prototype.sanitize = function () {
     return _.omit(this.toJSON(), ['password', 'salt']);
 }
 
-User.prototype.correctPassword = function (candidatePassword) {
-    return User.encryptPassword(candidatePassword, this.salt) === this.password;
+Chatroom.prototype.correctPassword = function (candidatePassword) {
+    return Chatroom.encryptPassword(candidatePassword, this.salt) === this.password;
 }
 
-module.exports = User;
+module.exports = Chatroom;

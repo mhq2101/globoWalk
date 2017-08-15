@@ -43,6 +43,9 @@ export const clearPeers = () => {
   };
 };
 
+/* --------------- THUNK CREATOR --------------- */
+
+
 /* --------------- REDUCER --------------- */
 
 export default function webrtcReducer (state = initialState, action) {

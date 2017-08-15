@@ -1,48 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { login, logout, signup } from '../redux/reducers/auth';
+import { login, logout } from '../redux/reducers/auth';
+import {joinChatRoom} from '../webRTC/client.jsx'
+
 
 /* -------Component--------- */
 
-class Home extends React.Component {
+class Login extends React.Component {
 
-
+    componentDidMount() {
+      // store.dispatch(fetchAudio())
+      //joinChatRoom('lobby')
+      
+    }
   
     render() {
         return (
             <div>
-                <h1>This is the Home Route</h1>
-                <form onSubmit={this.props.signup}>
-                    <div>
-                        <input
-                            key="name"
-                            name="name"
-                            type="name"
-                            placeholder="name"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            key="email"
-                            name="email"
-                            type="email"
-                            placeholder="email"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            key="password"
-                            name="password"
-                            type="password"
-                            placeholder="password"
-                            required
-                        />
-                        <button type="submit">Sign Up</button>
-                    </div>
-                </form>
+                <h1>Log in to GloboWalk</h1>
                 <form onSubmit={this.props.login}>
                     <div>
                         <input
@@ -91,13 +67,6 @@ const mapDispatch = dispatch => ({
     logout() {
         dispatch(logout());
     },
-    signup(event) {
-        event.preventDefault();
-        const name = event.target.name.value;
-        const email = event.target.email.value;
-        const password = event.target.password.value;
-        dispatch(signup(name, email, password));
-    }
 });
 
-export default connect(mapState, mapDispatch)(Home)
+export default connect(mapState, mapDispatch)(Login)

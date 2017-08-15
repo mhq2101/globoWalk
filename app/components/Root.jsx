@@ -1,11 +1,14 @@
 import React from 'react';
-import { Route, browserHistory, IndexRedirect, Switch } from 'react-router';
-import { connect } from 'react-redux';
 
+import { connect } from 'react-redux';
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import Audio from './Audio';
 import Home from './Home';
+import Login from './Login';
+import UserPage from './UserPage';
 import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
+// import {joinChatRoom} from '../webRTC/client.jsx';
 import { joinChatRoom } from '../webRTC/client.jsx';
 import RenderGMapImage from './RenderGMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
@@ -18,24 +21,53 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Root extends React.Component {
+<<<<<<< HEAD
 	componentWillMount() {
 		this.props.setCurrentPanoId('bqcCYoJIe5gS-HNnRL2e1g');
+=======
+
+  componentDidMount() {
+    // store.dispatch(fetchAudio())
+    //joinChatRoom('lobby')
+
+  }
+        
+  componentWillMount() {
+		this.props.setCurrentPanoId('dXZfBMex9_L7jO2JW3FTdA');
+>>>>>>> c5c47a657d6c16867dc2e1293d16481eddc916cf
 		// store.dispatch(fetchAudio())
 		joinChatRoom('lobby');
 	}
+  
 
-	render() {
-		return (
-			<Switch>
-				<Route exact path="/" component={Home} />
-				<Route path="/aframe" component={RenderGMapImage} />
-				<Route exact path='/audio' component={Audio} />
-			</Switch>
-		);
-	}
+  render() {
+    return (
+      <div>
+        <Switch>
+          <Route exact path='/' render={() => (
+            (this.props.auth.id) ? (
+              <div>
+                <Redirect to="/user" />
+              </div>
+            ) : (
+                <Home />
+              )
+          )}
+          />
+          <Route exact path='/user' component={UserPage} />
+          <Route exact path='/login' component={Login} />
+          <Route path="/aframe" component={RenderGMapImage} />
+          <Route exact path='/audio' component={Audio} />
+        </Switch>
+      </div>
+    )
+  }
 }
 
+const mapState = ({ auth }) => ({
+  auth
+});
 
-const mapDispatchToProps = { setCurrentPanoId };
+const mapDispatch = { setCurrentPanoId };
 
-export default connect(null, mapDispatchToProps)(Root);
+export default withRouter(connect(mapState, mapDispatch)(Root))
