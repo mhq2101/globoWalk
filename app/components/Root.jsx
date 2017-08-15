@@ -20,7 +20,7 @@ import store from '../store.jsx';
 class Root extends React.Component {
 
   componentDidMount() {
-    // store.dispatch(fetchAudio())
+    store.dispatch(fetchAudio())
     //joinChatRoom('lobby')
 
   }

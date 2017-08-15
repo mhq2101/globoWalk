@@ -1,4 +1,12 @@
-const initialState = new AudioContext();
+const audioContext = new AudioContext();
+const audioDest = audioContext.createMediaStreamDestination();
+
+
+
+const initialState = {
+  audioContext,
+  audioDest
+}
 
 
 
