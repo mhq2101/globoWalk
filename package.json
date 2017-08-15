@@ -4,13 +4,14 @@
   "description": "walk de globe and travel",
   "main": "/server/index.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/index.js",
     "start-watch": "npm-run-all --parallel webpack-watcher node-watcher",
     "webpack-watcher": "webpack -w",
     "node-watcher": "nodemon server/index.js",
     "db-init": "pg-init globoWalk",
-    "postinstall": "npm run db-init"
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "axios": "^0.16.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
+    "chalk": "^1.1.3",
     "connect-session-sequelize": "^4.1.0",
     "crypto": "^1.0.1",
     "express": "^4.15.4",
@@ -36,6 +38,7 @@
     "google-panorama-by-id": "^2.1.0",
     "google-panorama-equirectangular": "^2.1.0",
     "immutable": "^3.8.1",
+    "learning": "^1.0.0",
     "lodash": "^4.17.4",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
@@ -52,9 +55,9 @@
     "redux-thunk": "^2.2.0",
     "save": "^2.3.1",
     "sequelize": "^4.4.2",
-    "volleyball": "^1.4.1"
-  },
-  "devDependencies": {
+    "socket.io": "^1.7.2",
+    "socket.io-client": "^1.7.2",
+    "volleyball": "^1.4.1",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-preset-es2015": "^6.24.1",

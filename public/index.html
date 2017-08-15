@@ -15,11 +15,13 @@
   <!-- Our js bundle will be in 'bundle.js' -->
 	<!-- The 'defer' attribute will ensure that it is run only after the DOM finishes loading -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_F8hIJwY292vEpTiLEdyQzZY2OK7j6FM"></script>
+  <script src="socket.io/socket.io.js"></script>
   <script defer src="bundle.js"></script>
 </head>
 <body>
   <!-- We will render our React app into a div with an id of 'app' -->
   <!-- We can grab it off the DOM by saing `document.getElementById('app');` -->
   <div id="app"></div>
+  <audio id="localAudio" autoplay></audio>
 </body>
 </html>
