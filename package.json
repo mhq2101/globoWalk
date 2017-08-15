@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/mhq2101/globoWalk#readme",
   "dependencies": {
+    "aframe": "^0.6.1",
+    "aframe-react": "^4.3.0",
     "axios": "^0.16.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
@@ -33,6 +35,8 @@
     "express": "^4.15.4",
     "express-session": "^1.15.5",
     "fs-misc": "^2.0.0",
+    "google-panorama-by-id": "^2.1.0",
+    "google-panorama-equirectangular": "^2.1.0",
     "immutable": "^3.8.1",
     "learning": "^1.0.0",
     "lodash": "^4.17.4",
