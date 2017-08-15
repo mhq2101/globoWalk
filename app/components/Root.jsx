@@ -21,7 +21,6 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Root extends React.Component {
-
   componentDidMount() {
     store.dispatch(fetchAudio())
     //joinChatRoom('lobby')
@@ -29,7 +28,7 @@ class Root extends React.Component {
   }
         
   componentWillMount() {
-		this.props.setCurrentPanoId('dXZfBMex9_L7jO2JW3FTdA');
+		this.props.setCurrentPanoId('bqcCYoJIe5gS-HNnRL2e1g');
 		// store.dispatch(fetchAudio())
 		// joinChatRoom('lobby');
 	}
