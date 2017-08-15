@@ -19,10 +19,16 @@ class GMapArrow extends React.Component {
 
 	render() {
 		const linkData = this.props.linkData;
+		linkData.heading -= this.props.headingOffset + 90;
+		linkData.heading *= (Math.PI / 180);
+		console.log('heading', linkData.heading);
+		console.log('sin', Math.sin(linkData.heading));
+		console.log('cos', Math.cos(linkData.heading));
+
 		return (
 			<Entity events={{
 				click: this.handleClick
-			}} primitive="a-box" position={`${3 * Math.cos(linkData.heading)}, 0, ${3 * Math.sin(linkData.heading)}`} roation="0 45 0" color="#4CC3D9" />
+			}} primitive="a-box" position={`${3 * Math.sin(linkData.heading)}, 0, ${3 * Math.cos(linkData.heading)}`} rotation="0 45 0" color="#4CC3D9" />
 		);
 	}
 }

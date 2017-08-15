@@ -14,7 +14,7 @@ const GMapImage = ({ panoImgSrc, mapData }) => {
 			</a-assets>
 			<Entity id="image-360" primitive="a-sky" src={panoImgSrc} />
 			{
-				mapData.links.map(link => <GMapArrow key={link.pano} linkData={link} />)
+				mapData.links.map(link => <GMapArrow key={link.pano} linkData={link} headingOffset={mapData.tiles.originHeading} />)
 			}
 			<a-camera>
 				<a-cursor />
