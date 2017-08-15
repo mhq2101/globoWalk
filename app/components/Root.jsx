@@ -8,7 +8,7 @@ import Login from './Login';
 import UserPage from './UserPage';
 import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
-// import {joinChatRoom} from '../webRTC/client.jsx';
+// import {joinChatRoom} from '../webRTC/client.jsx';npm 
 import { joinChatRoom } from '../webRTC/client.jsx';
 import RenderGMapImage from './RenderGMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
@@ -31,7 +31,7 @@ class Root extends React.Component {
   componentWillMount() {
 		this.props.setCurrentPanoId('dXZfBMex9_L7jO2JW3FTdA');
 		// store.dispatch(fetchAudio())
-		joinChatRoom('lobby');
+		// joinChatRoom('lobby');
 	}
   
 
