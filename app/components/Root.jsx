@@ -8,7 +8,7 @@ import Login from './Login';
 import UserPage from './UserPage';
 import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
-// import {joinChatRoom} from '../webRTC/client.jsx';
+// import {joinChatRoom} from '../webRTC/client.jsx';npm 
 import { joinChatRoom } from '../webRTC/client.jsx';
 import RenderGMapImage from './RenderGMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
@@ -21,10 +21,16 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Root extends React.Component {
-	componentWillMount() {
+  componentDidMount() {
+    store.dispatch(fetchAudio())
+    //joinChatRoom('lobby')
+
+  }
+        
+  componentWillMount() {
 		this.props.setCurrentPanoId('bqcCYoJIe5gS-HNnRL2e1g');
 		// store.dispatch(fetchAudio())
-		joinChatRoom('lobby');
+		// joinChatRoom('lobby');
 	}
   
 
