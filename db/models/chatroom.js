@@ -3,11 +3,12 @@ const db = require('../index');
 const crypto = require('crypto');
 const _ = require('lodash');
 
-const Chatroom = db.define('chatrooms', {
+const Chatroom = db.define('chatroom', {
   name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
   password: {
     type: Sequelize.STRING
   },
@@ -15,13 +16,38 @@ const Chatroom = db.define('chatrooms', {
     type: Sequelize.STRING
   },
 }, {
+  // classMethods: {
+  //   generateSalt: function () {
+  //     return crypto.randomBytes(16).toString('base64');
+  //   },
+  //   encryptPassword: function (plainText, salt) {
+  //     const hash = crypto.createHash('sha1');
+  //     hash.update(plainText);
+  //     hash.update(salt);
+  //     return hash.digest('hex');
+  //   },
+  //   setSaltAndPassword: function (chatroom) {
+  //     if (chatroom.changed('password')) {
+  //       chatroom.salt = Chatroom.generateSalt();
+  //       chatroom.password = Chatroom.encryptPassword(chatroom.password, chatroom.salt);
+  //     }
+  //   }
+  // },
+  // instanceMethods: {
+  //   sanitize: function () {
+  //     return _.omit(this.toJSON(), ['password', 'salt']);
+  //   },
+  //   correctPassword: function (candidatePassword) {
+  //     return User.encryptPassword(candidatePassword, this.salt) === this.password;
+  //   }
+  // },
   hooks: {
     beforeCreate: setSaltAndPassword,
     beforeUpdate: setSaltAndPassword
-  }
+  },
 });
 
-//Class Methods
+// Class Methods
 Chatroom.generateSalt = function () {
       return crypto.randomBytes(16).toString('base64');
 }
@@ -41,7 +67,7 @@ function setSaltAndPassword (chatroom) {
 }
 
 
-//Instance Methods
+// Instance Methods
 Chatroom.prototype.sanitize = function () {
     return _.omit(this.toJSON(), ['password', 'salt']);
 }

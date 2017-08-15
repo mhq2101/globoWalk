@@ -17,6 +17,15 @@ class Home extends React.Component {
                     <div>
                         <input
                             key="name"
+                            name="name"
+                            type="name"
+                            placeholder="name"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <input
+                            key="email"
                             name="email"
                             type="email"
                             placeholder="email"
@@ -84,9 +93,10 @@ const mapDispatch = dispatch => ({
     },
     signup(event) {
         event.preventDefault();
+        const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
-        dispatch(signup(email, password));
+        dispatch(signup(name, email, password));
     }
 });
 
