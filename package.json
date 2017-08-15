@@ -67,6 +67,7 @@
     "socket.io-client": "^1.7.2",
     "style-loader": "^0.18.2",
     "volleyball": "^1.4.1",
-    "webpack": "^3.5.3"
+    "webpack": "^3.5.3",
+    "yarn": "^0.27.5"
   }
 }

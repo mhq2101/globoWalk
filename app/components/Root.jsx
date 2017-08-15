@@ -9,11 +9,6 @@ import UserPage from './UserPage';
 import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 // import {joinChatRoom} from '../webRTC/client.jsx';
-
-import Audio from './Audio';
-import Home from './Home';
-import { fetchAudio } from '../redux/reducers/audioStream.jsx';
-import store from '../store.jsx';
 import { joinChatRoom } from '../webRTC/client.jsx';
 import RenderGMapImage from './RenderGMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
