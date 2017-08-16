@@ -67,7 +67,7 @@ class UserPage extends React.Component {
     source.buffer = buffer;
     // connect the AudioBufferSourceNode to the
     // destination so we can hear the sound
-    source.connect(context.destination);
+    // source.connect(context.destination);
     source.connect(dest);
     event.preventDefault();
     this.setState({
