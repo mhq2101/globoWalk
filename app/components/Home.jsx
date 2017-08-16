@@ -2,13 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { login, logout, signup } from '../redux/reducers/auth';
+import { Link } from 'react-router-dom';
 
 /* -------Component--------- */
 
 class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this.goToChatroom = this.goToChatroom.bind(this);
+      }
 
+    goToChatroom (evt) {
+        return(
+            <div>
+                <Redirect to="/chatroom/1" />
+                <ChatroomPage/>
+            </div>
+          )
+    }
 
-  
     render() {
         return (
             <div>
@@ -70,6 +82,9 @@ class Home extends React.Component {
                         <span className="fa fa-google" ></span>
                         Log in with Google
                     </a>
+                </div>
+                <div>
+                    <Link to ='/chatroom/1'> Select Chatroom </Link>
                 </div>
             </div>
         )

@@ -41,6 +41,7 @@ chatroom.get('/room/:id', (req, res, next) => {
 })
 
 chatroom.post('/create', (req, res, next) => {
+  console.log("asd", req.body)
   Chatroom.create(req.body)
   .then(chatroom => {
     res.json(chatroom)
@@ -49,15 +50,15 @@ chatroom.post('/create', (req, res, next) => {
 });
 
 chatroom.post('/joinRoom', (req, res, next) => {
-  //const userPromise = User.findById(req.user.id)
-  const userPromise = User.findById('1')
+  const userPromise = User.findById(req.user.id)
+  //const userPromise = User.findById('2')
   const chatroomPromise = Chatroom.findOne({where: {name: req.body.name}})
   Promise.all([userPromise, chatroomPromise])
     .then((promises) => {
       const user = promises[0]
       const chatroom = promises[1]
       chatroom.addUser(user.id)
-      res.json("user added to chatroom")
+      res.json(chatroom)
     })
 })
 
