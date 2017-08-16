@@ -15,9 +15,9 @@ const rootReducer = combineReducers({
     audioStream: audioStream,
     audioCtx: audioContext,
     webrtc: webRtc,
-    chatroom: chatroom,
     panoId: panoId,
-    panoImgSrc: panoImgSrc
+    panoImgSrc: panoImgSrc,
+    chatroom: chatroom
 });
 
 export default rootReducer;

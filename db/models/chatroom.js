@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../index');
 const crypto = require('crypto');
 const _ = require('lodash');
+const User = require('./user')
 
 const Chatroom = db.define('chatroom', {
   name: {
@@ -45,6 +46,11 @@ const Chatroom = db.define('chatroom', {
     beforeCreate: setSaltAndPassword,
     beforeUpdate: setSaltAndPassword
   },
+  defaultScope: {
+    include: [
+      { model: User }
+    ]
+  }
 });
 
 // Class Methods
