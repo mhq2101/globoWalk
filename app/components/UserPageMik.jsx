@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx'
-import { fetchChatrooms, fetchChatroom, postChatroom, addUserToChatroom } from '../redux/reducers/chatroom'
 import AudioDrop from '../webRTC/audioDrop.js';
+import { updateChatroomName } from '../redux/reducers/chatroom'
 
 
 /* -------Component--------- */
@@ -67,7 +67,7 @@ class UserPage extends React.Component {
     source.buffer = buffer;
     // connect the AudioBufferSourceNode to the
     // destination so we can hear the sound
-    source.connect(context.destination);
+    // source.connect(context.destination);
     source.connect(dest);
     event.preventDefault();
     this.setState({
@@ -100,10 +100,6 @@ class UserPage extends React.Component {
     source.stop();
   }
 
-  componentDidMount () {
-    this.props.fetchChatrooms()
-  }
-
   audioConnect(event, source, a) {
     event.preventDefault();
     source.connect(a);
@@ -118,7 +114,7 @@ class UserPage extends React.Component {
     let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted } = this.state;
     const { audioStream, audioCtx } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
-
+    console.log(audioBuffer)
     return (
       <div>
         <h1>Welcome User {this.props.auth.email}</h1>
@@ -144,34 +140,19 @@ class UserPage extends React.Component {
 
         <button type="submit" onClick={(event) => this.audioConnect(event, source, audioCtx.audioDest)}>Connect Microphone</button>
         <button type="submit" onClick={(event) => this.audioDisconnect(event, source, audioCtx.audioDest)}>DisConnect Microphone</button>
-        
+
         <form onSubmit={(event) => {
           event.preventDefault()
-          this.props.chatroom && this.props.postChatroom(event.target.chatroom.value)
+          joinChatRoom(event.target.chatroom.value)
+          this.setState({
+            canJoin: false
+          })
         }}>
           <input
             key="chatroom"
             name="chatroom"
-            placeholder="create a chatroom"
-          />
-          <button type="submit"> Create Room </button>
-        </form>
-        <form onSubmit={(event) => {
-          event.preventDefault()
-          if(this.props.chatroom){
-            if(this.props.chatroom.filter(room => event.target.chatroom.value == room.name)[0]){
-              this.props.addUserToChatroom(event.target.chatroom.value)
-              joinChatRoom(event.target.chatroom.value)
-              this.setState({
-                canJoin: false
-              })
-            }
-          }
-        }}>
-          <input
-            key="chatroom"
-            name="chatroom"
-            placeholder="join a chatroom"
+            placeholder="create chatroom"
+
           />
           <button type="submit" disabled={!canJoin}> Join Room </button>
         </form>
@@ -200,18 +181,12 @@ const mapState = ({ auth, chatroom, audioStream, audioCtx }) => ({
   audioCtx
 });
 
-const mapDispatch = function (dispatch) {
-  return {
-    fetchChatrooms() {
-      dispatch(fetchChatrooms());
-    },
-    postChatroom(name) {
-      dispatch(postChatroom(name))
-    },
-    addUserToChatroom(name) {
-      dispatch(addUserToChatroom(name))
-    }
-  };
-};
+// const mapDispatch = function (dispatch) {
+//   return {
+//     handleChatroomChange(evt) {
+//       dispatch(updateChatroomName(evt.target.value));
+//     }
+//   };
+// };
 
-export default connect(mapState, mapDispatch)(UserPage)
+export default connect(mapState)(UserPage)
