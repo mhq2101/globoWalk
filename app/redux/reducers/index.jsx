@@ -11,13 +11,13 @@ import mapData from './mapData';
 import chatroom from './chatroom';
 
 const rootReducer = combineReducers({
-  dummy: dummy,
-  auth: auth,
-  audioStream: audioStream,
-  audioCtx: audioContext,
-  webrtc: webRtc,
-	chatroom: chatroom,
-  panoId: panoId,
+    dummy: dummy,
+    auth: auth,
+    audioStream: audioStream,
+    audioCtx: audioContext,
+    webrtc: webRtc,
+    chatroom: chatroom,
+    panoId: panoId,
 	panoImgSrc: panoImgSrc,
 	mapData: mapData
 });

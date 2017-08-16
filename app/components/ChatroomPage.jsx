@@ -13,9 +13,29 @@ class ChatroomPage extends React.Component {
   }
 
   render() {
+    console.log("props", this.props.chatroom.users)
     return (
       <div>
-        <h1>Welcome to Chatroom</h1>
+        <h1>Welcome to Chatroom {this.props.chatroom.name}</h1>
+        <h3>The users currently in this lobby are: </h3>
+        <table className="table table-responsive table-striped table-hover table-sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+          {this.props.chatroom.users && this.props.chatroom.users.map(user => {
+            return (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+              </tr>
+              )
+          })}
+          </tbody>
+        </table>
       </div>
     )
   }
