@@ -13,7 +13,6 @@ class GMapArrow extends React.Component {
 	}
 
 	handleClick() {
-		//console.log("I've been clicked!!!");
 		this.props.setCurrentPanoId(this.props.linkData.pano);
 	}
 
@@ -30,6 +29,7 @@ class GMapArrow extends React.Component {
 				className="selectable"
 				events={{
 					click: this.handleClick,
+					trackpadup: this.handleClick,
 					buttonup: this.handleClick
 				}}
 				primitive="a-sphere"
