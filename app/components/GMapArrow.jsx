@@ -21,14 +21,22 @@ class GMapArrow extends React.Component {
 		const linkData = this.props.linkData;
 		linkData.heading -= this.props.headingOffset + 90;
 		linkData.heading *= (Math.PI / 180);
-		console.log('heading', linkData.heading);
-		console.log('sin', Math.sin(linkData.heading));
-		console.log('cos', Math.cos(linkData.heading));
+
+		const arrowX = 5 * Math.sin(linkData.heading);
+		const arrowZ = 5 * Math.cos(linkData.heading);
 
 		return (
-			<Entity events={{
-				click: this.handleClick
-			}} primitive="a-sphere" scale="0.4 0.4 0.4" position={`${8 * Math.sin(linkData.heading)}, 0, ${8 * Math.cos(linkData.heading)}`} color="#4CC3D9" />
+			<Entity
+				className="selectable"
+				events={{
+					click: this.handleClick,
+					buttonup: this.handleClick
+				}}
+				primitive="a-sphere"
+				scale="0.15 0.15 0.15"
+				position={`${arrowX}, 1, ${arrowZ}`}
+				color="#4CC3D9"
+			/>
 		);
 	}
 }
