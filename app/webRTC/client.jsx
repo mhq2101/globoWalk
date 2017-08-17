@@ -1,6 +1,6 @@
 import store from '../store.jsx';
 import { setUserMedia, addPeer, deletePeer, clearPeers } from '../redux/reducers/webrtc-reducer';
-import { removeUserFromChatroom } from '../redux/reducers/chatroom';
+import { addUserToChatroom, removeUserFromChatroom } from '../redux/reducers/chatroom';
 // import io from 'socket.io-client';
 // All A-Frame components need access to the socket instance
 // window.socket = io.connect(window.location.origin);
@@ -51,6 +51,8 @@ export function joinChatRoom (room, errorback) {
     signalingSocket = window.socket;
   }
   if (localMediaStream !== null) {  /* ie, if we've already been initialized */
+    // store.dispatch(addUserToChatroom(room));
+    // console.log("thisda room", room)
     signalingSocket.emit('joinChatRoom', room);
     return;
   }
@@ -218,6 +220,7 @@ export function setIceCandidate (config) {
 }
 
 export function disconnectUser () {
+  // store.dispatch(removeUserChatroom(store.getState().chatroom.chatroom.name))
   for (const peerId in peerMediaElements) {
     peerMediaElements[peerId].remove();
   }
