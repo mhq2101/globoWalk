@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx';
-import { fetchChatrooms, fetchChatroom, postChatroom, addUserToChatroom } from '../redux/reducers/chatroom';
+import { setCurrentChatroom, fetchChatrooms, fetchChatroom, postChatroom, addUserToChatroom } from '../redux/reducers/chatroom';
 import { login, logout, signup } from '../redux/reducers/auth';
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
@@ -21,11 +21,15 @@ class UserPage extends React.Component {
 
   componentDidMount () {
     this.props.fetchChatrooms()
+    if (this.props.chatroom.chatroom.id){
+      this.props.setCurrentChatroom({})
+    }
   }
 
 
   render() {
     let { canJoin } = this.state;
+
     return (
       <div>
         <h1>Welcome User {this.props.auth.email}</h1>
@@ -62,10 +66,10 @@ class UserPage extends React.Component {
         </form>
         <div>
             {(this.props.chatroom.chatroom.id)
-            ? <div>
-                <Link to ={`/chatroom/${this.props.chatroom.chatroom.id}`}> Go to Chatroom {this.props.chatroom.chatroom.name} </Link>
-              </div>
-            : ""
+              ? <div>
+                  <Link to ={`/chatroom/${this.props.chatroom.chatroom.id}`}> Go to Chatroom {this.props.chatroom.chatroom.name} </Link>
+                </div>
+              : ""
             }
         </div>
         <button onClick={() => {
@@ -97,6 +101,9 @@ const mapDispatch = function (dispatch) {
   return {
     fetchChatrooms() {
       dispatch(fetchChatrooms());
+    },
+    setCurrentChatroom(chatroom) {
+      dispatch(setCurrentChatroom(chatroom));
     },
     postChatroom(name) {
       dispatch(postChatroom(name))

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx'
-import { fetchChatroom } from '../redux/reducers/chatroom.jsx'
+import { fetchChatroom, setCurrentChatroom } from '../redux/reducers/chatroom.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import UserPage from './UserPage';
@@ -224,7 +224,10 @@ const mapDispatch = function (dispatch) {
     return {
       fetchChatroom (chatroomId) {
         dispatch(fetchChatroom(chatroomId))
-      }
+      },
+      setCurrentChatroom (chatroomId) {
+        dispatch(setCurrentChatroom(chatroomId))
+      },
     }
 };
 

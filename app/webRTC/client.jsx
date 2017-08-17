@@ -1,6 +1,6 @@
 import store from '../store.jsx';
 import { setUserMedia, addPeer, deletePeer, clearPeers } from '../redux/reducers/webrtc-reducer';
-import { addUserToChatroom, removeUserFromChatroom } from '../redux/reducers/chatroom';
+import { addUserToChatroom, removeUserFromChatroom, setCurrentChatroom } from '../redux/reducers/chatroom';
 // import io from 'socket.io-client';
 // All A-Frame components need access to the socket instance
 // window.socket = io.connect(window.location.origin);
@@ -220,7 +220,6 @@ export function setIceCandidate (config) {
 }
 
 export function disconnectUser () {
-  // store.dispatch(removeUserChatroom(store.getState().chatroom.chatroom.name))
   for (const peerId in peerMediaElements) {
     peerMediaElements[peerId].remove();
   }
