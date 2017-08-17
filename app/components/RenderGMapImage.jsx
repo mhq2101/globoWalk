@@ -1,6 +1,7 @@
 import React from 'react';
-import panoLoad from 'google-panorama-equirectangular';
-import panoData from 'google-panorama-by-id';
+import getPanoImg from 'google-panorama-equirectangular';
+import getPanoDataId from 'google-panorama-by-id';
+import getPanoDataLoc from 'google-panorama-by-location';
 import { connect } from 'react-redux';
 
 import GMapImage from './GMapImage';
@@ -12,10 +13,13 @@ class RenderGMapImage extends React.Component {
 		super(props);
 
 		this.getPanoramaData = this.getPanoramaData.bind(this);
+		this.loadPanoramaData = this.loadPanoramaData.bind(this);
 	}
 
 	componentWillMount() {
-		this.getPanoramaData(this.props.panoId);
+		if (this.props.panoId) {
+			this.getPanoramaData(this.props.panoId);
+		}
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -25,35 +29,47 @@ class RenderGMapImage extends React.Component {
 	}
 
 	getPanoramaData(panoId) {
-		panoData(panoId, (err, mapData) => {
-			if (err) console.error(err);
-			this.props.setCurrentMapData(mapData);
-			panoLoad(panoId, {
-				tiles: mapData.tiles,
-				zoom: 3,
-				crossOrigin: 'Anonymous'
-			})
-				.on('complete', canvas => {
-					const panoImg = canvas.toDataURL('image/jpeg');
-					this.props.setCurrentPanoImgSrc(panoImg);
-				});
-		});
+		if (typeof panoId === 'string') {
+			getPanoDataId(panoId, (err, mapData) => {
+				if (err) console.error(err);
+				this.props.setCurrentMapData(mapData);
+				this.loadPanoramaData(panoId);
+			});
+		}
+		else {
+			getPanoDataLoc(panoId, (err, mapData) => {
+				if (err) console.error(err);
+				this.props.setCurrentMapData(mapData);
+				this.loadPanoramaData(mapData.id);
+			});
+		}
+	}
+
+	loadPanoramaData(panoId) {
+		getPanoImg(panoId, {
+			tiles: this.props.mapData.tiles,
+			zoom: 3,
+			crossOrigin: 'Anonymous'
+		})
+			.on('complete', canvas => {
+				const panoImg = canvas.toDataURL('image/jpeg');
+				this.props.setCurrentPanoImgSrc(panoImg);
+			});
 	}
 
 	render() {
-		if (!this.props.panoImgSrc) return <h1>Loading</h1>;
 		return (<GMapImage />);
 	}
 }
 
-const mapStateToProps = ({ panoId, panoImgSrc }) => ({ panoId, panoImgSrc });
+const mapStateToProps = ({ panoId, mapData }) => ({ panoId, mapData });
 
-const mapDispatchToProps = function(dispatch){
+const mapDispatchToProps = function (dispatch) {
 	return {
-		setCurrentPanoImgSrc(imgSrc){
+		setCurrentPanoImgSrc(imgSrc) {
 			dispatch(setCurrentPanoImgSrc(imgSrc));
 		},
-		setCurrentMapData(data){
+		setCurrentMapData(data) {
 			dispatch(setCurrentMapData(data));
 		}
 	};
