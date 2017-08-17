@@ -1,6 +1,5 @@
 import axios from 'axios';
 import store from '../../store';
-//import socket from '../socket';
 
 // ACTION TYPES
 const SET_CURRENT_CHATROOM = 'SET_CURRENT_CHATROOM';
@@ -45,8 +44,20 @@ export const addUserToChatroom = (name) => {
       axios.post('/api/chatroom/joinRoom', {name: name})
         .then(res => res.data)
         .then(chatroom => {
-          console.log("we outta", chatroom)
           dispatch(setCurrentChatroom(chatroom))
+          window.socket.emit('userInfo', store.getState().auth.id, name)
+        })
+        .catch(error => console.error(error))
+  
+}
+
+export const removeUserFromChatroom = (name) => {
+
+    return dispatch =>
+      axios.delete('/api/chatroom/leaveRoom', {data:{name: name}})
+        .then(res => res.data)
+        .then(chatroom => {
+          dispatch(setCurrentChatroom(initialState))
         })
         .catch(error => console.error(error))
   
@@ -65,12 +76,11 @@ export const fetchChatrooms = (chatroomId) => {
 }
 
 export const postChatroom = (name) => {
-  console.log("asdasd", name)
+
     return dispatch =>
       axios.post('/api/chatroom/create', {name: name})
         .then(res => res.data)
         .then(chatroom => {
-          console.log(chatroom)
           dispatch(addChatroom(chatroom))
         })
         .catch(error => console.error(error))
@@ -79,20 +89,23 @@ export const postChatroom = (name) => {
 
 // REDUCER
 export default function chatroomReducer (state = initialState, action) {
-
+  const newState = Object.assign({}, state)
   switch (action.type) {
 
     case SET_CURRENT_CHATROOM:
-      return action.chatroom;
+      newState.chatroom = action.chatroom;
+      break
 
     case GET_CHATROOMS:
-      return action.chatrooms;
+      newState.chatrooms = action.chatrooms;
+      break
 
     case ADD_CHATROOM:
-      return [...state, action.chatroom]
+      newState.chatrooms = [...newState.chatrooms, action.chatroom]
+      break
 
     default:
-      return state;
+      return newState;
   }
-
+  return newState
 }

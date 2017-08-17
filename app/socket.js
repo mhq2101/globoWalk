@@ -124,4 +124,4 @@ socket.on('sessionDescription', setRemoteAnswer);
 socket.on('iceCandidate', setIceCandidate);
 
 // Removes all peer connections and audio Elements from the DoM
-socket.on('disconnect', disconnectUser);
+socket.on('disconnect', () => disconnectUser)

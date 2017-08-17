@@ -68,7 +68,7 @@ passport.use(
 //OAuth Google Callback - handle the callback after Google has authenticated the user
 auth.get('/google/callback', 
   passport.authenticate('google', {
-    successRedirect: '/',
+    successRedirect: '/user',
     failureRedirect: '/login'
   })
 );
@@ -96,7 +96,10 @@ auth.post('/login', (req, res, next) => {
       else {
         req.login(user, err => {
           if (err) next(err);
-          else res.json(user);
+          else {
+            //req.session.user = user
+            res.json(user)
+          }
         });
       }
     })
