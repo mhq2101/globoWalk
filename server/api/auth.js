@@ -108,6 +108,7 @@ auth.post('/login', (req, res, next) => {
 
 auth.post('/logout', (req, res, next) => {
   req.logout();
+  //res.redirect('/login')
   res.sendStatus(200);
 });
 
