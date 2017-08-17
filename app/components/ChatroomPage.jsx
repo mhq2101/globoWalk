@@ -198,6 +198,7 @@ class ChatroomPage extends React.Component {
           to={'/user'}
         >
           <div>
+            
             You have been disconnected from the chatroom, click here to return to the User Page
           </div>
         </NavLink>
