@@ -123,22 +123,22 @@ class UserPage extends React.Component {
       <div>
         <h1>Welcome User {this.props.auth.email}</h1>
         <h2>This is the Audio Section
-          <button className="glyphicon glyphicon-music" onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
-            disabled={!canDrop}> Drop </button>
+          <button onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
+            disabled={!canDrop}> Drop<i className="material-icons medium left">music_note</i></button>
         </h2>
         {
             audioName !== null ? (<div>Sound file = {audioName}</div>) : (<div></div>)
           }
         
-          <button className="glyphicon glyphicon-play"
+          <button
             onClick={(event) => this.audioPlay(event, audioBuffer, audioCtx.audioContext, start, audioCtx.audioDest)}
-            disabled={!canPlay}>Play</button>
-          <button className="glyphicon glyphicon-pause"
+            disabled={!canPlay}>Play<i className="material-icons left">play_arrow</i></button>
+          <button
             onClick={(event) => this.audioPause(event, audioSource, audioCtx.audioContext, start, timeStarted)}
-            disabled={!canPause}>Pause</button>
-          <button className="glyphicon glyphicon-stop"
+            disabled={!canPause}>Pause<i className="material-icons left">pause</i></button>
+          <button
             onClick={(event) => this.audioStop(event, audioSource, audioCtx.audioContext, timeStarted)}
-            disabled={!canStop}>Stop</button>
+            disabled={!canStop}>Stop<i className="material-icons left">stop</i></button>
 
           
 

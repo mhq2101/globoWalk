@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import Audio from './Audio';
 import Home from './Home';
+import Future_Home from './Future_Home';
 import Login from './Login';
 import UserPage from './UserPage';
 import ChatroomPage from './ChatroomPage.jsx';
