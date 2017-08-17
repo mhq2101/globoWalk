@@ -7,6 +7,7 @@ import Home from './Home';
 import Login from './Login';
 import UserPage from './UserPage';
 import ChatroomPage from './ChatroomPage.jsx';
+import Signup from './Signup.jsx';
 import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 // import {joinChatRoom} from '../webRTC/client.jsx';npm 
@@ -51,6 +52,7 @@ class Root extends React.Component {
           />
           <Route exact path='/user' component={UserPage} />
           <Route exact path='/login' component={Login} />
+          <Route exact path='/signup' component={Signup} />
           <Route path='/chatroom/:id' component={ChatroomPage} />
           <Route path="/aframe" component={RenderGMapImage} />
           <Route exact path='/audio' component={Audio} />

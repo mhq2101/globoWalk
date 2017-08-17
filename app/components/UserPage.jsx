@@ -158,8 +158,9 @@ class UserPage extends React.Component {
         </form>
         <form onSubmit={(event) => {
           event.preventDefault()
-          if(this.props.chatroom){
-            if(this.props.chatroom.filter(room => event.target.chatroom.value == room.name)[0]){
+          console.log("we da props", this.props)
+          if(this.props.chatroom.chatrooms){
+            if(this.props.chatroom.chatrooms.filter(room => event.target.chatroom.value == room.name)[0]){
               this.props.addUserToChatroom(event.target.chatroom.value)
               joinChatRoom(event.target.chatroom.value)
               this.setState({
@@ -176,7 +177,7 @@ class UserPage extends React.Component {
           <button type="submit" disabled={!canJoin}> Join Room </button>
         </form>
         <button onClick={() => {
-          leaveChatRoom()
+          leaveChatRoom(this.props.chatroom.chatroom.name)
           this.setState({
             canJoin: true
           })

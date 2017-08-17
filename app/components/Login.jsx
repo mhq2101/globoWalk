@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import axios from 'axios'
+import {Link} from 'react-router-dom'
 import { login, logout } from '../redux/reducers/auth';
-import {joinChatRoom} from '../webRTC/client.jsx'
 
 
 /* -------Component--------- */
@@ -47,6 +46,7 @@ class Login extends React.Component {
                         Log in with Google
                     </a>
                 </div>
+                <Link to ="/signup"> Sign Up </Link>
             </div>
         )
     }
