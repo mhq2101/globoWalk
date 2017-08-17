@@ -13,11 +13,11 @@ class ChatroomPage extends React.Component {
   }
 
   render() {
-    console.log("props", this.props.chatroom.users)
+    console.log("props", this.props.chatroom.chatroom.users)
     return (
       <div>
         <h1>Welcome to Chatroom {this.props.chatroom.name}</h1>
-        <h3>The users currently in this lobby are: </h3>
+        <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
         <table className="table table-responsive table-striped table-hover table-sm">
           <thead>
             <tr>
@@ -26,7 +26,7 @@ class ChatroomPage extends React.Component {
             </tr>
           </thead>
           <tbody>
-          {this.props.chatroom.users && this.props.chatroom.users.map(user => {
+          {this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.map(user => {
             return (
               <tr key={user.id}>
                 <td>{user.name}</td>
