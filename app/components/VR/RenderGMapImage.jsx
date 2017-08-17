@@ -5,8 +5,8 @@ import getPanoDataLoc from 'google-panorama-by-location';
 import { connect } from 'react-redux';
 
 import GMapImage from './GMapImage';
-import { setCurrentPanoImgSrc } from '../redux/reducers/panoImgSrc';
-import { setCurrentMapData } from '../redux/reducers/mapData';
+import { setCurrentPanoImgSrc } from '../../redux/reducers/panoImgSrc';
+import { setCurrentMapData } from '../../redux/reducers/mapData';
 
 class RenderGMapImage extends React.Component {
 	constructor(props) {

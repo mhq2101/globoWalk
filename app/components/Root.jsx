@@ -14,7 +14,7 @@ import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 // import {joinChatRoom} from '../webRTC/client.jsx';npm 
 import { joinChatRoom } from '../webRTC/client.jsx';
-import RenderGMapImage from './RenderGMapImage';
+import RenderGMapImage from './VR/RenderGMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import App from './components/App';
 // import Home from './components/Login/Home';
