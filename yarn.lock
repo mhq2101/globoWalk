@@ -1540,11 +1540,9 @@ death@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/death/-/death-1.1.0.tgz#01aa9c401edd92750514470b8266390c66c67318"
 
-debug@2.2.0:
+debug@2.2.0, debug@ngokevin/debug#noTimestamp:
   version "2.2.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-2.2.0.tgz#f87057e995b1a1f6ae6a4960664137bc56f039da"
-  dependencies:
-    ms "0.7.1"
+  resolved "https://codeload.github.com/ngokevin/debug/tar.gz/ef5f8e66d49ce8bc64c6f282c15f8b7164409e3a"
 
 debug@2.3.3:
   version "2.3.3"
@@ -1563,10 +1561,6 @@ debug@2.6.8, debug@^2.1.1, debug@^2.1.3, debug@^2.2.0, debug@^2.3.0, debug@^2.4.
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.8.tgz#e731531ca2ede27d188222427da17821d68ff4fc"
   dependencies:
     ms "2.0.0"
-
-"debug@github:ngokevin/debug#noTimestamp":
-  version "2.2.0"
-  resolved "https://codeload.github.com/ngokevin/debug/tar.gz/ef5f8e66d49ce8bc64c6f282c15f8b7164409e3a"
 
 decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
@@ -1663,7 +1657,7 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-"document-register-element@github:dmarcos/document-register-element#8ccc532b7":
+document-register-element@dmarcos/document-register-element#8ccc532b7:
   version "0.5.4"
   resolved "https://codeload.github.com/dmarcos/document-register-element/tar.gz/8ccc532b7"
 
@@ -2393,6 +2387,14 @@ google-panorama-by-id@^2.1.0:
   dependencies:
     jsonp "^0.2.0"
     request "^2.58.0"
+
+google-panorama-by-location@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/google-panorama-by-location/-/google-panorama-by-location-4.1.1.tgz#28738d8e1841f797831199acd599c3b7ec302c6d"
+  dependencies:
+    defined "^1.0.0"
+    object-assign "^4.0.1"
+    xhr-request "^1.0.1"
 
 google-panorama-equirectangular@^2.1.0:
   version "2.1.0"
@@ -3425,10 +3427,6 @@ moment-timezone@^0.5.4:
 "moment@>= 2.9.0", moment@^2.13.0:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
-
-ms@0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.1.tgz#9cd13c03adbff25b65effde7ce864ee952017098"
 
 ms@0.7.2:
   version "0.7.2"

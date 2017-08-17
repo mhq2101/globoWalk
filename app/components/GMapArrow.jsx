@@ -1,46 +1,24 @@
 import 'aframe';
 import React from 'react';
 import { Entity } from 'aframe-react';
-import { connect } from 'react-redux';
 
-import { setCurrentPanoId } from '../redux/reducers/panoId';
+const GMapArrow = ({ linkData, headingOffset }) => {
+	let heading = linkData.heading - headingOffset - 90;
+	heading *= (Math.PI / 180);
 
-class GMapArrow extends React.Component {
-	constructor(props) {
-		super(props);
+	const arrowX = 5 * Math.sin(heading);
+	const arrowZ = 5 * Math.cos(heading);
 
-		this.handleClick = this.handleClick.bind(this);
-	}
+	return (
+		<Entity
+			className="selectable"
+			id={linkData.pano}
+			primitive="a-sphere"
+			scale="0.15 0.15 0.15"
+			position={`${arrowX}, 1, ${arrowZ}`}
+			color="#4CC3D9"
+		/>
+	);
+};
 
-	handleClick() {
-		this.props.setCurrentPanoId(this.props.linkData.pano);
-	}
-
-	render() {
-		const linkData = this.props.linkData;
-		linkData.heading -= this.props.headingOffset + 90;
-		linkData.heading *= (Math.PI / 180);
-
-		const arrowX = 5 * Math.sin(linkData.heading);
-		const arrowZ = 5 * Math.cos(linkData.heading);
-
-		return (
-			<Entity
-				className="selectable"
-				events={{
-					click: this.handleClick,
-					trackpadup: this.handleClick,
-					buttonup: this.handleClick
-				}}
-				primitive="a-sphere"
-				scale="0.15 0.15 0.15"
-				position={`${arrowX}, 1, ${arrowZ}`}
-				color="#4CC3D9"
-			/>
-		);
-	}
-}
-
-const mapDispatchToProps = { setCurrentPanoId };
-
-export default connect(null, mapDispatchToProps)(GMapArrow);
+export default GMapArrow;

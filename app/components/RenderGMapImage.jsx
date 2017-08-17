@@ -48,6 +48,15 @@ class RenderGMapImage extends React.Component {
 
 const mapStateToProps = ({ panoId, panoImgSrc }) => ({ panoId, panoImgSrc });
 
-const mapDispatchToProps = { setCurrentPanoImgSrc, setCurrentMapData };
+const mapDispatchToProps = function(dispatch){
+	return {
+		setCurrentPanoImgSrc(imgSrc){
+			dispatch(setCurrentPanoImgSrc(imgSrc));
+		},
+		setCurrentMapData(data){
+			dispatch(setCurrentMapData(data));
+		}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderGMapImage);
