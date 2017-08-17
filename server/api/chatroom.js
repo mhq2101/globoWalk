@@ -40,7 +40,6 @@ chatroom.get('/room/:id', (req, res, next) => {
 })
 
 chatroom.post('/create', (req, res, next) => {
-  console.log("asd", req.body)
   Chatroom.create(req.body)
   .then(chatroom => {
     res.json(chatroom)
