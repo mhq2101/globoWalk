@@ -8,19 +8,13 @@ import { Link, Redirect, withRouter } from 'react-router-dom';
 class Signup extends React.Component {
     constructor(props) {
         super(props);
-        // this.handleSubmit = this.handleSubmit.bind(this)
     }
     
-    // handleSubmit() {
-    //     this.props.signup
-    //     this.props.history.push("/user")
-    // }
-
     render() {
         return (
             <div>
                 <h1>Signup:</h1>
-                <form onSubmit={(event) => this.props.signup}>
+                <form onSubmit={this.props.signup}>
                     <div>
                         <input
                             key="name"
