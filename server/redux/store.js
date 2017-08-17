@@ -15,8 +15,7 @@ const rootReducer = combineReducers({
 const store = createStore(
   rootReducer,
   applyMiddleware(
-    thunkMiddleware,
-    // createLogger()
+    thunkMiddleware
   )
 );
 

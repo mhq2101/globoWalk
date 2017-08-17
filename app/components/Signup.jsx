@@ -1,27 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import {Link} from 'react-router-dom'
-import { login, logout } from '../redux/reducers/auth';
-
+import { login, logout, signup } from '../redux/reducers/auth';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 
 /* -------Component--------- */
 
-class Login extends React.Component {
-
-    componentDidMount() {
-      // store.dispatch(fetchAudio())
-      //joinChatRoom('lobby')
-      
+class Signup extends React.Component {
+    constructor(props) {
+        super(props);
     }
-  
+    
     render() {
         return (
             <div>
-                <h1>Log in to GloboWalk</h1>
-                <form onSubmit={this.props.login}>
+                <h1>Signup:</h1>
+                <form onSubmit={this.props.signup}>
                     <div>
                         <input
                             key="name"
+                            name="name"
+                            type="name"
+                            placeholder="name"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <input
+                            key="email"
                             name="email"
                             type="email"
                             placeholder="email"
@@ -36,17 +41,15 @@ class Login extends React.Component {
                             placeholder="password"
                             required
                         />
-                        <button type="submit">Log In</button>
+                        <button type="submit">Signup for GloboWalk </button>
                     </div>
                 </form>
-                <button type="submit" onClick={this.props.logout}>Logout</button>
                 <div>
                     <a target="_self" href="/api/auth/google/login">
                         <span className="fa fa-google" ></span>
-                        Log in with Google
+                        Signup with Google
                     </a>
                 </div>
-                <Link to ="/signup"> Sign Up </Link>
             </div>
         )
     }
@@ -58,15 +61,13 @@ class Login extends React.Component {
 const mapState = null;
 
 const mapDispatch = dispatch => ({
-    login(event) {
+    signup(event) {
         event.preventDefault();
+        const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
-        dispatch(login(email, password));
-    },
-    logout() {
-        dispatch(logout());
-    },
+        dispatch(signup(name, email, password));
+    }
 });
 
-export default connect(mapState, mapDispatch)(Login)
+export default connect(mapState, mapDispatch)(Signup)

@@ -27,21 +27,19 @@ chatroom.get('/rooms', (req, res, next) => {
 })
 
 chatroom.get('/room/:id', (req, res, next) => {
-  console.log("hello")
   Chatroom.findOne({
     where: {
       id: req.params.id
     }
   })
   .then(chatroom => {
-    console.log("asdasd")
+    console.log(req.session.user)
     res.json(chatroom)
   })
   .catch(next)
 })
 
 chatroom.post('/create', (req, res, next) => {
-  console.log("asd", req.body)
   Chatroom.create(req.body)
   .then(chatroom => {
     res.json(chatroom)
@@ -51,7 +49,6 @@ chatroom.post('/create', (req, res, next) => {
 
 chatroom.post('/joinRoom', (req, res, next) => {
   const userPromise = User.findById(req.user.id)
-  //const userPromise = User.findById('2')
   const chatroomPromise = Chatroom.findOne({where: {name: req.body.name}})
   Promise.all([userPromise, chatroomPromise])
     .then((promises) => {
@@ -59,6 +56,18 @@ chatroom.post('/joinRoom', (req, res, next) => {
       const chatroom = promises[1]
       chatroom.addUser(user.id)
       res.json(chatroom)
+    })
+})
+
+chatroom.delete('/leaveRoom', (req, res, next) => {
+  const userPromise = User.findById(req.user.id)
+  const chatroomPromise = Chatroom.findOne({where: {name: req.body.name}})
+  Promise.all([userPromise, chatroomPromise])
+    .then((promises) => {
+      const user = promises[0]
+      const chatroom = promises[1]
+      chatroom.removeUser(user.id)
+      res.json({})
     })
 })
 
