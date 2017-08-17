@@ -1,9 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux'
-import axios from 'axios'
-import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx'
-import { fetchChatrooms, fetchChatroom, postChatroom, addUserToChatroom } from '../redux/reducers/chatroom'
+import { connect } from 'react-redux';
+import axios from 'axios';
+import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx';
+import { fetchChatrooms, fetchChatroom, postChatroom, addUserToChatroom } from '../redux/reducers/chatroom';
 import AudioDrop from '../webRTC/audioDrop.js';
+import Gain from './Gain';
 
 
 /* -------Component--------- */
@@ -17,6 +18,7 @@ class UserPage extends React.Component {
       audioBuffer: null,
       audioSource: null,
       audioName: null,
+      gain: null,
       canPlay: false,
       canPause: false,
       canStop: false,
@@ -25,6 +27,7 @@ class UserPage extends React.Component {
       timeStarted: 0
     })
 
+    this.adjustGainValue = this.adjustGainValue.bind(this);
     this.audioPlay = this.audioPlay.bind(this);
     this.audioPause = this.audioPause.bind(this);
     this.audioStop = this.audioStop.bind(this);
@@ -33,8 +36,17 @@ class UserPage extends React.Component {
     this.audioDisconnect = this.audioDisconnect.bind(this);
   }
 
+  adjustGainValue(node, event) {
+    const value = event.target.value
+    node.gain.value = value
+  }
+
   audioDropHandle(event, context) {
     event.preventDefault();
+    const gainNode = context.createGain();
+    this.setState({
+      gain: gainNode
+    })
     const whatever = this
     AudioDrop({
       context: context,
@@ -60,15 +72,16 @@ class UserPage extends React.Component {
     })
   }
 
-  audioPlay(event, buffer, context, start, dest) {
+  audioPlay(event, buffer, context, start, dest, gain) {
     // start the source playing
     var source = context.createBufferSource();
     // set the buffer in the AudioBufferSourceNode
     source.buffer = buffer;
     // connect the AudioBufferSourceNode to the
     // destination so we can hear the sound
-    source.connect(context.destination);
-    source.connect(dest);
+    source.connect(gain);
+    gain.connect(context.destination);
+    gain.connect(dest);
     event.preventDefault();
     this.setState({
       audioSource: source,
@@ -115,7 +128,7 @@ class UserPage extends React.Component {
 
 
   render() {
-    let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted } = this.state;
+    let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
     const { audioStream, audioCtx } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
 
@@ -131,7 +144,7 @@ class UserPage extends React.Component {
           }
         
           <button
-            onClick={(event) => this.audioPlay(event, audioBuffer, audioCtx.audioContext, start, audioCtx.audioDest)}
+            onClick={(event) => this.audioPlay(event, audioBuffer, audioCtx.audioContext, start, audioCtx.audioDest, gain)}
             disabled={!canPlay}>Play<i className="material-icons left">play_arrow</i></button>
           <button
             onClick={(event) => this.audioPause(event, audioSource, audioCtx.audioContext, start, timeStarted)}
@@ -139,6 +152,15 @@ class UserPage extends React.Component {
           <button
             onClick={(event) => this.audioStop(event, audioSource, audioCtx.audioContext, timeStarted)}
             disabled={!canStop}>Stop<i className="material-icons left">stop</i></button>
+            
+
+            {
+              gain !== null ? (<Gain node={gain} adjustGainValue={this.adjustGainValue} />) : (<div></div>)
+            }
+          
+
+          
+          
 
           
 
