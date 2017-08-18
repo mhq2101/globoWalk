@@ -14,7 +14,7 @@ import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 // import {joinChatRoom} from '../webRTC/client.jsx';npm 
 import { joinChatRoom } from '../webRTC/client.jsx';
-import RenderGMapImage from './RenderGMapImage';
+import RenderGMapImage from './VR/RenderGMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import App from './components/App';
 // import Home from './components/Login/Home';
@@ -25,64 +25,64 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Root extends React.Component {
-  componentDidMount() {
-    store.dispatch(fetchAudio())
-    //joinChatRoom('lobby')
+	componentDidMount() {
+		store.dispatch(fetchAudio())
+		//joinChatRoom('lobby')
 
-  }
+	}
 
-  componentWillMount() {
-    this.props.setCurrentPanoId('bqcCYoJIe5gS-HNnRL2e1g');
-    // store.dispatch(fetchAudio())
-    // joinChatRoom('lobby');
-  }
+	componentWillMount() {
+		this.props.setCurrentPanoId([-22.9691146, -43.1805221]);
+		// store.dispatch(fetchAudio())
+		// joinChatRoom('lobby');
+	}
 
 
-  render() {
-    return (
-      <div>
-        <Switch>
-          <Route exact path='/' render={() => (
-            (this.props.auth.id) ? (
-              <div>
-                <Redirect to="/user" />
-              </div>
-            ) : (
-                <Home />
-              )
-          )}
-          />
-          <Route exact path='/user' component={UserPage} />
-          <Route exact path='/login' render={() => (
-            (this.props.auth.id) ? (
-              <div>
-                <Redirect to="/user" />
-              </div>
-            ) : (
-                <Login />
-              )
-           )}/>
-          <Route exact path='/signup' render={() => (
-            (this.props.auth.id) ? (
-              <div>
-                <Redirect to="/user" />
-              </div>
-            ) : (
-                <Signup />
-              )
-          )}/>
-          <Route path='/chatroom/:id' component={ChatroomPage} />
-          <Route path="/aframe" component={RenderGMapImage} />
-          <Route path="/location-selection" component={LocationSelection} />
-          <Route exact path='/audio' component={Audio} />
-        </Switch>
-      </div>
-    )
-  }
+	render() {
+		return (
+			<div>
+				<Switch>
+					<Route exact path='/' render={() => (
+						(this.props.auth.id) ? (
+							<div>
+								<Redirect to="/user" />
+							</div>
+						) : (
+								<Home />
+							)
+					)}
+					/>
+					<Route exact path='/user' component={UserPage} />
+					<Route exact path='/login' render={() => (
+						(this.props.auth.id) ? (
+							<div>
+								<Redirect to="/user" />
+							</div>
+						) : (
+								<Login />
+							)
+					)} />
+					<Route exact path='/signup' render={() => (
+						(this.props.auth.id) ? (
+							<div>
+								<Redirect to="/user" />
+							</div>
+						) : (
+								<Signup />
+							)
+					)} />
+					<Route path='/chatroom/:id' component={ChatroomPage} />
+					<Route path="/aframe" component={RenderGMapImage} />
+					<Route path="/location-selection" component={LocationSelection} />
+					<Route exact path='/audio' component={Audio} />
+				</Switch>
+			</div>
+		)
+	}
 }
 
 const mapState = ({ auth }) => ({
-  auth
+	auth
 });
 
 const mapDispatch = { setCurrentPanoId };

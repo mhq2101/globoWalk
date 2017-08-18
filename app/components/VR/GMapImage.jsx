@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 
 import GMapArrow from './GMapArrow';
 import DayDreamController from './DayDreamController';
-import { setCurrentPanoId } from '../redux/reducers/panoId';
+import { setCurrentPanoId } from '../../redux/reducers/panoId';
 
 const GMapImage = props => {
 	const { panoImgSrc, mapData } = props;
 	if (!mapData || !panoImgSrc) return <h3>Loading</h3>;
 	return (
 		<Scene events={{
-			trackpadup: (evt) => {
+			trackpadup: evt => {
 				const remote = evt.target;
 				const intersected = remote.components.raycaster.intersectedEls;
 				if (intersected.length) {
