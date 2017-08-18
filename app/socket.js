@@ -107,8 +107,6 @@ socket.on('connect', () => {
 // socket.on('addPeer', addPeerConn);
 
 socket.on('addPeer', (config) => {
-  console.log('we totaly et her')
-  console.log(config)
   addPeerConn(config);
 })
 // Adds a Peer to our DoM as their own Audio Element

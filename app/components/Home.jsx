@@ -72,9 +72,6 @@ class Home extends React.Component {
                         Log in with Google
                     </a>
                 </div>
-                <div>
-                    <Link to ='/chatroom/1'> Select Chatroom </Link>
-                </div>
             </div>
         )
     }
