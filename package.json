@@ -25,6 +25,7 @@
   "homepage": "https://github.com/mhq2101/globoWalk#readme",
   "dependencies": {
     "aframe": "^0.6.1",
+    "aframe-mouse-cursor-component": "^0.5.2",
     "aframe-react": "^4.3.0",
     "axios": "^0.16.2",
     "babel-core": "^6.25.0",
