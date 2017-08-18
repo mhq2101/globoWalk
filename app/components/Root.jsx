@@ -32,7 +32,7 @@ class Root extends React.Component {
   }
 
   componentWillMount() {
-    this.props.setCurrentPanoId('bqcCYoJIe5gS-HNnRL2e1g');
+    // this.props.setCurrentPanoId('bqcCYoJIe5gS-HNnRL2e1g');
     // store.dispatch(fetchAudio())
     // joinChatRoom('lobby');
   }
