@@ -2,16 +2,18 @@ export default class GoogleMap {
 
   constructor() {
     this.map;
-    // this.initialCenter;
-    // this.initialZoom;
     this.geocoder;
-    this.selectedCoordinates = [];
+    this.markers = [];
 
     this.initializeMap = this.initializeMap.bind(this);
     this.addSearchBox = this.addSearchBox.bind(this);
     this.setInitialCoordinates = this.setInitialCoordinates.bind(this);
     this.setDefaultCoordinates = this.setDefaultCoordinates.bind(this);
     this.setInputCoordinates = this.setInputCoordinates.bind(this);
+    this.clearMarkers = this.clearMarkers.bind(this);
+    this.addMarker = this.addMarker.bind(this);
+    this.getPlaceFromLatLng = this.getPlaceFromLatLng.bind(this);
+
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setInitialCoordinates, this.setDefaultCoordinates);
@@ -23,7 +25,6 @@ export default class GoogleMap {
   setInitialCoordinates(position) {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
-
     this.initializeMap(latitude, longitude);
   }
 
@@ -45,18 +46,109 @@ export default class GoogleMap {
     };
 
     this.map = new google.maps.Map(document.getElementById("location-map"), mapOptions);
-
-    // this.initialCenter = mapOptions.center;
-    // this.initialZoom = mapOptions.zoom;
+    this.geocoder = new google.maps.Geocoder();
 
     this.addSearchBox();
-    this.setInputCoordinates(initialLatitude, initialLongitude);
+    let latlng = new google.maps.LatLng(initialLatitude, initialLongitude);
+      this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+        if (status == google.maps.GeocoderStatus.OK) {
+          let place = results[0];
+
+          if (place){
+            this.addMarker(place);
+            this.setInputCoordinates(place);
+          } else {
+            console.log("Unable to get place from click event.");
+          } 
+
+          // this.setInputCoordinates(latitude, longitude);
+        }
+      });
+
+    // let place = this.getPlaceFromLatLng(initialLatitude, initialLongitude);
+    // this.setInputCoordinates(place);
+
+    this.map.addListener("click", (event) => {
+      let latitude = event.latLng.lat();
+      let longitude = event.latLng.lng();
+
+      this.map.panTo(event.latLng);
+      // this.getPlaceFromLatLng(latitude, longitude);
+
+      let latlng = new google.maps.LatLng(latitude, longitude);
+      this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+        if (status == google.maps.GeocoderStatus.OK) {
+          let place = results[0];
+
+          if (place){
+            this.addMarker(place);
+            this.setInputCoordinates(place);
+          } else {
+            console.log("Unable to get place from click event.");
+          } 
+
+          // this.setInputCoordinates(latitude, longitude);
+        }
+      });
+    })
   }
 
-  setInputCoordinates(latitude, longitude) {
-    console.log('Made it to set input coordinates');
-    document.getElementById('coord-latitude').value = latitude.toString();
-    document.getElementById('coord-longitude').value = longitude.toString();
+  getPlaceFromLatLng(latitude, longitude) {
+    let latlng = new google.maps.LatLng(latitude, longitude);
+      this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+        if (status == google.maps.GeocoderStatus.OK) {
+          let place = results[0];
+
+          if (place) {
+            this.addMarker(place);
+            this.setInputCoordinates(place);
+          } else {
+            console.log("Problem retrieving place from Lat Lng.");
+          }
+        }
+      });
+  }
+
+  // setInputCoordinates(latitude, longitude) {
+  //   document.getElementById('coord-latitude').value = latitude.toString();
+  //   document.getElementById('coord-longitude').value = longitude.toString();
+  // }
+
+  setInputCoordinates(place) {
+    let location = place.geometry.location;
+    document.getElementById('coord-name').innerHTML = place.formatted_address;
+    document.getElementById('coord-latitude').value = location.lat();//.toString();
+    document.getElementById('coord-longitude').value = location.lng();//.toString();
+  }
+
+  clearMarkers() {
+    this.markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    this.markers = [];
+  }
+
+  addMarker(place) {
+    // Clear all previous markers
+    this.clearMarkers();
+
+    let icon = {
+      url: place.icon,
+      size: new google.maps.Size(71, 71),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(17, 34),
+      scaledSize: new google.maps.Size(25, 25)
+    };
+
+    // Create a marker for each place.
+    this.markers.push(new google.maps.Marker({
+      map: this.map,
+      icon: icon,
+      title: place.name,
+      position: place.geometry.location
+    }));
+
+    document.getElementById('coord-name').innerHTML = place.formatted_address;
   }
 
   addSearchBox() {
@@ -70,7 +162,7 @@ export default class GoogleMap {
       searchBox.setBounds(this.map.getBounds());
     });
 
-    let markers = [];
+    // let markers = [];
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
     searchBox.addListener('places_changed', () => {
@@ -78,11 +170,12 @@ export default class GoogleMap {
 
       if (places.length === 0) return;
 
+      console.log("Markers: ", this.markers);
       // Clear out the old markers.
-      markers.forEach((marker) => {
+      this.markers.forEach((marker) => {
         marker.setMap(null);
       });
-      markers = [];
+      this.markers = [];
 
       // For each place, get the icon, name and location.
       let bounds = new google.maps.LatLngBounds();
@@ -92,38 +185,26 @@ export default class GoogleMap {
           return;
         }
 
-        let icon = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
+        this.addMarker(place);
 
-        // Create a marker for each place.
-        markers.push(new google.maps.Marker({
-          map: this.map,
-          icon: icon,
-          title: place.name,
-          position: place.geometry.location
-        }));
+        let viewport = place.geometry.viewport;
+        let location = place.geometry.location;
 
-        if (place.geometry.viewport) {
+        if (viewport) {
           // Only geocodes have viewport.
-          bounds.union(place.geometry.viewport);
+          bounds.union(viewport);
         } else {
-          bounds.extend(place.geometry.location);
+          bounds.extend(location);
         }
-        let latitude = place.geometry.location.lat();
-        let longitude = place.geometry.location.lng();
-        this.selectedCoordinates = [latitude, longitude];
+        let latitude = location.lat();
+        let longitude = location.lng();
 
-        console.log("Place Obj: ", place);
+        // console.log("Place Obj: ", place);
         // console.log("Place Geometry Latitude: ", latitude);
         // console.log("Place Geometry Longitude: ", longitude);
 
-        document.getElementById('coord-name').innerHTML = place.formatted_address;
-        this.setInputCoordinates(latitude, longitude);
+        // document.getElementById('coord-name').innerHTML = place.formatted_address;
+        // this.setInputCoordinates(latitude, longitude);
         // document.getElementById('coord-latitude').value = latitude.toString();
         // document.getElementById('coord-longitude').value = longitude.toString();
       });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import panorama from 'google-panorama-by-location';
+import panorama from 'google-panorama-by-location/node';
 import { withRouter } from 'react-router-dom';
 
 import { setCurrentPanoId } from '../redux/reducers/panoId';
@@ -19,11 +19,10 @@ class LocationSelection extends React.Component {
   handleSubmit(evt) {
     evt.preventDefault();
 
-    // -22.9691146,-43.1805221
+    // '-22.9691146,-43.1805221'
     let location = evt.target.locations.value.split(',')
       .map(coordinate => Number(coordinate));
 
-    console.log("Location: ", location);
     panorama(location, (err, result) => {
       if (err) throw err;
 
@@ -33,9 +32,6 @@ class LocationSelection extends React.Component {
       this.props.setCurrentPanoId(panoId);
 
       this.props.history.push("/aframe");
-      // actual latitude, longitude
-      // console.log(result.latitude)
-      // console.log(result.longitude)
     });
   }
 
@@ -48,9 +44,9 @@ class LocationSelection extends React.Component {
     console.log("Lng:", longitude);
     console.log("Location: ", location);
 
-    let options = {
-      radius: 1000
-    };
+    const options = {
+      radius: 200
+    }
 
     panorama(location, options, (err, result) => {
       if (err) throw err;
@@ -62,12 +58,6 @@ class LocationSelection extends React.Component {
 
       this.props.history.push("/aframe");
     });
-  }
-
-  handleChange(evt) {
-    // this.setState({})
-    evt.persist();
-    console.log(evt);
   }
 
   componentDidMount() {
