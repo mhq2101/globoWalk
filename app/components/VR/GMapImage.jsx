@@ -1,4 +1,5 @@
 import 'aframe';
+import 'aframe-mouse-cursor-component';
 import React from 'react';
 import { Entity, Scene } from 'aframe-react';
 import { connect } from 'react-redux';
@@ -11,7 +12,7 @@ import { setCurrentPanoId } from '../../redux/reducers/panoId';
 
 const GMapImage = props => {
 	const { panoImgSrc, mapData } = props;
-	const scale = 0.75;
+	const scale = 0.5;
 	const color = 'gray';
 	const controls = [
 		{
@@ -60,16 +61,19 @@ const GMapImage = props => {
 
 	if (!mapData || !panoImgSrc) return <h3>Loading</h3>;
 	return (
-		<Scene events={{
-			trackpadup: evt => {
-				const remote = evt.target;
-				const intersected = remote.components.raycaster.intersectedEls;
-				if (intersected.length) {
-					const panoId = intersected[0].id;
-					props.setCurrentPanoId(panoId);
+		<Scene
+			cursor="rayOrigin: mouse; fuse: false"
+			events={{
+				trackpadup: evt => {
+					const remote = evt.target;
+					const intersected = remote.components.raycaster.intersectedEls;
+					if (intersected.length) {
+						const panoId = intersected[0].id;
+						props.setCurrentPanoId(panoId);
+					}
 				}
-			}
-		}}>
+			}}
+		>
 			<Assets controls={controls} />
 			<Entity primitive="a-camera" wasd-controls-enabled="false" />
 			<Entity id="image-360" primitive="a-sky" src={panoImgSrc} />
