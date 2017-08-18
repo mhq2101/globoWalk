@@ -4,11 +4,60 @@ import { Entity, Scene } from 'aframe-react';
 import { connect } from 'react-redux';
 
 import GMapArrow from './GMapArrow';
+import Assets from './Assets';
+import MusicControls from './MusicControls';
 import DayDreamController from './DayDreamController';
 import { setCurrentPanoId } from '../../redux/reducers/panoId';
 
 const GMapImage = props => {
 	const { panoImgSrc, mapData } = props;
+	const scale = 0.75;
+	const color = 'gray';
+	const controls = [
+		{
+			id: 'play',
+			index: 0,
+			src: 'images/play.png',
+			scale,
+			color,
+		},
+		{
+			id: 'pause',
+			index: 1,
+			src: 'images/pause.png',
+			scale,
+			color,
+		},
+		{
+			id: 'stop',
+			index: 2,
+			src: 'images/stop.png',
+			scale,
+			color,
+		},
+		{
+			id: 'prev',
+			index: 3,
+			src: 'images/prev.png',
+			scale,
+			color,
+		},
+		{
+			id: 'next',
+			index: 4,
+			src: 'images/next.png',
+			scale,
+			color,
+		},
+		{
+			id: 'mute',
+			index: 5,
+			src: 'images/mute.png',
+			scale,
+			color,
+		}
+	];
+
 	if (!mapData || !panoImgSrc) return <h3>Loading</h3>;
 	return (
 		<Scene events={{
@@ -21,11 +70,13 @@ const GMapImage = props => {
 				}
 			}
 		}}>
+			<Assets controls={controls} />
 			<Entity primitive="a-camera" wasd-controls-enabled="false" />
 			<Entity id="image-360" primitive="a-sky" src={panoImgSrc} />
 			{
 				mapData.links.map(link => <GMapArrow key={link.pano} linkData={link} headingOffset={mapData.tiles.originHeading} />)
 			}
+			<MusicControls controls={controls} />
 			<DayDreamController />
 		</Scene>
 	);
