@@ -186,7 +186,8 @@ export default class GoogleMap {
         }
 
         this.addMarker(place);
-
+        this.setInputCoordinates(place);
+        
         let viewport = place.geometry.viewport;
         let location = place.geometry.location;
 
@@ -199,6 +200,7 @@ export default class GoogleMap {
         let latitude = location.lat();
         let longitude = location.lng();
 
+        
         // console.log("Place Obj: ", place);
         // console.log("Place Geometry Latitude: ", latitude);
         // console.log("Place Geometry Longitude: ", longitude);
