@@ -4,7 +4,8 @@ import { Map } from 'immutable';
 const initialState = Map({
   localMediaStream: null,
   peers: Map({}),
-  peerMediaElements: Map({})
+  peerMediaElements: Map({}),
+  peerNames: Map({})
 });
 /* --------------- ACTIONS --------------- */
 
@@ -22,15 +23,16 @@ export const setUserMedia = (stream) => {
   };
 };
 
-export const addPeer = (peerId, peerConnection) => {
+export const addPeer = (peerId, peerConnection, name) => {
   return {
     type: ADD_PEER,
     peerId,
-    peerConnection
+    peerConnection,
+    name
   };
 };
 
-export const deletePeer = (peerId) => {
+export const deletePeer = (peerId, name) => {
   return {
     type: DELETE_PEER,
     peerId
@@ -55,14 +57,14 @@ export default function webrtcReducer (state = initialState, action) {
       return state.set('localMediaStream', action.stream);
 
     case ADD_PEER:
-      return state.setIn(['peers', action.peerId], action.peerConnection);
+      return state.setIn(['peers', action.peerId], action.peerConnection).setIn(['peerNames', action.name], action.name)
 
     case DELETE_PEER:
-      return state.deleteIn(['peers', action.peerId]);
+      return state.deleteIn(['peers', action.peerId]).deleteIn(['peerNames', action.name])
 
     case CLEAR_PEERS:
       // I didn't use .clear here because I want to keep the localMediaStream
-      return state.set('peers', Map({})).set('peerMediaElements', Map({}));
+      return state.set('peers', Map({})).set('peerMediaElements', Map({})).set('peerNames', Map({}));
 
     default:
       return state;

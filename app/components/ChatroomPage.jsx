@@ -128,9 +128,11 @@ class ChatroomPage extends React.Component {
   }
 
   render() {
+    
     let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
-    const { audioStream, audioCtx } = this.props;
+    const { audioStream, audioCtx, webrtc } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
+    console.log(webrtc && webrtc.get('peerNames').valueSeq().toArray())
     if(this.props.chatroom.chatroom && this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id)[0]) {
       console.log(this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id))
       return (
@@ -168,21 +170,19 @@ class ChatroomPage extends React.Component {
               canJoin: true
             })
           }} disabled={canJoin} > Leave Room </button>
-
+          
           <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
           <table className="table table-responsive table-striped table-hover table-sm">
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Email</th>
               </tr>
             </thead>
             <tbody>
-            {this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.map(user => {
+            {webrtc && webrtc.get('peerNames').valueSeq().toArray().map(name => {
               return (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
+                <tr key={name}>
+                  <td>{name}</td>
                 </tr>
                 )
             })}
@@ -213,11 +213,12 @@ class ChatroomPage extends React.Component {
 
 
 
-const mapState = ({ auth, chatroom, audioStream, audioCtx }) => ({
+const mapState = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => ({
   auth,
   chatroom,
   audioStream,
-  audioCtx
+  audioCtx,
+  webrtc
 });
 
 const mapDispatch = function (dispatch) {
