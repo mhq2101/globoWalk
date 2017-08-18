@@ -58,7 +58,7 @@ class RenderGMapImage extends React.Component {
 	}
 
 	render() {
-		return (<GMapImage />);
+		return <GMapImage />;
 	}
 }
 

@@ -158,7 +158,7 @@ export function addPeerConn (config) {
       }
     );
   }
-  store.dispatch(addPeer(peerId, peerConnection));
+  store.dispatch(addPeer(peerId, peerConnection, store.getState().auth.name));
 }
 
 export function removePeerConn (config) {
@@ -171,7 +171,7 @@ export function removePeerConn (config) {
   if (peers.has(peerId)) {
     peers.get(peerId).close();
   }
-  store.dispatch(deletePeer(peerId));
+  store.dispatch(deletePeer(peerId, store.getState().auth.name));
   delete peerMediaElements[config.peerId];
 }
 
