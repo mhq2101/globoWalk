@@ -12,11 +12,12 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1>This is the Home Route</h1>
-                <form onSubmit={this.props.signup}>
-                    <div>
-                        <input
+            <div className="container">
+                <h1>Welcome to GloboWalk</h1>
+                <h5>New User? Sign Up here!</h5>
+                <form className="col s12" onSubmit={this.props.signup}>
+                    <div className="row">
+                        <input className="validate"
                             key="name"
                             name="name"
                             type="name"
@@ -24,7 +25,7 @@ class Home extends React.Component {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="row">
                         <input
                             key="email"
                             name="email"
@@ -33,7 +34,7 @@ class Home extends React.Component {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="row">
                         <input
                             key="password"
                             name="password"
@@ -45,7 +46,7 @@ class Home extends React.Component {
                     </div>
                 </form>
                 <form onSubmit={this.props.login}>
-                    <div>
+                    <div className="row">
                         <input
                             key="name"
                             name="email"
@@ -54,7 +55,7 @@ class Home extends React.Component {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="row" >
                         <input
                             key="password"
                             name="password"

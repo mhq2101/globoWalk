@@ -21,7 +21,7 @@ export function addChatroom (chatroom) {
 
 //Initial State
 const initialState = {
-  chatroom: {},
+  chatroom: '',
   chatrooms: []
 }
 

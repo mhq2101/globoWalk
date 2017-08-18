@@ -52,6 +52,21 @@ class Root extends React.Component {
               )
           )}
           />
+          <Route exact path='/user' render={() => (
+            (!this.props.auth.id) ? (
+              <div>
+                <Redirect to='/'/>
+              </div>
+            ) : (
+            this.props.chatroom.chatroom.id) ? (
+              <div>
+                <Redirect to={`/chatroom/${this.props.chatroom.chatroom.id}`}/>
+              </div>
+            ) : (
+                <UserPage />
+              )
+          )}
+          />
           <Route exact path='/user' component={UserPage} />
           <Route exact path='/login' render={() => (
             (this.props.auth.id) ? (
@@ -81,8 +96,8 @@ class Root extends React.Component {
   }
 }
 
-const mapState = ({ auth }) => ({
-  auth
+const mapState = ({ auth, chatroom }) => ({
+  auth, chatroom
 });
 
 const mapDispatch = { setCurrentPanoId };

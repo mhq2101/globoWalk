@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx'
-import { fetchChatroom, setCurrentChatroom } from '../redux/reducers/chatroom.jsx'
+
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import UserPage from './UserPage';
@@ -124,6 +124,7 @@ class ChatroomPage extends React.Component {
   }
 
   componentDidMount () {
+    this.props.addUserToChatroom(this.props.chatroom.chatroom.name)
     this.props.fetchChatroom(this.props.match.params.id)
   }
 
@@ -209,7 +210,7 @@ class ChatroomPage extends React.Component {
 
 
 /*-------Container-----------*/
-
+import { fetchChatroom, setCurrentChatroom, addUserToChatroom } from '../redux/reducers/chatroom.jsx'
 
 
 
@@ -220,16 +221,19 @@ const mapState = ({ auth, chatroom, audioStream, audioCtx }) => ({
   audioCtx
 });
 
-const mapDispatch = function (dispatch) {
-    return {
-      fetchChatroom (chatroomId) {
-        dispatch(fetchChatroom(chatroomId))
-      },
-      setCurrentChatroom (chatroomId) {
-        dispatch(setCurrentChatroom(chatroomId))
-      },
-    }
-};
+const mapDispatch = { fetchChatroom, setCurrentChatroom, addUserToChatroom }
+
+// const mapDispatch = function (dispatch) {
+//     return {
+      
+//       fetchChatroom (chatroomId) {
+//         dispatch(fetchChatroom(chatroomId))
+//       },
+//       setCurrentChatroom (chatroomId) {
+//         dispatch(setCurrentChatroom(chatroomId))
+//       },
+//     }
+// };
 
 
 export default connect(mapState, mapDispatch)(ChatroomPage)
