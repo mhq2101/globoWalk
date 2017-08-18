@@ -58,7 +58,7 @@ class LocationSelection extends React.Component {
       // pano ID
       let panoId = result.id;
       console.log("Pano Id: ", panoId);
-      this.props.setCurrentPanoId(location);
+      this.props.setCurrentPanoId(panoId);
 
       this.props.history.push("/aframe");
     });
