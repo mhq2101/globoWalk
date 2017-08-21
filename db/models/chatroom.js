@@ -46,11 +46,11 @@ const Chatroom = db.define('chatroom', {
     beforeCreate: setSaltAndPassword,
     beforeUpdate: setSaltAndPassword
   },
-  defaultScope: {
-    include: [
-      { model: User }
-    ]
-  }
+  // defaultScope: {
+  //   include: [
+  //     { model: User }
+  //   ]
+  // }
 });
 
 // Class Methods
