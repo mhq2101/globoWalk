@@ -1,6 +1,7 @@
-const Chatroom = require('./chatroom');
 const User = require('./user');
+const Chatroom = require('./chatroom');
 
-Chatroom.belongsToMany(User, {through: "Chatroom_User"})
+
+User.belongsToMany(Chatroom, {through: "User_Prev_Chatrooms"})
 
 module.exports = {Chatroom, User};

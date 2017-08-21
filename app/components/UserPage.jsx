@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx';
 import { setCurrentChatroom, fetchChatrooms, fetchChatroom, postChatroom, addUserToChatroom } from '../redux/reducers/chatroom';
-import { login, logout, signup } from '../redux/reducers/auth';
+import { login, logout, signup, postUserChatroom, whoami } from '../redux/reducers/auth';
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
+import {Row, Input} from 'react-materialize'
 import { Link } from 'react-router-dom';
+import '../../public/js/app/init.js'
 
 /* -------Component--------- */
 
@@ -29,7 +31,8 @@ class UserPage extends React.Component {
 
   render() {
     let { canJoin } = this.state;
-
+    const { auth, chatroom } = this.props;
+    console.log(auth.chatrooms)
     return (
       <div>
         <h1>Welcome User {this.props.auth.email}</h1>
@@ -37,6 +40,7 @@ class UserPage extends React.Component {
         <form onSubmit={(event) => {
           event.preventDefault()
           this.props.chatroom && this.props.postChatroom(event.target.chatroom.value)
+          this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
         }}>
           <input
             key="chatroom"
@@ -45,12 +49,24 @@ class UserPage extends React.Component {
           />
           <button type="submit"> Create Room </button>
         </form>
+        <Row>
+          <Input s={12} type='select' label="Choose from Previous Rooms" placeholder='Select a Chatroom' defaultValue={auth.chatrooms.length - 1}>
+            {
+              auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
+                return (
+                  <option key={chatroom.id} value={ind}> {chatroom.name} </option>
+                )
+              })
+            }
+          </Input>
+        </Row>
         <form onSubmit={(event) => {
           event.preventDefault()
           if(this.props.chatroom.chatrooms){
             if(this.props.chatroom.chatrooms.filter(room => event.target.chatroom.value == room.name)[0]){
               this.props.addUserToChatroom(event.target.chatroom.value)
               joinChatRoom(event.target.chatroom.value)
+              this.props.postUserChatroom(event.target.chatroom.value)
               this.setState({
                 canJoin: false
               })
@@ -102,6 +118,9 @@ const mapDispatch = function (dispatch) {
     fetchChatrooms() {
       dispatch(fetchChatrooms());
     },
+    whoami() {
+     dispatch(whoami());
+   },
     setCurrentChatroom(chatroom) {
       dispatch(setCurrentChatroom(chatroom));
     },
@@ -110,6 +129,9 @@ const mapDispatch = function (dispatch) {
     },
     addUserToChatroom(name) {
       dispatch(addUserToChatroom(name))
+    },
+    postUserChatroom(name) {
+     dispatch(postUserChatroom(name))
     },
     logout() {
       dispatch(logout())

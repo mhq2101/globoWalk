@@ -26,15 +26,16 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 
 class Root extends React.Component {
 	componentDidMount() {
-		store.dispatch(fetchAudio())
+    this.props.fetchAudio()
 		//joinChatRoom('lobby')
-
+    // if(this.props.auth.id) {
+    //   store.dispatch(fetchUserChats());
+    // }
 	}
+
 
 	componentWillMount() {
 		this.props.setCurrentPanoId([-22.9691146, -43.1805221]);
-		// store.dispatch(fetchAudio())
-		// joinChatRoom('lobby');
 	}
 
 
@@ -85,6 +86,6 @@ const mapState = ({ auth }) => ({
 	auth
 });
 
-const mapDispatch = { setCurrentPanoId };
+const mapDispatch = { setCurrentPanoId, fetchAudio };
 
 export default withRouter(connect(mapState, mapDispatch)(Root))
