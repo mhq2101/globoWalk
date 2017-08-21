@@ -86,16 +86,16 @@ module.exports = io => {
       }
     });
 
-    socket.on('userInfo', (userName) => {
-      socket.peerName = userName
-      // socket.userId = id
-      // socket.chatroomName = name
-    })
+    // socket.on('userInfo', (userName) => {
+    //   socket.peerName = userName
+    //   // socket.userId = id
+    //   // socket.chatroomName = name
+    // })
 
     // joinChatRoom joins a socket.io room and tells all clients in that room to establish a WebRTC
     //   connetions with the person entering the room.
     socket.on('joinChatRoom', function (room, name) {
-
+      socket.peerName = name
       console.log(`[${socket.id}] join ${room}`);
       if (!(store.getState().rooms.has(room))) {
         console.log(`Adding ${room} to state`);

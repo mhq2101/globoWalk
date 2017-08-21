@@ -38,18 +38,16 @@ export const fetchChatroom = (chatroomId) => {
 
 }
 
-export const joinAndGo = (chatroomName, userName) => {
+export const joinAndGo = (chatroomName) => {
 
   return dispatch => {
     return axios.get(`/api/chatroom/room/${chatroomName}`)
       .then(res => res.data)
       .then(chatroom => {
-        window.socket.emit('userInfo', userName)
         dispatch(setCurrentChatroom(chatroom))
         return chatroom.name
       })
       .then(name => {
-        console.log(name)
         joinChatRoom(name)
       })
       .catch(error => console.error(error))
