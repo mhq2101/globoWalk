@@ -26,21 +26,31 @@ class UserPage extends React.Component {
   //     this.props.setCurrentChatroom({})
   //   }
   // }
+  
+
+  componentWillUpdate(nextProps) {
+    console.log('nextprops', nextProps.auth)
+  }
 
 
   render() {
     let { canJoin } = this.state;
     const { auth, chatroom } = this.props;
-    console.log(auth.chatrooms)
+    
+    console.log('auth chatrooms', auth.chatrooms)
     return (
       <div>
+        
+
+        {/*<select> jkhkjh
+          
+        </select>*/}
         <h1>Welcome User {this.props.auth.email}</h1>
         <button type="submit" onClick={this.props.logout}>Logout</button>
         <form onSubmit={(event) => {
           event.preventDefault()
           this.props.chatroom && this.props.postChatroom(event.target.chatroom.value)
           this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
-          this.props.whoami()
         }}>
           <input
             key="chatroom"
@@ -49,15 +59,15 @@ class UserPage extends React.Component {
           />
           <button type="submit"> Create Room </button>
         </form>
-        <select>Your chatrooms!
-          {
-            auth && auth.chatrooms.map((chatroom, ind) => {
+        <div> Your Previous Chatrooms! 
+        {
+            auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
               return (
-                <option key={chatroom.id} value={ind}> {chatroom.name} </option>
+                <div key={chatroom.id} value={ind}> {chatroom.name} </div>
               )
             })
           }
-        </select>
+        </div>
         <form onSubmit={(event) => {
           event.preventDefault()
           if(this.props.chatroom.chatrooms){
