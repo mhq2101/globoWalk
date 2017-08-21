@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx';
 import { setCurrentChatroom, fetchChatrooms, fetchChatroom, postChatroom, joinAndGo } from '../redux/reducers/chatroom';
 import { login, logout, signup, postUserChatroom, whoami } from '../redux/reducers/auth';
@@ -33,7 +34,6 @@ class UserPage extends React.Component {
     const { auth, chatroom } = this.props;
     const { chatrooms } = this.props.chatroom
     
-    console.log('auth chatrooms', auth.chatrooms)
     return (
       <div>
         <h1>Welcome User {this.props.auth.name}</h1>
@@ -63,11 +63,11 @@ class UserPage extends React.Component {
         </Row>
         <form onSubmit={(event) => {
           event.preventDefault();
-          this.props.joinAndGo(event.target.chatroom.value, auth.name);
+          this.props.joinAndGo(event.target.chatroom.value);
           this.setState({
                 canJoin: false
               })
-          
+          this.props.history.push('/user/chatroom/1')
           {/*this.props.postUserChatroom(event.target.chatroom.value)*/}
           {/*if(this.props.chatroom.chatrooms){
             if(this.props.chatroom.chatrooms.filter(room => event.target.chatroom.value == room.name)[0]){
@@ -84,20 +84,12 @@ class UserPage extends React.Component {
           />
           <button type="submit" disabled={!canJoin}> Join Room </button>
         </form>
-        <div>
-            {(this.props.chatroom.chatroom.id)
-              ? <div>
-                  <Link to ={`/chatroom/${this.props.chatroom.chatroom.id}`}> Go to Chatroom {this.props.chatroom.chatroom.name} </Link>
-                </div>
-              : ""
-            }
-        </div>
-        <button onClick={() => {
+        {/* <button onClick={() => {
           leaveChatRoom(this.props.chatroom.chatroom.name)
           this.setState({
             canJoin: true
           })
-        }} disabled={canJoin} > Leave Room </button>
+        }} disabled={canJoin} > Leave Room </button> */}
       </div>
     )
   }
@@ -146,4 +138,4 @@ const mapDispatch = function (dispatch) {
   };
 };
 
-export default connect(mapState, mapDispatch)(UserPage)
+export default withRouter(connect(mapState, mapDispatch)(UserPage))

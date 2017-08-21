@@ -123,8 +123,8 @@ class ChatroomPage extends React.Component {
     source.disconnect(a);
   }
 
-  componentDidMount () {
-    
+  componentWillUnmount () {
+    this.props.setCurrentChatroom({})
   }
 
   render() {
