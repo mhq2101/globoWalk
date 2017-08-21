@@ -10,17 +10,13 @@ const initialState = {};
 /* --------------- ACTIONS --------------- */
 
 const AUTHENTICATED = 'AUTHENTICATED';
-const ADD_USER_CHATROOM = 'ADD_USER_CHATROOM'
+
 
 /* --------------- ACTION CREATORS --------------- */
 
 export const authenticated = user => ({
  type: AUTHENTICATED, user
 });
-
-export function addChatroomToUser (chatroom) {
- return { type: ADD_USER_CHATROOM, chatroom };
-}
 
 /* --------------- THUNKS --------------- */
 export const signup = (name, email, password) => {
@@ -66,7 +62,7 @@ export const postUserChatroom = (name) => {
          .then(res => res.data)
          .then(user => {
            //dispatch(addChatroomToUser(chatroom))
-           console.log(user)
+           //console.log(user)
            dispatch(authenticated(user))
          })
          .catch(error => console.error(error))

@@ -8,6 +8,7 @@ import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import {Row, Input} from 'react-materialize'
 import { Link } from 'react-router-dom';
+import '../../public/js/app/init.js'
 
 /* -------Component--------- */
 
@@ -20,12 +21,12 @@ class UserPage extends React.Component {
     })
   }
 
-  // componentDidMount () {
-  //   this.props.fetchChatrooms()
-  //   if (this.props.chatroom.chatroom.id){
-  //     this.props.setCurrentChatroom({})
-  //   }
-  // }
+  componentDidMount () {
+    this.props.fetchChatrooms()
+    if (this.props.chatroom.chatroom.id){
+      this.props.setCurrentChatroom({})
+    }
+  }
 
 
   render() {
@@ -40,7 +41,6 @@ class UserPage extends React.Component {
           event.preventDefault()
           this.props.chatroom && this.props.postChatroom(event.target.chatroom.value)
           this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
-          this.props.whoami()
         }}>
           <input
             key="chatroom"
@@ -49,15 +49,17 @@ class UserPage extends React.Component {
           />
           <button type="submit"> Create Room </button>
         </form>
-        <select>Your chatrooms!
-          {
-            auth && auth.chatrooms.map((chatroom, ind) => {
-              return (
-                <option key={chatroom.id} value={ind}> {chatroom.name} </option>
-              )
-            })
-          }
-        </select>
+        <Row>
+          <Input s={12} type='select' label="Choose from Previous Rooms" placeholder='Select a Chatroom' defaultValue={auth.chatrooms.length - 1}>
+            {
+              auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
+                return (
+                  <option key={chatroom.id} value={ind}> {chatroom.name} </option>
+                )
+              })
+            }
+          </Input>
+        </Row>
         <form onSubmit={(event) => {
           event.preventDefault()
           if(this.props.chatroom.chatrooms){
