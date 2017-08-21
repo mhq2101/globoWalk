@@ -4,7 +4,7 @@ import panorama from 'google-panorama-by-location/node';
 import { withRouter } from 'react-router-dom';
 
 import { setCurrentPanoId } from '../redux/reducers/panoId';
-import GoogleMap from '../google_maps_helpers';
+import GoogleMap from './GoogleMap';
 
 
 class LocationSelection extends React.Component {
@@ -12,58 +12,47 @@ class LocationSelection extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      latitude: '',
+      longitude: '',
+      location_name: '',
+      error_message: ''
+    }
+
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.updateLocationFields = this.updateLocationFields.bind(this);
+  }
+
+  updateLocationFields(location) {
+    this.setState({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      location_name: location.location_name,
+      error_message: ''
+    });
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
 
-    // '-22.9691146,-43.1805221'
-    let location = evt.target.locations.value.split(',')
-      .map(coordinate => Number(coordinate));
+    let location = [Number(this.state.latitude), Number(this.state.longitude)];
 
-    panorama(location, (err, result) => {
-      if (err) throw err;
-
-      // pano ID
-      let panoId = result.id;
-      console.log("Pano Id: ", panoId);
-      this.props.setCurrentPanoId(panoId);
-
-      this.props.history.push("/aframe");
-    });
-  }
-
-  handleClick(evt) {
-    let latitude = document.getElementById('coord-latitude').value;
-    let longitude = document.getElementById('coord-longitude').value;
-    let location = [Number(latitude), Number(longitude)];
-
-    console.log("Lat: ", latitude);
-    console.log("Lng:", longitude);
-    console.log("Location: ", location);
-
-    const options = {
-      radius: 200
-    }
-
+    const options = { radius: 400 };
     panorama(location, options, (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.log("Panorama Error: ", err);
+        this.setState({ error_message: "Street View not available for location" });
+
+        return;
+      }
 
       // pano ID
       let panoId = result.id;
-      console.log("Pano Id: ", panoId);
       this.props.setCurrentPanoId(panoId);
 
       this.props.history.push("/aframe");
     });
   }
-
-  componentDidMount() {
-    let mapHelper = new GoogleMap();
-  }
-
 
   render() {
     return (
@@ -71,35 +60,33 @@ class LocationSelection extends React.Component {
         <div className="section">
           <form onSubmit={this.handleSubmit}>
             <div className="row">
-              <h1>Select A Location</h1>
-
-              <div className="input-field col s6">
-                <select name="locations" defaultValue="" onChange={this.handleChange}>
-                  <option value="" disabled>Pick a desired location</option>
-                  <option value="52.5215372,13.4080149">Berlin, Germany</option>
-                  <option value="-22.9691146,-43.1805221">Rio de Janeiro, Brazil</option>
-                  <option value="48.1445233,17.0796787">Bratislava, Slovakia</option>
-                </select>
-                <label>Location</label>
+              <div className="col s12">
+                <h2>Location</h2>
+                <h6>{this.state.location_name}</h6>
               </div>
             </div>
             <div className="row">
               <div className="col s6">
-                <button type="submit">Submit</button>
+                <label>Latitude</label>
+                <input type="text" name="latitude" value={this.state.latitude} disabled />
+                <label>Longitude</label>
+                <input type="text" name="longitude" value={this.state.longitude} disabled />
+                <button type="submit" className="waves-effect waves-light btn">Select</button>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col s12">
+                {this.state.error_message &&
+                  <div className="card-panel red lighten-3">
+                    <span className="red-text text-darken-2">{this.state.error_message}</span>
+                  </div>
+                }
               </div>
             </div>
           </form>
           <div className="row">
-            <div className="col s8">
-              <input id="places-search" type="text" placeholder="Search Locations" />
-              <div id="location-map"></div>
-            </div>
-            <div className="col s4">
-              <h2>Location</h2>
-              <div id="coord-name"></div>
-              <input id="coord-latitude" type="text" name="latitude" onChange={this.handleChange} disabled />
-              <input id="coord-longitude" type="text" name="longitude" onChange={this.handleChange} disabled />
-              <a className="waves-effect waves-light btn" onClick={this.handleClick}>Select</a>
+            <div className="col s12">
+              <GoogleMap updateLocationFields={this.updateLocationFields} />
             </div>
           </div>
         </div>

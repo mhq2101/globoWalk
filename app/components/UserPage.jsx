@@ -8,6 +8,7 @@ import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import {Row, Input} from 'react-materialize'
 import { Link } from 'react-router-dom';
+import '../../public/js/app/init.js'
 
 /* -------Component--------- */
 
@@ -20,6 +21,12 @@ class UserPage extends React.Component {
     })
   }
 
+ componentDidMount () {
+    this.props.fetchChatrooms()
+    if (this.props.chatroom.chatroom.id){
+      this.props.setCurrentChatroom({})
+    }
+  }
 
   render() {
     let { canJoin } = this.state;
@@ -43,15 +50,17 @@ class UserPage extends React.Component {
           />
           <button type="submit"> Create Room </button>
         </form>
-        <div> Your Previous Chatrooms! 
-        {
-            auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
-              return (
-                <div key={chatroom.id} value={ind}> {chatroom.name} </div>
-              )
-            })
-          }
-        </div>
+        <Row>
+          <Input s={12} type='select' label="Choose from Previous Rooms" placeholder='Select a Chatroom' defaultValue={auth.chatrooms.length - 1}>
+            {
+              auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
+                return (
+                  <option key={chatroom.id} value={ind}> {chatroom.name} </option>
+                )
+              })
+            }
+          </Input>
+        </Row>
         <form onSubmit={(event) => {
           event.preventDefault();
           this.props.joinAndGo(event.target.chatroom.value, auth.name);
