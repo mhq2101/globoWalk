@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const _ = require('lodash');
 const Sequelize = require('sequelize');
-
+const Chatroom = require('./chatroom')
 const db = require('../index');
 
 const User = db.define('user', {
@@ -52,7 +52,12 @@ const User = db.define('user', {
   hooks: {
     beforeCreate: setSaltAndPassword,
     beforeUpdate: setSaltAndPassword
-  }
+  },
+    defaultScope: {
+     include: [
+       { model: Chatroom }
+     ]
+   }
 });
 
 
