@@ -26,6 +26,18 @@ chatroom.get('/rooms', (req, res, next) => {
   .catch(error => console.error(error))
 })
 
+chatroom.get('/room/:name', (req, res, next) => {
+ Chatroom.findOne({
+   where: {
+     name: req.params.name
+   }
+ })
+ .then(chatroom => {
+   res.json(chatroom)
+ })
+ .catch(next)
+})
+
 chatroom.get('/room/:id', (req, res, next) => {
   Chatroom.findOne({
     where: {

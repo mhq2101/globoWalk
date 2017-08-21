@@ -16,6 +16,7 @@ import store from '../store.jsx';
 import { joinChatRoom } from '../webRTC/client.jsx';
 import RenderGMapImage from './VR/RenderGMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
+import { fetchChatrooms } from '../redux/reducers/chatroom';
 // import App from './components/App';
 // import Home from './components/Login/Home';
 // import Login from './components/Login/Login';
@@ -27,6 +28,7 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 class Root extends React.Component {
 	componentDidMount() {
     this.props.fetchAudio()
+    this.props.fetchChatrooms()
 		//joinChatRoom('lobby')
     // if(this.props.auth.id) {
     //   store.dispatch(fetchUserChats());
@@ -86,6 +88,6 @@ const mapState = ({ auth }) => ({
 	auth
 });
 
-const mapDispatch = { setCurrentPanoId, fetchAudio };
+const mapDispatch = { setCurrentPanoId, fetchAudio, fetchChatrooms };
 
 export default withRouter(connect(mapState, mapDispatch)(Root))

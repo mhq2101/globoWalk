@@ -124,7 +124,7 @@ class ChatroomPage extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchChatroom(this.props.match.params.id)
+    
   }
 
   render() {
@@ -132,9 +132,9 @@ class ChatroomPage extends React.Component {
     let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
     const { audioStream, audioCtx, webrtc } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
-    console.log(webrtc && webrtc.get('peerNames').valueSeq().toArray())
-    if(this.props.chatroom.chatroom && this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id)[0]) {
-      console.log(this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id))
+    // console.log(webrtc && webrtc.get('peerNames').valueSeq().toArray())
+    // if(this.props.chatroom.chatroom && this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id)[0]) {
+    //   console.log(this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id))
       return (
         <div>
           <h1>Welcome to Chatroom {this.props.chatroom.chatroom.name}</h1>
@@ -191,7 +191,7 @@ class ChatroomPage extends React.Component {
         </div>
       )
     }
-    else {
+    /*else {
       return(
         <NavLink
           activeClassName= "active"
@@ -203,7 +203,7 @@ class ChatroomPage extends React.Component {
         </NavLink>
       )
     }
-  }
+  }*/
 }
 
 

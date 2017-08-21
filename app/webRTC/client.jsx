@@ -41,7 +41,7 @@ export function joinChatRoom (room, errorback) {
   // Get our microphone from the state
   // const localMediaStream = store.getState().webrtc.get('localMediaStream');
   const localMediaStream = store.getState().audioContext;
-
+  console.log(store.getState().chatroom.chatrooms)
 
   if (!room) {
     console.log('No room was provided');
@@ -51,9 +51,7 @@ export function joinChatRoom (room, errorback) {
     signalingSocket = window.socket;
   }
   if (localMediaStream !== null) {  /* ie, if we've already been initialized */
-    // store.dispatch(addUserToChatroom(room));
-    // console.log("thisda room", room)
-    signalingSocket.emit('joinChatRoom', room);
+    signalingSocket.emit('joinChatRoom', room, store.getState().auth.name);
     return;
   }
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -66,7 +64,7 @@ export function joinChatRoom (room, errorback) {
       // const audioEl = document.getElementById('localAudio');
       // audioEl.muted = true;
       // audioEl.srcObject = stream;
-      signalingSocket.emit('joinChatRoom', room);
+      signalingSocket.emit('joinChatRoom', room, store.getState().auth.name);
     },
     // On Failure... likely because user denied access to a/v
     function () {
@@ -81,7 +79,6 @@ export function joinChatRoom (room, errorback) {
 //   triggers server-side logic to leave the matching socket.io room and tear down
 //   existing WebRTC connections.
 export function leaveChatRoom (name) {
-  store.dispatch(removeUserFromChatroom(name))
   signalingSocket.emit('leaveChatRoom');
 }
 
@@ -90,6 +87,8 @@ export function addPeerConn (config) {
   console.log('Signaling server said to add peer:', config);
   const peerId = config.peer_id;
   const peers = store.getState().webrtc.get('peers');
+  const peerName = config.peerName;
+  console.log(peerName)
   // If for some reason, this client aready is connected to the peer, return
   if (peers.has(peerId)) {
     console.log('Already connected to peer ', peerId);
@@ -158,7 +157,7 @@ export function addPeerConn (config) {
       }
     );
   }
-  store.dispatch(addPeer(peerId, peerConnection, store.getState().auth.name));
+  store.dispatch(addPeer(peerId, peerConnection, peerName));
 }
 
 export function removePeerConn (config) {
