@@ -1,3 +1,4 @@
+/* eslint id-length: 0 */
 import 'aframe';
 import React from 'react';
 import { Entity } from 'aframe-react';
@@ -15,12 +16,12 @@ const GMapArrow = props => {
 
 	return (
 		<Entity
-			className="selectable"
 			id={linkData.pano}
-			primitive="a-sphere"
-			scale="0.15 0.15 0.15"
+			className={'arrows'}
+			primitive={'a-sphere'}
+			scale={{ x: 0.15, y: 0.15, z: 0.15 }}
 			position={`${arrowX}, 1, ${arrowZ}`}
-			color="#4CC3D9"
+			color={'#4CC3D9'}
 			events={{
 				click: evt => props.setCurrentPanoId(evt.target.id),
 			}}

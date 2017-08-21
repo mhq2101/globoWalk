@@ -12,64 +12,21 @@ import { setCurrentPanoId } from '../../redux/reducers/panoId';
 
 const GMapImage = props => {
 	const { panoImgSrc, mapData } = props;
-	const scale = 0.5;
-	const color = 'gray';
-	const controls = [
-		{
-			id: 'play',
-			index: 0,
-			src: 'images/play.png',
-			scale,
-			color,
-		},
-		{
-			id: 'pause',
-			index: 1,
-			src: 'images/pause.png',
-			scale,
-			color,
-		},
-		{
-			id: 'stop',
-			index: 2,
-			src: 'images/stop.png',
-			scale,
-			color,
-		},
-		{
-			id: 'prev',
-			index: 3,
-			src: 'images/prev.png',
-			scale,
-			color,
-		},
-		{
-			id: 'next',
-			index: 4,
-			src: 'images/next.png',
-			scale,
-			color,
-		},
-		{
-			id: 'mute',
-			index: 5,
-			src: 'images/mute.png',
-			scale,
-			color,
-		}
-	];
+	const controls = ['play', 'pause', 'stop', 'prev', 'next', 'mute', 'menu'];
+	const controlEvents = {
+		menu: () => console.log('menu clicked!')
+	};
 
 	if (!mapData || !panoImgSrc) return <h3>Loading</h3>;
 	return (
 		<Scene
-			cursor="rayOrigin: mouse; fuse: false"
+			cursor={{ rayOrigin: 'mouse', fuse: false }}
 			events={{
 				trackpadup: evt => {
 					const remote = evt.target;
 					const intersected = remote.components.raycaster.intersectedEls;
-					if (intersected.length) {
-						const panoId = intersected[0].id;
-						props.setCurrentPanoId(panoId);
+					if (intersected.length && intersected[0].className === 'buttons') {
+						controlEvents[intersected[0].id]();
 					}
 				}
 			}}
