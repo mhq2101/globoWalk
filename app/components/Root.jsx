@@ -12,27 +12,15 @@ import ChatroomPage from './ChatroomPage.jsx';
 import Signup from './Signup.jsx';
 import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
-// import {joinChatRoom} from '../webRTC/client.jsx';npm 
 import { joinChatRoom } from '../webRTC/client.jsx';
 import GMapImage from './VR/GMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
 import { fetchChatrooms } from '../redux/reducers/chatroom';
-// import App from './components/App';
-// import Home from './components/Login/Home';
-// import Login from './components/Login/Login';
-// import Signup from './components/Login/Signup';
-// import SOCKET from '../socket';
-// import { whoami, logout } from '../redux/reducers/auth';
-// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Root extends React.Component {
 	componentDidMount() {
     this.props.fetchAudio()
     this.props.fetchChatrooms()
-		//joinChatRoom('lobby')
-    // if(this.props.auth.id) {
-    //   store.dispatch(fetchUserChats());
-    // }
 	}
 
 
@@ -45,7 +33,7 @@ class Root extends React.Component {
 		return (
 			<div>
 				<Switch>
-					<Route exact path='/' render={() => (
+					{/* <Route exact path='/' render={() => (
 						(this.props.auth.id) ? (
 							<div>
 								<Redirect to="/user" />
@@ -54,7 +42,8 @@ class Root extends React.Component {
 								<Home />
 							)
 					)}
-					/>
+					/> */}
+					<Route exact path='/' component={Future_Home} />
 					<Route exact path='/user' component={UserPage} />
 					<Route exact path='/login' render={() => (
 						(this.props.auth.id) ? (
@@ -76,7 +65,7 @@ class Root extends React.Component {
 					)} />
 					<Route path="/aframe" component={GMapImage} />
 					<Route path='/user/chatroom/:name' component={ChatroomPage} />
-					<Route path="/location-selection" component={LocationSelection} />
+					<Route path="/:name/location-selection" component={LocationSelection} />
 					<Route exact path='/audio' component={Audio} />
 				</Switch>
 			</div>

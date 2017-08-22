@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import panorama from 'google-panorama-by-location/node';
 import { withRouter } from 'react-router-dom';
-
 import { setCurrentPanoId } from '../redux/reducers/panoId';
+import { joinAndGo } from '../redux/reducers/chatroom.jsx';
 import GoogleMap from './GoogleMap';
 
 
@@ -54,6 +54,12 @@ class LocationSelection extends React.Component {
     });
   }
 
+  componentDidMount() {
+    if (!this.props.chatroom.chatroom.id) {
+      this.props.joinAndGo(this.props.match.params.name)
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -62,6 +68,7 @@ class LocationSelection extends React.Component {
             <div className="row">
               <div className="col s12">
                 <h2>Location</h2>
+                <button onClick={() => this.props.history.push(`/user/chatroom/${this.props.chatroom.chatroom.name}`)}>Return To Chatroom</button>
                 <h6>{this.state.location_name}</h6>
               </div>
             </div>
@@ -95,7 +102,22 @@ class LocationSelection extends React.Component {
   }
 }
 
-const mapStateToProps = null;
-const mapDispatchToProps = { setCurrentPanoId };
+const mapStateToProps = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => ({
+  auth,
+  chatroom,
+  audioStream,
+  audioCtx,
+  webrtc
+});
+
+const mapDispatchToProps = { setCurrentPanoId, joinAndGo };
+
+// const mapDispatch = function (dispatch) {
+//   return {
+//     joinAndGo(name) {
+//       dispatch(joinAndGo(name))
+//     }
+//   }
+// };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LocationSelection))

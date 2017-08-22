@@ -33,7 +33,6 @@ export const login = (email, password) => {
            const user = response.data;
            dispatch(authenticated(user));
        })
-       //.then(() => browserHistory.push('/'))
        .catch(err => {
            console.error(err)
        });
@@ -42,8 +41,8 @@ export const login = (email, password) => {
 export const logout = () =>
  dispatch =>
    axios.post('/api/auth/logout')
-     .then(() => dispatch(whoami()))
-     .catch(() => dispatch(whoami()));
+    .then(() => dispatch(whoami()))
+    .catch(() => dispatch(whoami()));
 
 export const whoami = () => {
  return dispatch =>
@@ -61,8 +60,6 @@ export const postUserChatroom = (name) => {
        axios.post('/api/chatroom/addUserChatroom', {name: name})
          .then(res => res.data)
          .then(user => {
-           //dispatch(addChatroomToUser(chatroom))
-           //console.log(user)
            dispatch(authenticated(user))
          })
          .catch(error => console.error(error))

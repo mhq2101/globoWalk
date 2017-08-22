@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import axios from 'axios'
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
-import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx'
-import { fetchChatroom, setCurrentChatroom, joinAndGo } from '../redux/reducers/chatroom.jsx'
+import { withRouter } from 'react-router-dom';
+import { leaveChatRoom } from '../webRTC/client.jsx'
+import { joinAndGo } from '../redux/reducers/chatroom.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
-import UserPage from './UserPage';
-import {NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 /* -------Component--------- */
 
@@ -124,95 +122,73 @@ class ChatroomPage extends React.Component {
     source.disconnect(a);
   }
 
-  componentDidMount () {
-    if(!this.props.chatroom.chatroom.id){
+  componentDidMount() {
+    if (!this.props.chatroom.chatroom.id) {
       this.props.joinAndGo(this.props.match.params.name)
-      joinChatRoom(this.props.match.params.name)
     }
   }
 
-  componentWillUnmount () {
-    this.props.setCurrentChatroom({})
-  }
-
   render() {
-    
     let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
     const { audioStream, audioCtx, webrtc } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
-    // console.log(webrtc && webrtc.get('peerNames').valueSeq().toArray())
-    // if(this.props.chatroom.chatroom && this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id)[0]) {
-    //   console.log(this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id))
-      return (
-        <div>
-          <h1>Welcome to Chatroom {this.props.chatroom.chatroom.name}</h1>
-          <h2>This is the Audio Section
+    return (
+      <div>
+        <h1>Welcome to Chatroom {this.props.chatroom.chatroom.name}</h1>
+        <h2>This is the Audio Section
             <button onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
-              disabled={!canDrop}> Drop<i className="material-icons medium left">music_note</i></button>
-          </h2>
-          {
-              audioName !== null ? (<div>Sound file = {audioName}</div>) : (<div></div>)
-            }
-          
-            <button
-              onClick={(event) => this.audioPlay(event, audioBuffer, audioCtx.audioContext, start, audioCtx.audioDest, gain)}
-              disabled={!canPlay}>Play<i className="material-icons left">play_arrow</i></button>
-            <button
-              onClick={(event) => this.audioPause(event, audioSource, audioCtx.audioContext, start, timeStarted)}
-              disabled={!canPause}>Pause<i className="material-icons left">pause</i></button>
-            <button
-              onClick={(event) => this.audioStop(event, audioSource, audioCtx.audioContext, timeStarted)}
-              disabled={!canStop}>Stop<i className="material-icons left">stop</i></button>
-              
+            disabled={!canDrop}> Drop<i className="material-icons medium left">music_note</i></button>
+        </h2>
+        {
+          audioName !== null ? (<div>Sound file = {audioName}</div>) : (<div></div>)
+        }
 
-              {
-                gain !== null ? (<Gain node={gain} adjustGainValue={this.adjustGainValue} />) : (<div></div>)
-              }
-            
-          <button type="submit" onClick={(event) => this.audioConnect(event, source, audioCtx.audioDest)}>Connect Microphone</button>
-          <button type="submit" onClick={(event) => this.audioDisconnect(event, source, audioCtx.audioDest)}>DisConnect Microphone</button>
-          
-          <button onClick={() => {
-            leaveChatRoom(this.props.chatroom.chatroom.name)
-            this.setState({
-              canJoin: true
-            })
-            this.props.history.push('/user')
-          }} disabled={canJoin} > Leave Room </button>
-          
-          <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
-          <table className="table table-responsive table-striped table-hover table-sm">
-            <thead>
-              <tr>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
+        <button
+          onClick={(event) => this.audioPlay(event, audioBuffer, audioCtx.audioContext, start, audioCtx.audioDest, gain)}
+          disabled={!canPlay}>Play<i className="material-icons left">play_arrow</i></button>
+        <button
+          onClick={(event) => this.audioPause(event, audioSource, audioCtx.audioContext, start, timeStarted)}
+          disabled={!canPause}>Pause<i className="material-icons left">pause</i></button>
+        <button
+          onClick={(event) => this.audioStop(event, audioSource, audioCtx.audioContext, timeStarted)}
+          disabled={!canStop}>Stop<i className="material-icons left">stop</i></button>
+
+
+        {
+          gain !== null ? (<Gain node={gain} adjustGainValue={this.adjustGainValue} />) : (<div></div>)
+        }
+
+        <button type="submit" onClick={(event) => this.audioConnect(event, source, audioCtx.audioDest)}>Connect Microphone</button>
+        <button type="submit" onClick={(event) => this.audioDisconnect(event, source, audioCtx.audioDest)}>DisConnect Microphone</button>
+
+        <button onClick={() => {
+          leaveChatRoom(this.props.chatroom.chatroom.name)
+          this.setState({
+            canJoin: true
+          })
+          this.props.history.push('/user')
+        }} disabled={canJoin} > Leave Room </button>
+        <button type="submit" onClick={() => this.props.history.push(`/${this.props.chatroom.chatroom.name}/location-selection`)}>Select Your Location</button>
+        <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
+        <table className="table table-responsive table-striped table-hover table-sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
             {webrtc && webrtc.get('peerNames').valueSeq().toArray().map(name => {
               return (
                 <tr key={name}>
                   <td>{name}</td>
                 </tr>
-                )
+              )
             })}
-            </tbody>
-          </table>
-        </div>
-      )
-    }
-  //   else {
-  //     return(
-  //       <NavLink
-  //         activeClassName= "active"
-  //         to={'/user'}
-  //       >
-  //         <div>
-  //           You have been disconnected from the chatroom, click here to return to the User Page
-  //         </div>
-  //       </NavLink>
-  //     )
-  //   }
-  //}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
 }
 
 
@@ -231,17 +207,11 @@ const mapState = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => ({
 });
 
 const mapDispatch = function (dispatch) {
-    return {
-      fetchChatroom (chatroomId) {
-        dispatch(fetchChatroom(chatroomId))
-      },
-      joinAndGo (name) {
-        dispatch(joinAndGo(name))
-      },
-      setCurrentChatroom (chatroomId) {
-        dispatch(setCurrentChatroom(chatroomId))
-      },
+  return {
+    joinAndGo(name) {
+      dispatch(joinAndGo(name))
     }
+  }
 };
 
 
