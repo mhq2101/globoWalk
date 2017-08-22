@@ -95,7 +95,14 @@ class LocationSelection extends React.Component {
   }
 }
 
-const mapStateToProps = null;
+const mapStateToProps = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => ({
+  auth,
+  chatroom,
+  audioStream,
+  audioCtx,
+  webrtc
+});
+
 const mapDispatchToProps = { setCurrentPanoId };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LocationSelection))

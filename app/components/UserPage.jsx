@@ -17,6 +17,13 @@ class UserPage extends React.Component {
 
   constructor() {
     super()
+    //this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(event) {
+    if(this.props.chatroom.chatrooms && event.target.innerHTML !== "Select A Lobby"){
+      this.props.joinAndGo(event.target.innerHTML)
+    }
   }
 
  componentDidMount () {
@@ -29,6 +36,9 @@ class UserPage extends React.Component {
   componentDidUpdate () {
     if (this.props.chatroom.chatroom.id) {
       (this.props.history.push(`/user/chatroom/${this.props.chatroom.chatroom.name}`))
+    }
+    if (!this.props.auth.id) {
+      (this.props.history.push('/login'))
     }
   }
 
@@ -56,11 +66,12 @@ class UserPage extends React.Component {
           <button type="submit"> Create Room </button>
         </form>
         <Row>
-          <Input s={12} type='select' label="Choose from Previous Rooms" placeholder='Select a Chatroom' defaultValue='0'>
+          <Input s={12} type='select' label="Choose from Previous Rooms" onChange={() => this.handleChange(event)}>
+            <option key='default'>Select A Lobby</option>
             {
               auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
                 return (
-                  <option key={chatroom.id} value={ind}> {chatroom.name} </option>
+                  <option key={chatroom.id}>{chatroom.name}</option>
                 )
               })
             }
