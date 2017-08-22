@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx';
-import { setCurrentChatroom, fetchChatrooms, fetchChatroom, postChatroom, joinAndGo, createAndGo } from '../redux/reducers/chatroom';
-import { login, logout, signup, postUserChatroom, whoami } from '../redux/reducers/auth';
+import { setCurrentChatroom, fetchChatrooms, fetchChatroom, joinAndGo, createAndGo } from '../redux/reducers/chatroom';
+import { login, logout, signup, postUserChatroom } from '../redux/reducers/auth';
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import {Row, Input} from 'react-materialize'
-import { Link } from 'react-router-dom';
-import '../../public/js/app/init.js'
 
 /* -------Component--------- */
 
@@ -17,6 +14,14 @@ class UserPage extends React.Component {
 
   constructor() {
     super()
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(event) {
+    event.preventDefault()
+    if(this.props.chatroom.chatrooms && event.target.innerHTML !== "Select A Lobby"){
+      this.props.joinAndGo(event.target.innerHTML)
+    }
   }
 
  componentDidMount () {
@@ -29,6 +34,9 @@ class UserPage extends React.Component {
   componentDidUpdate () {
     if (this.props.chatroom.chatroom.id) {
       (this.props.history.push(`/user/chatroom/${this.props.chatroom.chatroom.name}`))
+    }
+    if (!this.props.auth.id) {
+      (this.props.history.push('/login'))
     }
   }
 
@@ -56,15 +64,18 @@ class UserPage extends React.Component {
           <button type="submit"> Create Room </button>
         </form>
         <Row>
-          <Input s={12} type='select' label="Choose from Previous Rooms" placeholder='Select a Chatroom' defaultValue='0'>
+          {this.props.auth.chatrooms &&
+          <Input s={12} type='select' label="Choose from Previous Rooms" onChange={() => this.handleChange(event)}>
+            <option key='default'>Select A Lobby</option>
             {
-              auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
+              auth.chatrooms.map((chatroom, ind) => {
                 return (
-                  <option key={chatroom.id} value={ind}> {chatroom.name} </option>
+                  <option key={chatroom.id}>{chatroom.name}</option>
                 )
               })
             }
           </Input>
+          }
         </Row>
         <form onSubmit={(event) => {
           event.preventDefault();
@@ -110,17 +121,8 @@ const mapDispatch = function (dispatch) {
     fetchChatrooms() {
       dispatch(fetchChatrooms());
     },
-    whoami() {
-     dispatch(whoami());
-   },
     setCurrentChatroom(chatroom) {
       dispatch(setCurrentChatroom(chatroom));
-    },
-    postChatroom(name) {
-      dispatch(postChatroom(name))
-    },
-    addUserToChatroom(name) {
-      dispatch(addUserToChatroom(name))
     },
     postUserChatroom(name) {
      dispatch(postUserChatroom(name))

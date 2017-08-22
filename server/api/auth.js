@@ -24,7 +24,7 @@ auth.get('/users', (req, res, next) => {
   .then((users) => {
     res.json(users)
   })
-  .catch(error => console.error(error))
+  .catch(next)
 })
 
 //OAuth Google
@@ -108,7 +108,6 @@ auth.post('/login', (req, res, next) => {
 
 auth.post('/logout', (req, res, next) => {
   req.logout();
-  //res.redirect('/login')
   res.sendStatus(200);
 });
 

@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Row, Col, Button, Input, Collapsible, CollapsibleItem } from 'react-materialize';
 
 import { setCurrentPanoId } from '../redux/reducers/panoId';
+import { joinAndGo } from '../redux/reducers/chatroom.jsx';
 import GoogleMap from './GoogleMap';
 
 
@@ -102,11 +103,18 @@ class LocationSelection extends React.Component {
     this.callPanorama(location);
   }
 
+  componentDidMount() {
+    if (!this.props.chatroom.chatroom.id) {
+      this.props.joinAndGo(this.props.match.params.name)
+    }
+  }
+
   render() {
     return (
       <div className="container">
         <div className="section">
           <h2>Locations</h2>
+          <button onClick={() => this.props.history.push(`/user/chatroom/${this.props.chatroom.chatroom.name}`)}>Return To Chatroom</button>
           <Collapsible defaultActiveKey={1} accordion>
             <CollapsibleItem header='Suggested Locations' icon='thumb_up'>
               <p>
@@ -173,7 +181,22 @@ class LocationSelection extends React.Component {
   }
 }
 
-const mapStateToProps = null;
-const mapDispatchToProps = { setCurrentPanoId };
+const mapStateToProps = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => ({
+  auth,
+  chatroom,
+  audioStream,
+  audioCtx,
+  webrtc
+});
+
+const mapDispatchToProps = { setCurrentPanoId, joinAndGo };
+
+// const mapDispatch = function (dispatch) {
+//   return {
+//     joinAndGo(name) {
+//       dispatch(joinAndGo(name))
+//     }
+//   }
+// };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LocationSelection))

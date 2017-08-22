@@ -5,11 +5,8 @@ const store = require('./redux/store');
 const User = require('../db').model('user');
 const Chatroom = require('../db').model('chatroom');
 
-// const { createAndEmitUser, updateUserData, removeUserAndEmit } = require('./redux/reducers/user-reducer');
 const { addRoom, addSocketToRoom, removeSocketFromRoom } = require('./redux/reducers/room-reducer');
 const { addSocket, removeSocket } = require('./redux/reducers/socket-reducer');
-
-// const { getOtherUsers } = require('./utils');
 
 module.exports = io => {
   io.on('connection', socket => {
@@ -85,12 +82,6 @@ module.exports = io => {
         unsubscribe();
       }
     });
-
-    // socket.on('userInfo', (userName) => {
-    //   socket.peerName = userName
-    //   // socket.userId = id
-    //   // socket.chatroomName = name
-    // })
 
     // joinChatRoom joins a socket.io room and tells all clients in that room to establish a WebRTC
     //   connetions with the person entering the room.
