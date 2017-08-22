@@ -6,9 +6,9 @@ const DayDreamController = () => {
 	return (
 		<Entity
 			daydream-controls
-			id="remote"
-			raycaster="showLine: true; objects: .selectable; far: 6"
-			line="color: red; opacity: 0.75"
+			id={'remote'}
+			raycaster={{ showLine: true, objects: ['.buttons', '.arrows', '.keyboard'], far: 8 }}
+			line={{ color: 'red', opacity: 0.75 }}
 		/>
 	);
 };

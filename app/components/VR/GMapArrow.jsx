@@ -1,3 +1,4 @@
+/* eslint id-length: 0 */
 import 'aframe';
 import React from 'react';
 import { Entity } from 'aframe-react';
@@ -15,16 +16,24 @@ const GMapArrow = props => {
 
 	return (
 		<Entity
-			className="selectable"
 			id={linkData.pano}
-			primitive="a-sphere"
-			scale="0.15 0.15 0.15"
-			position={`${arrowX}, 1, ${arrowZ}`}
-			color="#4CC3D9"
+			className={'arrows'}
+			primitive={'a-sphere'}
+			scale={{ x: 0.15, y: 0.15, z: 0.15 }}
+			position={{ x: arrowX, y: 1.5, z: arrowZ }}
+			color={'#4CC3D9'}
 			events={{
-				click: evt => props.setCurrentPanoId(evt.target.id),
+				click: () => props.setCurrentPanoId(linkData.pano),
 			}}
-		/>
+		>
+			<a-animation
+				attribute={'position'}
+				to={`${arrowX} 1.42 ${arrowZ}`}
+				direction={'alternate'}
+				dur={'2000'}
+				repeat={'indefinite'}
+			/>
+		</Entity>
 	);
 };
 
