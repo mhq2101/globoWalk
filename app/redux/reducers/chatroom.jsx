@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from '../../store';
 import {joinChatRoom} from '../../webRTC/client.jsx';
+
 // ACTION TYPES
 const SET_CURRENT_CHATROOM = 'SET_CURRENT_CHATROOM';
 const GET_CHATROOMS = 'GET_CHATROOMS'

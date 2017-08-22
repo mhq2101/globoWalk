@@ -17,40 +17,10 @@ const Chatroom = db.define('chatroom', {
     type: Sequelize.STRING
   },
 }, {
-  // classMethods: {
-  //   generateSalt: function () {
-  //     return crypto.randomBytes(16).toString('base64');
-  //   },
-  //   encryptPassword: function (plainText, salt) {
-  //     const hash = crypto.createHash('sha1');
-  //     hash.update(plainText);
-  //     hash.update(salt);
-  //     return hash.digest('hex');
-  //   },
-  //   setSaltAndPassword: function (chatroom) {
-  //     if (chatroom.changed('password')) {
-  //       chatroom.salt = Chatroom.generateSalt();
-  //       chatroom.password = Chatroom.encryptPassword(chatroom.password, chatroom.salt);
-  //     }
-  //   }
-  // },
-  // instanceMethods: {
-  //   sanitize: function () {
-  //     return _.omit(this.toJSON(), ['password', 'salt']);
-  //   },
-  //   correctPassword: function (candidatePassword) {
-  //     return User.encryptPassword(candidatePassword, this.salt) === this.password;
-  //   }
-  // },
   hooks: {
     beforeCreate: setSaltAndPassword,
     beforeUpdate: setSaltAndPassword
   },
-  // defaultScope: {
-  //   include: [
-  //     { model: User }
-  //   ]
-  // }
 });
 
 // Class Methods
