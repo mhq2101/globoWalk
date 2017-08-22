@@ -5,11 +5,11 @@ import { Entity } from 'aframe-react';
 import MusicButton from './MusicButton';
 
 const MusicControls = props => {
-	const { controls } = props;
+	const { controls, controlEvents } = props;
 
 	return (
 		<Entity>
-			{controls.map((control, index) => <MusicButton key={control} attr={control} length={controls.length} index={index} />)}
+			{controls.map((control, index) => <MusicButton key={control} id={control} length={controls.length} index={index} controlEvents={controlEvents} />)}
 		</Entity>
 	);
 };

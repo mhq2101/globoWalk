@@ -20,12 +20,20 @@ const GMapArrow = props => {
 			className={'arrows'}
 			primitive={'a-sphere'}
 			scale={{ x: 0.15, y: 0.15, z: 0.15 }}
-			position={`${arrowX}, 1, ${arrowZ}`}
+			position={{ x: arrowX, y: 1.5, z: arrowZ }}
 			color={'#4CC3D9'}
 			events={{
-				click: evt => props.setCurrentPanoId(evt.target.id),
+				click: () => props.setCurrentPanoId(linkData.pano),
 			}}
-		/>
+		>
+			<a-animation
+				attribute={'position'}
+				to={`${arrowX} 1.42 ${arrowZ}`}
+				direction={'alternate'}
+				dur={'2000'}
+				repeat={'indefinite'}
+			/>
+		</Entity>
 	);
 };
 

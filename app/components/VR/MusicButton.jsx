@@ -4,10 +4,8 @@ import React from 'react';
 import { Entity } from 'aframe-react';
 
 const MusicButton = props => {
-	const { length, index } = props;
-	const id = props.attr;
+	const { length, index, id, controlEvents } = props;
 	const scale = 0.5;
-	const color = 'gray';
 
 	const spacing = scale * 0.1; // spacing between each button
 	const offset = scale + spacing; // offsets the buttons so they are spaced evenly
@@ -19,12 +17,13 @@ const MusicButton = props => {
 			id={id}
 			className={'buttons'}
 			src={`#${id}img`}
-			primitive="a-plane"
-			material={{ color: color, opacity: 0.95 }}
-			position={{ x: currX, y: 6, z: -4 }}
+			primitive={'a-plane'}
+			material={{ opacity: 0.95 }}
+			position={{ x: currX, y: 5, z: -4 }}
 			rotation={{ x: 24, y: 0, z: 0 }}
 			height={scale}
 			width={scale}
+			events={controlEvents[id]}
 		/>
 	);
 };

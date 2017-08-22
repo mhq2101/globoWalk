@@ -74,13 +74,8 @@ class Root extends React.Component {
 								<Signup />
 							)
 					)} />
-<<<<<<< HEAD
-					<Route path='/chatroom/:id' component={ChatroomPage} />
 					<Route path="/aframe" component={GMapImage} />
-=======
 					<Route path='/user/chatroom/:name' component={ChatroomPage} />
-					<Route path="/aframe" component={RenderGMapImage} />
->>>>>>> e68be7a9b3de21afdcf1b8944b856447e6b79a88
 					<Route path="/location-selection" component={LocationSelection} />
 					<Route exact path='/audio' component={Audio} />
 				</Switch>
