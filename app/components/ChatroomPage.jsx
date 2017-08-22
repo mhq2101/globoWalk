@@ -127,7 +127,6 @@ class ChatroomPage extends React.Component {
   componentDidMount () {
     if(!this.props.chatroom.chatroom.id){
       this.props.joinAndGo(this.props.match.params.name)
-      joinChatRoom(this.props.match.params.name)
     }
   }
 
@@ -136,7 +135,6 @@ class ChatroomPage extends React.Component {
   }
 
   render() {
-    
     let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
     const { audioStream, audioCtx, webrtc } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
