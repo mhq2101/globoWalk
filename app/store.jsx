@@ -9,7 +9,7 @@ const store = createStore(
   rootReducer,
   applyMiddleware(
     thunkMiddleware,
-    createLogger()
+    createLogger({collapsed: true})
   )
 );
 

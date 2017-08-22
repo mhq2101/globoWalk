@@ -13,7 +13,7 @@ import Signup from './Signup.jsx';
 import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 import { joinChatRoom } from '../webRTC/client.jsx';
-import RenderGMapImage from './VR/RenderGMapImage';
+import GMapImage from './VR/GMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
 import { fetchChatrooms } from '../redux/reducers/chatroom';
 
@@ -63,8 +63,8 @@ class Root extends React.Component {
 								<Signup />
 							)
 					)} />
+					<Route path="/aframe" component={GMapImage} />
 					<Route path='/user/chatroom/:name' component={ChatroomPage} />
-					<Route path="/aframe" component={RenderGMapImage} />
 					<Route path="/:name/location-selection" component={LocationSelection} />
 					<Route exact path='/audio' component={Audio} />
 				</Switch>
