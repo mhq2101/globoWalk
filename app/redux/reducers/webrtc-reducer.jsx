@@ -35,7 +35,8 @@ export const addPeer = (peerId, peerConnection, name) => {
 export const deletePeer = (peerId, name) => {
   return {
     type: DELETE_PEER,
-    peerId
+    peerId,
+    name
   };
 };
 

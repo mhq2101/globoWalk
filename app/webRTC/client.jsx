@@ -78,8 +78,8 @@ export function joinChatRoom (room, errorback) {
 // Called by a A-Frame Room's componentWillUnmount lifecycle hook, it leaveChatRoom
 //   triggers server-side logic to leave the matching socket.io room and tear down
 //   existing WebRTC connections.
-export function leaveChatRoom (name) {
-  signalingSocket.emit('leaveChatRoom');
+export function leaveChatRoom () {
+  signalingSocket.emit('leaveChatRoom', store.getState().auth.name);
 }
 
 // accepts conifg
@@ -161,6 +161,7 @@ export function addPeerConn (config) {
 }
 
 export function removePeerConn (config) {
+  const peerName = config.peerName
   console.log('Signaling server said to remove peer:', config);
   const peerId = config.peer_id;
   if (peerId in peerMediaElements) {
@@ -170,7 +171,7 @@ export function removePeerConn (config) {
   if (peers.has(peerId)) {
     peers.get(peerId).close();
   }
-  store.dispatch(deletePeer(peerId, store.getState().auth.name));
+  store.dispatch(deletePeer(peerId, peerName));
   delete peerMediaElements[config.peerId];
 }
 
