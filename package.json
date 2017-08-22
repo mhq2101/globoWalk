@@ -25,6 +25,7 @@
   "homepage": "https://github.com/mhq2101/globoWalk#readme",
   "dependencies": {
     "aframe": "^0.6.1",
+    "aframe-keyboard": "^0.0.1",
     "aframe-mouse-cursor-component": "^0.5.2",
     "aframe-react": "^4.3.0",
     "axios": "^0.16.2",
@@ -60,6 +61,7 @@
     "react-materialize": "^1.0.10",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.1.2",
+    "react-toastr": "^2.9.2",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",

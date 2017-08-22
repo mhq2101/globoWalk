@@ -24,31 +24,6 @@ const User = db.define('user', {
     type: Sequelize.STRING
   },
 }, {
-  // classMethods: {
-  //   generateSalt: function () {
-  //     return crypto.randomBytes(16).toString('base64');
-  //   },
-  //   encryptPassword: function (plainText, salt) {
-  //     const hash = crypto.createHash('sha1');
-  //     hash.update(plainText);
-  //     hash.update(salt);
-  //     return hash.digest('hex');
-  //   },
-  //   setSaltAndPassword: function (user) {
-  //     if (user.changed('password')) {
-  //       user.salt = User.generateSalt();
-  //       user.password = User.encryptPassword(user.password, user.salt);
-  //     }
-  //   }
-  // },
-  // instanceMethods: {
-  //   sanitize: function () {
-  //     return _.omit(this.toJSON(), ['password', 'salt']);
-  //   },
-  //   correctPassword: function (candidatePassword) {
-  //     return User.encryptPassword(candidatePassword, this.salt) === this.password;
-  //   }
-  // },
   hooks: {
     beforeCreate: setSaltAndPassword,
     beforeUpdate: setSaltAndPassword

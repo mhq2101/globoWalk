@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx';
-import { setCurrentChatroom, fetchChatrooms, fetchChatroom, postChatroom, joinAndGo, createAndGo } from '../redux/reducers/chatroom';
-import { login, logout, signup, postUserChatroom, whoami } from '../redux/reducers/auth';
+import { setCurrentChatroom, fetchChatrooms, fetchChatroom, joinAndGo, createAndGo } from '../redux/reducers/chatroom';
+import { login, logout, signup, postUserChatroom } from '../redux/reducers/auth';
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import {Row, Input} from 'react-materialize'
-import { Link } from 'react-router-dom';
-import '../../public/js/app/init.js'
 
 /* -------Component--------- */
 
@@ -124,17 +121,8 @@ const mapDispatch = function (dispatch) {
     fetchChatrooms() {
       dispatch(fetchChatrooms());
     },
-    whoami() {
-     dispatch(whoami());
-   },
     setCurrentChatroom(chatroom) {
       dispatch(setCurrentChatroom(chatroom));
-    },
-    postChatroom(name) {
-      dispatch(postChatroom(name))
-    },
-    addUserToChatroom(name) {
-      dispatch(addUserToChatroom(name))
     },
     postUserChatroom(name) {
      dispatch(postUserChatroom(name))

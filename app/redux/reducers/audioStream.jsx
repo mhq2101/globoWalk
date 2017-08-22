@@ -28,8 +28,6 @@ export const fetchAudio = () => dispatch => {
     // On Failure
     function () {
       console.log('Access denied for audio/video');
-      window.alert('You chose not to provide access to your microphone, so real-time voice chat is unavailable.');
-      if (errorback) errorback();
     });
 }
 

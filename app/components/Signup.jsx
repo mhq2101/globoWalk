@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { login, logout, signup } from '../redux/reducers/auth';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 /* -------Component--------- */
 
@@ -50,6 +50,7 @@ class Signup extends React.Component {
                         Signup with Google
                     </a>
                 </div>
+                <Link to ="/login"> Login </Link>
             </div>
         )
     }

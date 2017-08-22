@@ -1,9 +1,8 @@
 const router = require('express').Router();
 
-router.use('/auth', require('./auth'))
-router.use('/chatroom', require('./chatroom'))
-//router.use('/users', require('./users')); // matches all requests to /api/users/
-//router.use('/locations', require('./locations')); // matches all requests to  /api/puppies/
+router.use('/auth', require('./auth')) // matches all requests to  /api/auth/
+router.use('/chatroom', require('./chatroom')) // matches all requests to  /api/chatroom/
+//router.use('/locations', require('./locations')); // matches all requests to  /api/locations/
 
 
 //Not Found 404

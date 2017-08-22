@@ -39,9 +39,7 @@ let peerMediaElements = {};  // keep track of our <audio> tags, indexed by peer_
 
 export function joinChatRoom (room, errorback) {
   // Get our microphone from the state
-  // const localMediaStream = store.getState().webrtc.get('localMediaStream');
   const localMediaStream = store.getState().audioContext;
-  console.log(store.getState().chatroom.chatrooms)
 
   if (!room) {
     console.log('No room was provided');
@@ -61,9 +59,6 @@ export function joinChatRoom (room, errorback) {
     function (stream) {
       console.log('Access granted to audio');
       store.dispatch(setUserMedia(stream));
-      // const audioEl = document.getElementById('localAudio');
-      // audioEl.muted = true;
-      // audioEl.srcObject = stream;
       signalingSocket.emit('joinChatRoom', room, store.getState().auth.name);
     },
     // On Failure... likely because user denied access to a/v
@@ -104,7 +99,7 @@ export function addPeerConn (config) {
     * for now to get firefox to talk to chrome */
   );
 
-  // I'm not 100% sure what this does, but it sets up ice candidates ¯\_(ツ)_/¯
+  //Set up ice candidates
   peerConnection.onicecandidate = function (event) {
     if (event.candidate) {
       signalingSocket.emit('relayICECandidate', {
@@ -130,8 +125,6 @@ export function addPeerConn (config) {
     remoteAudio.srcObject = event.stream;
   };
   /* Add our local stream */
-  //WHY??
-  // peerConnection.addStream(store.getState().webrtc.get('localMediaStream'));
   peerConnection.addStream(store.getState().audioCtx.audioDest.stream);
   /* Only one side of the peer connection should create the
   * offer, the signaling server picks one to be the offerer.
