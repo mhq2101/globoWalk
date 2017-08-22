@@ -14,7 +14,7 @@ import { fetchAudio } from '../redux/reducers/audioStream.jsx';
 import store from '../store.jsx';
 // import {joinChatRoom} from '../webRTC/client.jsx';npm 
 import { joinChatRoom } from '../webRTC/client.jsx';
-import RenderGMapImage from './VR/RenderGMapImage';
+import GMapImage from './VR/GMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
 // import App from './components/App';
 // import Home from './components/Login/Home';
@@ -72,7 +72,7 @@ class Root extends React.Component {
 							)
 					)} />
 					<Route path='/chatroom/:id' component={ChatroomPage} />
-					<Route path="/aframe" component={RenderGMapImage} />
+					<Route path="/aframe" component={GMapImage} />
 					<Route path="/location-selection" component={LocationSelection} />
 					<Route exact path='/audio' component={Audio} />
 				</Switch>

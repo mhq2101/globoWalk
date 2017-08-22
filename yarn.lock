@@ -39,6 +39,23 @@ acorn@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.1.1.tgz#53fe161111f912ab999ee887a90a0bc52822fd75"
 
+aframe-html@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/aframe-html/-/aframe-html-0.0.4.tgz#451d62171ea1a5a0d11edfea5d30ce467e5532ab"
+  dependencies:
+    aframe latest
+    rasterizehtml "^1.2.2"
+
+aframe-keyboard@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/aframe-keyboard/-/aframe-keyboard-0.0.1.tgz#08f7460ec5405d571ca4a279798925a84d6799dd"
+  dependencies:
+    aframe latest
+    aframe-html "0.0.4"
+    aframe-webvr-controller "0.0.7"
+    react "^15.1.0"
+    react-dom "^15.1.0"
+
 aframe-mouse-cursor-component@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/aframe-mouse-cursor-component/-/aframe-mouse-cursor-component-0.5.2.tgz#6ce6926a3718691fba3be7561d853de33ba5cce4"
@@ -47,7 +64,13 @@ aframe-react@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/aframe-react/-/aframe-react-4.3.0.tgz#43eba68be4a1e88830aac404e90ac033945fbf54"
 
-aframe@^0.6.1:
+aframe-webvr-controller@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/aframe-webvr-controller/-/aframe-webvr-controller-0.0.7.tgz#c7dba6d69e4dee4530c6e8a89c2e2101e1982a65"
+  dependencies:
+    aframe latest
+
+aframe@^0.6.1, aframe@latest:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/aframe/-/aframe-0.6.1.tgz#291d6aad47586e09d04689fd48c1fb03f0ba63a5"
   dependencies:
@@ -301,6 +324,10 @@ axios@^0.16.2:
   dependencies:
     follow-redirects "^1.2.3"
     is-buffer "^1.1.5"
+
+ayepromise@~1.1.0, ayepromise@~1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/ayepromise/-/ayepromise-1.1.2.tgz#e04d6857c183df6d101787c3636d41691db80894"
 
 babel-code-frame@^6.11.0, babel-code-frame@^6.22.0:
   version "6.22.0"
@@ -1426,6 +1453,10 @@ css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
 
+css-font-face-src@~0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/css-font-face-src/-/css-font-face-src-0.2.2.tgz#09bdaaef731b952dc7c2969bfde86559b94fffae"
+
 css-loader@^0.28.4:
   version "0.28.4"
   resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.28.4.tgz#6cf3579192ce355e8b38d5f42dd7a1f2ec898d0f"
@@ -1444,6 +1475,10 @@ css-loader@^0.28.4:
     postcss-modules-values "^1.1.0"
     postcss-value-parser "^3.3.0"
     source-list-map "^0.1.7"
+
+css-mediaquery@~0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/css-mediaquery/-/css-mediaquery-0.1.2.tgz#6a2c37344928618631c54bd33cedd301da18bea0"
 
 css-parse@1.7.0:
   version "1.7.0"
@@ -1518,6 +1553,10 @@ csso@~2.3.1:
     clap "^1.0.9"
     source-map "^0.5.3"
 
+cssom@~0.3.0:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/cssom/-/cssom-0.3.2.tgz#b8036170c79f07a90ff2f16e22284027a243848b"
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
@@ -1544,7 +1583,7 @@ death@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/death/-/death-1.1.0.tgz#01aa9c401edd92750514470b8266390c66c67318"
 
-debug@2.2.0, debug@ngokevin/debug#noTimestamp:
+debug@2.2.0, "debug@github:ngokevin/debug#noTimestamp", debug@ngokevin/debug#noTimestamp:
   version "2.2.0"
   resolved "https://codeload.github.com/ngokevin/debug/tar.gz/ef5f8e66d49ce8bc64c6f282c15f8b7164409e3a"
 
@@ -1661,7 +1700,7 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-document-register-element@dmarcos/document-register-element#8ccc532b7:
+document-register-element@dmarcos/document-register-element#8ccc532b7, "document-register-element@github:dmarcos/document-register-element#8ccc532b7":
   version "0.5.4"
   resolved "https://codeload.github.com/dmarcos/document-register-element/tar.gz/8ccc532b7"
 
@@ -2664,6 +2703,16 @@ inherits@2.0.1:
 ini@^1.3.4, ini@~1.3.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.4.tgz#0537cb79daf59b59a1a517dff706c86ec039162e"
+
+inlineresources@~0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/inlineresources/-/inlineresources-0.3.2.tgz#162d394742bfc08f3b7b03a16a308a740036edc3"
+  dependencies:
+    ayepromise "~1.1.0"
+    css-font-face-src "~0.2.2"
+    url "~0.11.0"
+  optionalDependencies:
+    cssom "~0.3.0"
 
 inquirer@^3.0.1:
   version "3.2.1"
@@ -4507,6 +4556,17 @@ range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
 
+rasterizehtml@^1.2.2:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/rasterizehtml/-/rasterizehtml-1.2.4.tgz#a576120d5aefe7ea58724bdc5800a2d1e73043f4"
+  dependencies:
+    ayepromise "~1.1.1"
+    css-mediaquery "~0.1.2"
+    inlineresources "~0.3.2"
+    sane-domparser-error "~0.2.0"
+    url "~0.10.1"
+    xmlserializer "~0.4.0"
+
 raw-body@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.2.0.tgz#994976cf6a5096a41162840492f0bdc5d6e7fb96"
@@ -4524,7 +4584,7 @@ rc@^1.0.1, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^15.6.1:
+react-dom@^15.1.0, react-dom@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
   dependencies:
@@ -4565,7 +4625,7 @@ react-router@^4.1.1:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
-react@^15.6.1:
+react@^15.1.0, react@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"
   dependencies:
@@ -4897,6 +4957,10 @@ rx-lite@*, rx-lite@^4.0.8:
 safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
+
+sane-domparser-error@~0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/sane-domparser-error/-/sane-domparser-error-0.2.0.tgz#adec5360c8a394526c204e61b00ea125f7b2b01f"
 
 sass-graph@^2.1.1:
   version "2.2.4"
@@ -5658,9 +5722,16 @@ url-set-query@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/url-set-query/-/url-set-query-1.0.0.tgz#016e8cfd7c20ee05cafe7795e892bd0702faa339"
 
-url@^0.11.0:
+url@^0.11.0, url@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
+  dependencies:
+    punycode "1.3.2"
+    querystring "0.2.0"
+
+url@~0.10.1:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/url/-/url-0.10.3.tgz#021e4d9c7705f21bbf37d03ceb58767402774c64"
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
@@ -5916,6 +5987,10 @@ xmlbuilder@~9.0.1:
 xmlhttprequest-ssl@1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.3.tgz#185a888c04eca46c3e4070d99f7b49de3528992d"
+
+xmlserializer@~0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/xmlserializer/-/xmlserializer-0.4.0.tgz#9726a8a10e4ba66c531a6c209d3ad3b7a1641dc3"
 
 "xtend@>=4.0.0 <4.1.0-0", xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.1"
