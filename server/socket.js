@@ -76,7 +76,7 @@ module.exports = io => {
     // Also removes the user from the chatroom they were currently in chatroom
     socket.on('disconnect', () => {
       console.log(chalk.magenta(`User ${socket.userId} ${socket.id} has disconnected from ${socket.chatroomName}`));
-      leaveChatRoom();
+      leaveChatRoom(socket.peerName);
       console.log(`[${socket.id}] disconnected`);
       store.dispatch(removeSocket(socket));
       if (unsubscribe) {
@@ -116,7 +116,7 @@ module.exports = io => {
 
     // leaveChatRoom leaves the current socket.io room and tells all clients to tear down WebRTC
     //   connections with the person leaving the room.
-    function leaveChatRoom () {
+    function leaveChatRoom (name) {
       const room = socket.currentChatRoom;
       if (room) {
         console.log(`[${socket.id}] leaveChatRoom ${room}`);
@@ -124,15 +124,15 @@ module.exports = io => {
         store.dispatch(removeSocketFromRoom(room, socket));
         const roomOnState = store.getState().rooms.get(room);
         roomOnState.valueSeq().forEach(peer => {
-          peer.emit('removePeer', { 'peer_id': socket.id });
-          socket.emit('removePeer', { 'peer_id': peer.id });
+          peer.emit('removePeer', { 'peer_id': socket.id, 'peerName': name });
+          socket.emit('removePeer', { 'peer_id': peer.id, 'peerName': peer.peerName}, );
         });
         socket.currentChatRoom = null;
       } else {
         console.log('Not currently in room, so nothing to leave');
       }
     }
-    socket.on('leaveChatRoom', () => leaveChatRoom());
+    socket.on('leaveChatRoom', (name) => leaveChatRoom(name));
 
     // If any user is an Ice Candidate, tells other users to set up a ICE connection with them
     socket.on('relayICECandidate', function (config) {

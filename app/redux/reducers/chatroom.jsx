@@ -45,10 +45,6 @@ export const joinAndGo = (chatroomName) => {
       .then(res => res.data)
       .then(chatroom => {
         dispatch(setCurrentChatroom(chatroom))
-        return chatroom.name
-      })
-      .then(name => {
-        joinChatRoom(name)
       })
       .catch(error => console.error(error))
   }
@@ -77,6 +73,23 @@ export const postChatroom = (name) => {
         .catch(error => console.error(error))
   
 }
+
+export const createAndGo = (chatroomName) => {
+  
+    return dispatch => {
+      return axios.post('/api/chatroom/create', {name: chatroomName})
+        .then(res => res.data)
+        .then(chatroom => {
+          dispatch(addChatroom(chatroom))
+          dispatch(setCurrentChatroom(chatroom))
+          return chatroom.name
+        })
+        .then(name => {
+          joinChatRoom(name)
+        })
+        .catch(error => console.error(error))
+    }
+  }
 
 // REDUCER
 export default function chatroomReducer (state = initialState, action) {
