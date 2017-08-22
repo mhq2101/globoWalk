@@ -33,9 +33,10 @@ export const login = (email, password) => {
            const user = response.data;
            dispatch(authenticated(user));
        })
-       .catch(err => {
-           console.error(err)
-       });
+      // error will be caught on the login page
+      //  .catch(err => {
+      //      console.error(err)
+      //  });
 };
 
 export const logout = () =>
