@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import panorama from 'google-panorama-by-location/node';
 import { withRouter } from 'react-router-dom';
-
 import { setCurrentPanoId } from '../redux/reducers/panoId';
+import { joinAndGo } from '../redux/reducers/chatroom.jsx';
 import GoogleMap from './GoogleMap';
 
 
@@ -52,6 +52,12 @@ class LocationSelection extends React.Component {
 
       this.props.history.push("/aframe");
     });
+  }
+
+  componentDidMount() {
+    if (!this.props.chatroom.chatroom.id) {
+      this.props.joinAndGo(this.props.match.params.name)
+    }
   }
 
   render() {
@@ -104,6 +110,14 @@ const mapStateToProps = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => (
   webrtc
 });
 
-const mapDispatchToProps = { setCurrentPanoId };
+const mapDispatchToProps = { setCurrentPanoId, joinAndGo };
+
+// const mapDispatch = function (dispatch) {
+//   return {
+//     joinAndGo(name) {
+//       dispatch(joinAndGo(name))
+//     }
+//   }
+// };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LocationSelection))

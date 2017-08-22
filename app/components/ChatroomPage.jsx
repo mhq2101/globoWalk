@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import { leaveChatRoom } from '../webRTC/client.jsx'
-import { fetchChatroom, joinAndGo } from '../redux/reducers/chatroom.jsx'
+import { joinAndGo } from '../redux/reducers/chatroom.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import { NavLink } from 'react-router-dom'
@@ -168,7 +168,7 @@ class ChatroomPage extends React.Component {
           })
           this.props.history.push('/user')
         }} disabled={canJoin} > Leave Room </button>
-        <button type="submit" onClick={() => this.props.history.push('/location-selection')}>Select Your Location</button>
+        <button type="submit" onClick={() => this.props.history.push(`/${this.props.chatroom.chatroom.name}/location-selection`)}>Select Your Location</button>
         <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
         <table className="table table-responsive table-striped table-hover table-sm">
           <thead>
@@ -208,9 +208,6 @@ const mapState = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => ({
 
 const mapDispatch = function (dispatch) {
   return {
-    fetchChatroom(chatroomId) {
-      dispatch(fetchChatroom(chatroomId))
-    },
     joinAndGo(name) {
       dispatch(joinAndGo(name))
     }

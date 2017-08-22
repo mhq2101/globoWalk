@@ -65,7 +65,7 @@ class Root extends React.Component {
 					)} />
 					<Route path='/user/chatroom/:name' component={ChatroomPage} />
 					<Route path="/aframe" component={RenderGMapImage} />
-					<Route path="/location-selection" component={LocationSelection} />
+					<Route path="/:name/location-selection" component={LocationSelection} />
 					<Route exact path='/audio' component={Audio} />
 				</Switch>
 			</div>
