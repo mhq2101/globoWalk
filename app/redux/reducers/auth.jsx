@@ -42,8 +42,9 @@ export const login = (email, password) => {
 export const logout = () =>
  dispatch =>
    axios.post('/api/auth/logout')
-     .then(() => dispatch(whoami()))
-     .catch(() => dispatch(whoami()));
+    .then(() => dispatch(whoami()))
+     //.then(() => browserHistory.push('login'))
+    .catch(() => dispatch(whoami()));
 
 export const whoami = () => {
  return dispatch =>
@@ -52,7 +53,7 @@ export const whoami = () => {
        const user = response.data;
        dispatch(authenticated(user));
      })
-     .catch(err => console.error(err));
+     //.catch(err => console.error(err));
 };
 
 export const postUserChatroom = (name) => {

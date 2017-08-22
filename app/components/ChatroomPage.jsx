@@ -130,10 +130,6 @@ class ChatroomPage extends React.Component {
     }
   }
 
-  componentWillUnmount () {
-    this.props.setCurrentChatroom({})
-  }
-
   render() {
     let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
     const { audioStream, audioCtx, webrtc } = this.props;
@@ -177,7 +173,7 @@ class ChatroomPage extends React.Component {
             })
             this.props.history.push('/user')
           }} disabled={canJoin} > Leave Room </button>
-          
+          <button type="submit" onClick={() => this.props.history.push('/location-selection')}>Select Your Location</button>
           <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
           <table className="table table-responsive table-striped table-hover table-sm">
             <thead>

@@ -45,7 +45,7 @@ class Root extends React.Component {
 		return (
 			<div>
 				<Switch>
-					<Route exact path='/' render={() => (
+					{/* <Route exact path='/' render={() => (
 						(this.props.auth.id) ? (
 							<div>
 								<Redirect to="/user" />
@@ -54,7 +54,8 @@ class Root extends React.Component {
 								<Home />
 							)
 					)}
-					/>
+					/> */}
+					<Route exact path='/' component={Future_Home} />
 					<Route exact path='/user' component={UserPage} />
 					<Route exact path='/login' render={() => (
 						(this.props.auth.id) ? (
