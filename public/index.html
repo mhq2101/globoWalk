@@ -22,7 +22,6 @@
   <!-- Our js bundle will be in 'bundle.js' -->
 	<!-- The 'defer' attribute will ensure that it is run only after the DOM finishes loading -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_F8hIJwY292vEpTiLEdyQzZY2OK7j6FM&libraries=places"></script>
-  <script defer src="/bundle.js"></script>
 </head>
 <body>
   <!-- We will render our React app into a div with an id of 'app' -->
@@ -34,7 +33,8 @@
   <!--Import jQuery before materialize.js-->
   <script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/js/materialize.min.js"></script>
-  <script type="text/javascript" src="/js/app/init.js"></script>
+  <script defer src="/bundle.js"></script>
+	<script type="text/javascript" src="/js/app/init.js"></script>
 	<!-- <a href="https://icons8.com">Icon pack by Icons8</a> -->
 </body>
 </html>

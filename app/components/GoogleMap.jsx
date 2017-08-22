@@ -1,8 +1,13 @@
 import React from 'react';
+import { Preloader } from 'react-materialize';
 
 export default class GoogleMap extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      loading: true
+    }
 
     this.map;
     this.geocoder;
@@ -24,6 +29,8 @@ export default class GoogleMap extends React.Component {
     } else {
       this.setDefaultCoordinates(new Error("GeoLocation service not available in your browser."));
     }
+
+    this.setState({loading: false});
   }
 
   initializeMap(initialLatitude, initialLongitude) {
@@ -196,9 +203,12 @@ export default class GoogleMap extends React.Component {
     });
   }
 
+
+
   render() {
     return (
       <div>
+        {this.state.loading && <Preloader size='big' flashing />}
         <input id="places-search" type="text" placeholder="Search Locations" />
         <div id="location-map"></div>
       </div>
