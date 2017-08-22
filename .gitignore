@@ -6,5 +6,4 @@ app/.DS_Store
 public/bundle.js
 public/bundle.js.map
 
-localSecrets.js
 package-lock.json
