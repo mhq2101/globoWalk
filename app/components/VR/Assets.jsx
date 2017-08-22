@@ -7,7 +7,7 @@ const Assets = props => {
 	return (
 		<a-assets>
 			{
-				controls.map(control => <img key={`${control}img`} id={`${control}img`} crossOrigin="anonymous" src={`images/${control}.png`} />)
+				controls.map(control => <img key={`${control}img`} id={`${control}img`} crossOrigin="anonymous" src={`/images/${control}.png`} />)
 			}
 		</a-assets>
 	);
