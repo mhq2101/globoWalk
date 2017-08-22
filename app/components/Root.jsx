@@ -16,6 +16,7 @@ import store from '../store.jsx';
 import { joinChatRoom } from '../webRTC/client.jsx';
 import GMapImage from './VR/GMapImage';
 import { setCurrentPanoId } from '../redux/reducers/panoId';
+import { fetchChatrooms } from '../redux/reducers/chatroom';
 // import App from './components/App';
 // import Home from './components/Login/Home';
 // import Login from './components/Login/Login';
@@ -26,15 +27,17 @@ import { setCurrentPanoId } from '../redux/reducers/panoId';
 
 class Root extends React.Component {
 	componentDidMount() {
-		store.dispatch(fetchAudio())
+    this.props.fetchAudio()
+    this.props.fetchChatrooms()
 		//joinChatRoom('lobby')
-
+    // if(this.props.auth.id) {
+    //   store.dispatch(fetchUserChats());
+    // }
 	}
+
 
 	componentWillMount() {
 		this.props.setCurrentPanoId([-22.9691146, -43.1805221]);
-		// store.dispatch(fetchAudio())
-		// joinChatRoom('lobby');
 	}
 
 
@@ -71,8 +74,13 @@ class Root extends React.Component {
 								<Signup />
 							)
 					)} />
+<<<<<<< HEAD
 					<Route path='/chatroom/:id' component={ChatroomPage} />
 					<Route path="/aframe" component={GMapImage} />
+=======
+					<Route path='/user/chatroom/:name' component={ChatroomPage} />
+					<Route path="/aframe" component={RenderGMapImage} />
+>>>>>>> e68be7a9b3de21afdcf1b8944b856447e6b79a88
 					<Route path="/location-selection" component={LocationSelection} />
 					<Route exact path='/audio' component={Audio} />
 				</Switch>
@@ -85,6 +93,6 @@ const mapState = ({ auth }) => ({
 	auth
 });
 
-const mapDispatch = { setCurrentPanoId };
+const mapDispatch = { setCurrentPanoId, fetchAudio, fetchChatrooms };
 
 export default withRouter(connect(mapState, mapDispatch)(Root))

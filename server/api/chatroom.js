@@ -26,6 +26,18 @@ chatroom.get('/rooms', (req, res, next) => {
   .catch(error => console.error(error))
 })
 
+chatroom.get('/room/:name', (req, res, next) => {
+ Chatroom.findOne({
+   where: {
+     name: req.params.name
+   }
+ })
+ .then(chatroom => {
+   res.json(chatroom)
+ })
+ .catch(next)
+})
+
 chatroom.get('/room/:id', (req, res, next) => {
   Chatroom.findOne({
     where: {
@@ -46,6 +58,23 @@ chatroom.post('/create', (req, res, next) => {
   })
     .catch(next);
 });
+
+chatroom.post('/addUserChatroom', (req, res, next) => {
+ const userPromise = User.findById(req.user.id)
+ const chatroomPromise = Chatroom.findOne({where: {name: req.body.name}})
+ Promise.all([userPromise, chatroomPromise])
+   .then((promises) => {
+     const user = promises[0]
+     const chatroom = promises[1]
+     return user.addChatroom(chatroom.id)
+   })
+   .then((user)=> {
+     return User.findById(req.user.id)
+   })
+   .then((user) => {
+     res.json(user)
+   })
+})
 
 chatroom.post('/joinRoom', (req, res, next) => {
   const userPromise = User.findById(req.user.id)

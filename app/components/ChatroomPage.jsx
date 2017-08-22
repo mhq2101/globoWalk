@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import axios from 'axios'
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx'
-import { fetchChatroom, setCurrentChatroom } from '../redux/reducers/chatroom.jsx'
+import { fetchChatroom, setCurrentChatroom, joinAndGo } from '../redux/reducers/chatroom.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import UserPage from './UserPage';
@@ -124,7 +125,14 @@ class ChatroomPage extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchChatroom(this.props.match.params.id)
+    if(!this.props.chatroom.chatroom.id){
+      this.props.joinAndGo(this.props.match.params.name)
+      joinChatRoom(this.props.match.params.name)
+    }
+  }
+
+  componentWillUnmount () {
+    this.props.setCurrentChatroom({})
   }
 
   render() {
@@ -132,9 +140,9 @@ class ChatroomPage extends React.Component {
     let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
     const { audioStream, audioCtx, webrtc } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
-    console.log(webrtc && webrtc.get('peerNames').valueSeq().toArray())
-    if(this.props.chatroom.chatroom && this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id)[0]) {
-      console.log(this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id))
+    // console.log(webrtc && webrtc.get('peerNames').valueSeq().toArray())
+    // if(this.props.chatroom.chatroom && this.props.chatroom.chatroom.users && this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id)[0]) {
+    //   console.log(this.props.chatroom.chatroom.users.filter((user) => user.id === this.props.auth.id))
       return (
         <div>
           <h1>Welcome to Chatroom {this.props.chatroom.chatroom.name}</h1>
@@ -169,6 +177,7 @@ class ChatroomPage extends React.Component {
             this.setState({
               canJoin: true
             })
+            this.props.history.push('/user')
           }} disabled={canJoin} > Leave Room </button>
           
           <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
@@ -191,19 +200,19 @@ class ChatroomPage extends React.Component {
         </div>
       )
     }
-    else {
-      return(
-        <NavLink
-          activeClassName= "active"
-          to={'/user'}
-        >
-          <div>
-            You have been disconnected from the chatroom, click here to return to the User Page
-          </div>
-        </NavLink>
-      )
-    }
-  }
+  //   else {
+  //     return(
+  //       <NavLink
+  //         activeClassName= "active"
+  //         to={'/user'}
+  //       >
+  //         <div>
+  //           You have been disconnected from the chatroom, click here to return to the User Page
+  //         </div>
+  //       </NavLink>
+  //     )
+  //   }
+  //}
 }
 
 
@@ -226,6 +235,9 @@ const mapDispatch = function (dispatch) {
       fetchChatroom (chatroomId) {
         dispatch(fetchChatroom(chatroomId))
       },
+      joinAndGo (name) {
+        dispatch(joinAndGo(name))
+      },
       setCurrentChatroom (chatroomId) {
         dispatch(setCurrentChatroom(chatroomId))
       },
@@ -233,4 +245,4 @@ const mapDispatch = function (dispatch) {
 };
 
 
-export default connect(mapState, mapDispatch)(ChatroomPage)
+export default withRouter(connect(mapState, mapDispatch)(ChatroomPage))

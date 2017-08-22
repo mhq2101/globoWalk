@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../../store';
-
+import {joinChatRoom} from '../../webRTC/client.jsx';
 // ACTION TYPES
 const SET_CURRENT_CHATROOM = 'SET_CURRENT_CHATROOM';
 const GET_CHATROOMS = 'GET_CHATROOMS'
@@ -38,29 +38,16 @@ export const fetchChatroom = (chatroomId) => {
 
 }
 
-export const addUserToChatroom = (name) => {
-  
-    return dispatch =>
-      axios.post('/api/chatroom/joinRoom', {name: name})
-        .then(res => res.data)
-        .then(chatroom => {
-          dispatch(setCurrentChatroom(chatroom))
-          window.socket.emit('userInfo', store.getState().auth.id, name)
-        })
-        .catch(error => console.error(error))
-  
-}
+export const joinAndGo = (chatroomName) => {
 
-export const removeUserFromChatroom = (name) => {
-
-    return dispatch =>
-      axios.delete('/api/chatroom/leaveRoom', {data:{name: name}})
-        .then(res => res.data)
-        .then(chatroom => {
-          dispatch(setCurrentChatroom(initialState))
-        })
-        .catch(error => console.error(error))
-  
+  return dispatch => {
+    return axios.get(`/api/chatroom/room/${chatroomName}`)
+      .then(res => res.data)
+      .then(chatroom => {
+        dispatch(setCurrentChatroom(chatroom))
+      })
+      .catch(error => console.error(error))
+  }
 }
 
 export const fetchChatrooms = (chatroomId) => {
@@ -86,6 +73,23 @@ export const postChatroom = (name) => {
         .catch(error => console.error(error))
   
 }
+
+export const createAndGo = (chatroomName) => {
+  
+    return dispatch => {
+      return axios.post('/api/chatroom/create', {name: chatroomName})
+        .then(res => res.data)
+        .then(chatroom => {
+          dispatch(addChatroom(chatroom))
+          dispatch(setCurrentChatroom(chatroom))
+          return chatroom.name
+        })
+        .then(name => {
+          joinChatRoom(name)
+        })
+        .catch(error => console.error(error))
+    }
+  }
 
 // REDUCER
 export default function chatroomReducer (state = initialState, action) {

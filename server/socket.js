@@ -76,17 +76,7 @@ module.exports = io => {
     // Also removes the user from the chatroom they were currently in chatroom
     socket.on('disconnect', () => {
       console.log(chalk.magenta(`User ${socket.userId} ${socket.id} has disconnected from ${socket.chatroomName}`));
-      const userPromise = User.findById(socket.userId)
-      const chatroomPromise = Chatroom.findOne({where: {name: socket.chatroomName}})
-
-      Promise.all([userPromise, chatroomPromise])
-        .then((promises) => {
-          const user = promises[0]
-          const chatroom = promises[1]
-          chatroom.removeUser(user.id)
-        })
-
-      leaveChatRoom();
+      leaveChatRoom(socket.peerName);
       console.log(`[${socket.id}] disconnected`);
       store.dispatch(removeSocket(socket));
       if (unsubscribe) {
@@ -96,15 +86,16 @@ module.exports = io => {
       }
     });
 
-    socket.on('userInfo', (id, name) => {
-      socket.userId = id
-      socket.chatroomName = name
-    })
+    // socket.on('userInfo', (userName) => {
+    //   socket.peerName = userName
+    //   // socket.userId = id
+    //   // socket.chatroomName = name
+    // })
 
     // joinChatRoom joins a socket.io room and tells all clients in that room to establish a WebRTC
     //   connetions with the person entering the room.
-    socket.on('joinChatRoom', function (room) {
-
+    socket.on('joinChatRoom', function (room, name) {
+      socket.peerName = name
       console.log(`[${socket.id}] join ${room}`);
       if (!(store.getState().rooms.has(room))) {
         console.log(`Adding ${room} to state`);
@@ -114,9 +105,9 @@ module.exports = io => {
       
       roomOnState.valueSeq().toArray().forEach(peer => {
         // adds you to your peers
-        peer.emit('addPeer', { 'peer_id': socket.id, 'should_create_offer': false });
+        peer.emit('addPeer', { 'peer_id': socket.id, 'should_create_offer': false, 'peerName': name });
         // add your peers to you
-        socket.emit('addPeer', { 'peer_id': peer.id, 'should_create_offer': true });
+        socket.emit('addPeer', { 'peer_id': peer.id, 'should_create_offer': true, 'peerName': peer.peerName });
       });
       store.dispatch(addSocketToRoom(room, socket));
       socket.join(room);
@@ -125,7 +116,7 @@ module.exports = io => {
 
     // leaveChatRoom leaves the current socket.io room and tells all clients to tear down WebRTC
     //   connections with the person leaving the room.
-    function leaveChatRoom () {
+    function leaveChatRoom (name) {
       const room = socket.currentChatRoom;
       if (room) {
         console.log(`[${socket.id}] leaveChatRoom ${room}`);
@@ -133,15 +124,15 @@ module.exports = io => {
         store.dispatch(removeSocketFromRoom(room, socket));
         const roomOnState = store.getState().rooms.get(room);
         roomOnState.valueSeq().forEach(peer => {
-          peer.emit('removePeer', { 'peer_id': socket.id });
-          socket.emit('removePeer', { 'peer_id': peer.id });
+          peer.emit('removePeer', { 'peer_id': socket.id, 'peerName': name });
+          socket.emit('removePeer', { 'peer_id': peer.id, 'peerName': peer.peerName}, );
         });
         socket.currentChatRoom = null;
       } else {
         console.log('Not currently in room, so nothing to leave');
       }
     }
-    socket.on('leaveChatRoom', () => leaveChatRoom());
+    socket.on('leaveChatRoom', (name) => leaveChatRoom(name));
 
     // If any user is an Ice Candidate, tells other users to set up a ICE connection with them
     socket.on('relayICECandidate', function (config) {

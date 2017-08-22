@@ -42,7 +42,7 @@ const roomReducer = (state = initialState, action) => {
     case ADD_ROOM:
       return state.set(action.room, Map({}));
     case ADD_SOCKET_TO_ROOM:
-      return state.setIn([action.room, action.socket.id], action.socket);
+      return state.setIn([action.room, action.socket.id], action.socket)
     case REMOVE_SOCKET_FROM_ROOM:
       return state.deleteIn([action.room, action.socket.id]);
     default:

@@ -1,6 +1,9 @@
-export default class GoogleMap {
+import React from 'react';
 
-  constructor() {
+export default class GoogleMap extends React.Component {
+  constructor(props) {
+    super(props);
+
     this.map;
     this.geocoder;
     this.markers = [];
@@ -13,14 +16,63 @@ export default class GoogleMap {
     this.clearMarkers = this.clearMarkers.bind(this);
     this.addMarker = this.addMarker.bind(this);
     this.getPlaceFromLatLng = this.getPlaceFromLatLng.bind(this);
+  }
 
-
+  componentDidMount() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setInitialCoordinates, this.setDefaultCoordinates);
     } else {
       this.setDefaultCoordinates(new Error("GeoLocation service not available in your browser."));
     }
   }
+
+  initializeMap(initialLatitude, initialLongitude) {
+    let mapOptions = {
+      center: new google.maps.LatLng(initialLatitude, initialLongitude),
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeControl: false
+    };
+
+    this.map = new google.maps.Map(document.getElementById("location-map"), mapOptions);
+    this.geocoder = new google.maps.Geocoder();
+
+    this.addSearchBox();
+    let latlng = new google.maps.LatLng(initialLatitude, initialLongitude);
+    this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+      if (status == google.maps.GeocoderStatus.OK) {
+        let place = results[0];
+
+        if (place) {
+          this.addMarker(place);
+          this.setInputCoordinates(place);
+        } else {
+          console.log("Unable to get place from click event.");
+        }
+      }
+    });
+
+    this.map.addListener("click", (event) => {
+      let latitude = event.latLng.lat();
+      let longitude = event.latLng.lng();
+
+      this.map.panTo(event.latLng);
+
+      let latlng = new google.maps.LatLng(latitude, longitude);
+      this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+        if (status == google.maps.GeocoderStatus.OK) {
+          let place = results[0];
+
+          if (place) {
+            this.addMarker(place);
+            this.setInputCoordinates(place);
+          } else {
+            console.log("Unable to get place from click event.");
+          }
+        }
+      });
+    });
+  }  // end initializeMap
 
   setInitialCoordinates(position) {
     let latitude = position.coords.latitude;
@@ -37,88 +89,32 @@ export default class GoogleMap {
     this.initializeMap(hoboken_latitude, hoboken_longitude);
   }
 
-  initializeMap(initialLatitude, initialLongitude) {
-    let mapOptions = {
-      center: new google.maps.LatLng(initialLatitude, initialLongitude),
-      zoom: 12,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl: false
-    };
-
-    this.map = new google.maps.Map(document.getElementById("location-map"), mapOptions);
-    this.geocoder = new google.maps.Geocoder();
-
-    this.addSearchBox();
-    let latlng = new google.maps.LatLng(initialLatitude, initialLongitude);
-      this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-          let place = results[0];
-
-          if (place){
-            this.addMarker(place);
-            this.setInputCoordinates(place);
-          } else {
-            console.log("Unable to get place from click event.");
-          } 
-
-          // this.setInputCoordinates(latitude, longitude);
-        }
-      });
-
-    // let place = this.getPlaceFromLatLng(initialLatitude, initialLongitude);
-    // this.setInputCoordinates(place);
-
-    this.map.addListener("click", (event) => {
-      let latitude = event.latLng.lat();
-      let longitude = event.latLng.lng();
-
-      this.map.panTo(event.latLng);
-      // this.getPlaceFromLatLng(latitude, longitude);
-
-      let latlng = new google.maps.LatLng(latitude, longitude);
-      this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-          let place = results[0];
-
-          if (place){
-            this.addMarker(place);
-            this.setInputCoordinates(place);
-          } else {
-            console.log("Unable to get place from click event.");
-          } 
-
-          // this.setInputCoordinates(latitude, longitude);
-        }
-      });
-    })
-  }
-
   getPlaceFromLatLng(latitude, longitude) {
     let latlng = new google.maps.LatLng(latitude, longitude);
-      this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-          let place = results[0];
+    this.geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+      if (status == google.maps.GeocoderStatus.OK) {
+        let place = results[0];
 
-          if (place) {
-            this.addMarker(place);
-            this.setInputCoordinates(place);
-          } else {
-            console.log("Problem retrieving place from Lat Lng.");
-          }
+        if (place) {
+          this.addMarker(place);
+          this.setInputCoordinates(place);
+        } else {
+          console.log("Problem retrieving place from Lat Lng.");
         }
-      });
+      }
+    });
   }
-
-  // setInputCoordinates(latitude, longitude) {
-  //   document.getElementById('coord-latitude').value = latitude.toString();
-  //   document.getElementById('coord-longitude').value = longitude.toString();
-  // }
 
   setInputCoordinates(place) {
     let location = place.geometry.location;
-    document.getElementById('coord-name').innerHTML = place.formatted_address;
-    document.getElementById('coord-latitude').value = location.lat();//.toString();
-    document.getElementById('coord-longitude').value = location.lng();//.toString();
+
+    let location_info = {
+      latitude: location.lat(),
+      longitude: location.lng(),
+      location_name: place.formatted_address
+    };
+
+    this.props.updateLocationFields(location_info);
   }
 
   clearMarkers() {
@@ -133,7 +129,7 @@ export default class GoogleMap {
     this.clearMarkers();
 
     let icon = {
-      url: place.icon,
+      url: (place.icon || 'http://maps.google.com/mapfiles/ms/micons/red.png'),
       size: new google.maps.Size(71, 71),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(17, 34),
@@ -147,8 +143,6 @@ export default class GoogleMap {
       title: place.name,
       position: place.geometry.location
     }));
-
-    document.getElementById('coord-name').innerHTML = place.formatted_address;
   }
 
   addSearchBox() {
@@ -162,7 +156,6 @@ export default class GoogleMap {
       searchBox.setBounds(this.map.getBounds());
     });
 
-    // let markers = [];
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
     searchBox.addListener('places_changed', () => {
@@ -170,7 +163,6 @@ export default class GoogleMap {
 
       if (places.length === 0) return;
 
-      console.log("Markers: ", this.markers);
       // Clear out the old markers.
       this.markers.forEach((marker) => {
         marker.setMap(null);
@@ -187,7 +179,7 @@ export default class GoogleMap {
 
         this.addMarker(place);
         this.setInputCoordinates(place);
-        
+
         let viewport = place.geometry.viewport;
         let location = place.geometry.location;
 
@@ -199,18 +191,18 @@ export default class GoogleMap {
         }
         let latitude = location.lat();
         let longitude = location.lng();
-
-        
-        // console.log("Place Obj: ", place);
-        // console.log("Place Geometry Latitude: ", latitude);
-        // console.log("Place Geometry Longitude: ", longitude);
-
-        // document.getElementById('coord-name').innerHTML = place.formatted_address;
-        // this.setInputCoordinates(latitude, longitude);
-        // document.getElementById('coord-latitude').value = latitude.toString();
-        // document.getElementById('coord-longitude').value = longitude.toString();
       });
       this.map.fitBounds(bounds);
     });
+  }
+
+  render() {
+    return (
+      <div>
+        <input id="places-search" type="text" placeholder="Search Locations" />
+        <div id="location-map"></div>
+      </div>
+
+    )
   }
 }
