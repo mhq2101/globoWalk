@@ -14,17 +14,19 @@ class ChatroomPage extends React.Component {
   constructor() {
     super()
     this.state = ({
+      currentSong: 0,
       canJoin: false,
-      audioBuffer: null,
+      audioBuffer: [],
       audioSource: null,
-      audioName: null,
+      audioName: [],
       gain: null,
       canPlay: false,
       canPause: false,
       canStop: false,
       canDrop: true,
       startTime: 0,
-      timeStarted: 0
+      timeStarted: 0,
+      canPlayAfterStop: false
     })
 
     this.adjustGainValue = this.adjustGainValue.bind(this);
@@ -47,7 +49,7 @@ class ChatroomPage extends React.Component {
     this.setState({
       gain: gainNode
     })
-    const whatever = this
+    const whatever = this;
     AudioDrop({
       context: context,
       elements: window.document.body,
@@ -56,8 +58,8 @@ class ChatroomPage extends React.Component {
         if (AudioDrop.isValidVariableName(name)) {
           window[name] = buffer;
           whatever.setState({
-            audioBuffer: buffer,
-            audioName: name,
+            audioBuffer: whatever.state.audioBuffer.concat([buffer]),
+            audioName: whatever.state.audioName.concat([name]),
             canPlay: true
           })
           console.log('Added the variable "' + name + '"" to the window.');
@@ -72,17 +74,49 @@ class ChatroomPage extends React.Component {
     })
   }
 
-  audioPlay(event, buffer, context, start, dest, gain) {
+  audioPlay(event, context, start, dest, gain, current, nextOrPrev, endStart) {
+    
+    if (this.state.audioSource !== null) {
+      this.state.audioSource.disconnect();
+    }
+    if (current < 0) {
+      current = 0;
+      this.setState({
+        currentSong: 0
+      });
+    } else if (current > this.state.audioBuffer.length - 1) {
+      current = 0;
+      this.setState({
+        currentSong: 0
+      });
+    } else {
+      if (nextOrPrev) {
+        if (nextOrPrev === 'next') {
+          this.setState({
+            currentSong: current
+          })
+        }
+        if (nextOrPrev === 'prev') {
+          this.setState({
+            currentSong: current
+          })
+        }
+      }
+    }
+
+
     // start the source playing
     var source = context.createBufferSource();
     // set the buffer in the AudioBufferSourceNode
-    source.buffer = buffer;
+    source.buffer = this.state.audioBuffer[current];
     // connect the AudioBufferSourceNode to the
     // destination so we can hear the sound
     source.connect(gain);
     gain.connect(context.destination);
     gain.connect(dest);
-    event.preventDefault();
+    if (event !== null) {
+      event.preventDefault();
+    }
     this.setState({
       audioSource: source,
       timeStarted: context.currentTime,
@@ -100,7 +134,7 @@ class ChatroomPage extends React.Component {
       canPlay: true,
       canStop: true
     })
-    source.stop();
+    source.disconnect()
   }
   audioStop(event, source, context, timeAudioStarted) {
     event.preventDefault();
@@ -110,7 +144,7 @@ class ChatroomPage extends React.Component {
       canPlay: true,
       canPause: false
     })
-    source.stop();
+    source.disconnect()
   }
 
   audioConnect(event, source, a) {
@@ -129,9 +163,16 @@ class ChatroomPage extends React.Component {
   }
 
   render() {
-    let { canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain } = this.state;
+    let { currentSong, canJoin, audioBuffer, audioSource, audioName, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted, gain, endStart } = this.state;
     const { audioStream, audioCtx, webrtc } = this.props;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
+
+    if (audioSource !== null) {
+      console.log('aljhsd')
+      audioSource.onended = (event) => {
+          this.audioPlay(null, audioCtx.audioContext, 0, audioCtx.audioDest, gain, currentSong + 1)
+      }
+    }
     return (
       <div>
         <h1>Welcome to Chatroom {this.props.chatroom.chatroom.name}</h1>
@@ -139,12 +180,25 @@ class ChatroomPage extends React.Component {
             <button onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
             disabled={!canDrop}> Drop<i className="material-icons medium left">music_note</i></button>
         </h2>
-        {
-          audioName !== null ? (<div>Sound file = {audioName}</div>) : (<div></div>)
-        }
+
+        <h6> Your Playlist ({audioBuffer.length} Songs)
+            {
+            audioName.map((name, ind) => {
+              return (<div key={ind}>{ind + 1}. {name}
+                <button
+                  onClick={(event) => this.audioPlay(event, audioCtx.audioContext, start, audioCtx.audioDest, gain, ind)}
+                >Play<i className="material-icons left">play_arrow</i>
+                </button>
+              </div>)
+            })
+          }
+        </h6>
 
         <button
-          onClick={(event) => this.audioPlay(event, audioBuffer, audioCtx.audioContext, start, audioCtx.audioDest, gain)}
+          onClick={(event) => this.audioPlay(event, audioCtx.audioContext, 0, audioCtx.audioDest, gain, currentSong - 1, 'prev')}
+        >Previous<i className="material-icons left">skip_previous</i></button>
+        <button
+          onClick={(event) => this.audioPlay(event, audioCtx.audioContext, start, audioCtx.audioDest, gain, currentSong)}
           disabled={!canPlay}>Play<i className="material-icons left">play_arrow</i></button>
         <button
           onClick={(event) => this.audioPause(event, audioSource, audioCtx.audioContext, start, timeStarted)}
@@ -152,6 +206,10 @@ class ChatroomPage extends React.Component {
         <button
           onClick={(event) => this.audioStop(event, audioSource, audioCtx.audioContext, timeStarted)}
           disabled={!canStop}>Stop<i className="material-icons left">stop</i></button>
+        <button
+          onClick={(event) => this.audioPlay(event, audioCtx.audioContext, 0, audioCtx.audioDest, gain, currentSong + 1, 'next')}
+        >Next<i className="material-icons left">skip_next</i></button>
+
 
 
         {
@@ -168,6 +226,7 @@ class ChatroomPage extends React.Component {
           })
           this.props.history.push('/user')
         }} disabled={canJoin} > Leave Room </button>
+
         <button type="submit" onClick={() => this.props.history.push(`/${this.props.chatroom.chatroom.name}/location-selection`)}>Select Your Location</button>
         <h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
         <table className="table table-responsive table-striped table-hover table-sm">
