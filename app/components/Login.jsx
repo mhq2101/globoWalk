@@ -35,7 +35,8 @@ class Login extends React.Component {
                 <h1>Log in to GloboWalk</h1>
                 <ToastContainer ref={(input) => {this.container = input;}}
                     toastMessageFactory={ToastMessageFactory}
-                    className="toast-top-right" />
+                    className="toast-top-right"
+                />
                 <form onSubmit={this.submitHandler}>
                     <div>
                         <input
