@@ -45,6 +45,10 @@ export const joinAndGo = (chatroomName) => {
       .then(res => res.data)
       .then(chatroom => {
         dispatch(setCurrentChatroom(chatroom))
+        return chatroom.name
+      })
+      .then(name => {
+        joinChatRoom(name)
       })
       .catch(error => console.error(error))
   }
