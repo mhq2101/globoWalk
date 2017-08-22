@@ -55,6 +55,23 @@ export const joinAndGo = (chatroomName) => {
   }
 }
 
+export const joinAndGoNoCatch = (chatroomName) => {
+  
+    return dispatch => {
+      return axios.get(`/api/chatroom/room/${chatroomName}`)
+        .then(res => res.data)
+        .then(chatroom => {
+          dispatch(setCurrentChatroom(chatroom))
+          return chatroom.name
+        })
+        .then(name => {
+          joinChatRoom(name)
+        })
+        // error will be handled on the UserPage
+        // .catch(error => console.error(error))
+    }
+  }
+
 export const fetchChatrooms = (chatroomId) => {
   
     return dispatch =>
@@ -92,7 +109,8 @@ export const createAndGo = (chatroomName) => {
         .then(name => {
           joinChatRoom(name)
         })
-        .catch(error => console.error(error))
+        // error will be handled on the UserPage
+        // .catch(error => console.error(error))
     }
   }
 
