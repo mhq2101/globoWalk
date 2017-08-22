@@ -17,10 +17,11 @@ class UserPage extends React.Component {
 
   constructor() {
     super()
-    //this.handleChange = this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(event) {
+    event.preventDefault()
     if(this.props.chatroom.chatrooms && event.target.innerHTML !== "Select A Lobby"){
       this.props.joinAndGo(event.target.innerHTML)
     }
@@ -66,16 +67,18 @@ class UserPage extends React.Component {
           <button type="submit"> Create Room </button>
         </form>
         <Row>
+          {this.props.auth.chatrooms &&
           <Input s={12} type='select' label="Choose from Previous Rooms" onChange={() => this.handleChange(event)}>
             <option key='default'>Select A Lobby</option>
             {
-              auth.chatrooms && auth.chatrooms.map((chatroom, ind) => {
+              auth.chatrooms.map((chatroom, ind) => {
                 return (
                   <option key={chatroom.id}>{chatroom.name}</option>
                 )
               })
             }
           </Input>
+          }
         </Row>
         <form onSubmit={(event) => {
           event.preventDefault();

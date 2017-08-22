@@ -62,6 +62,7 @@ class LocationSelection extends React.Component {
             <div className="row">
               <div className="col s12">
                 <h2>Location</h2>
+                <button onClick={() => this.props.history.push(`/user/chatroom/${this.props.chatroom.chatroom.name}`)}>Return To Chatroom</button>
                 <h6>{this.state.location_name}</h6>
               </div>
             </div>
