@@ -191,12 +191,4 @@ const mapStateToProps = ({ auth, chatroom, audioStream, audioCtx, webrtc }) => (
 
 const mapDispatchToProps = { setCurrentPanoId, joinAndGo };
 
-// const mapDispatch = function (dispatch) {
-//   return {
-//     joinAndGo(name) {
-//       dispatch(joinAndGo(name))
-//     }
-//   }
-// };
-
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LocationSelection))
