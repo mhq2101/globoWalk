@@ -16,16 +16,20 @@ const LocationTile = props => {
 	const xOffset = scale + spacing;
 	const startX = -((xOffset * rowSize) / 2) + spacing / 2;
 	const currX = startX + xOffset * (index % rowSize);
+
 	const startY = 3;
 	const yOffset = Math.floor(index / rowSize);
 	const currY = startY - yOffset - (yOffset * spacing);
+
+	const loc = location.coords.join(',');
+	const locStr = `https://maps.googleapis.com/maps/api/streetview?size=128x128&location=${loc}&fov=90&key=AIzaSyC_F8hIJwY292vEpTiLEdyQzZY2OK7j6FM`;
 
 	return (
 		<Entity
 			id={location.name}
 			className={'arrows'}
 			primitive={'a-plane'}
-			color={'#bababa'}
+			src={locStr}
 			transparent={false}
 			scale={{ x: scale, y: scale, z: scale }}
 			position={{ x: currX, y: currY, z: -4.5 }}
@@ -39,7 +43,7 @@ const LocationTile = props => {
 			<Entity
 				text={{
 					align: 'left',
-					color: 'black',
+					color: 'red',
 					font: 'roboto',
 					shader: 'msdf',
 					value: location.name,
