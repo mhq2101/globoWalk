@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import { leaveChatRoom } from '../webRTC/client.jsx'
-import { joinAndGo } from '../redux/reducers/chatroom.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import { NavLink } from 'react-router-dom';
@@ -20,13 +19,10 @@ class ChatroomPage extends React.Component {
     super()
     this.state = ({
       canJoin: false,
-      gain: null,
       canPlay: false,
       canPause: false,
       canStop: false,
       canDrop: true,
-      startTime: 0,
-      timeStarted: 0
     })
 
     this.adjustGainValue = this.adjustGainValue.bind(this);
@@ -70,6 +66,7 @@ class ChatroomPage extends React.Component {
         }
       }
     });
+    //redux
     this.setState({
       canDrop: false
     })
@@ -107,21 +104,27 @@ class ChatroomPage extends React.Component {
     }
 
     this.props.setSource(source)
+    this.props.setTime(this.props.audioCtx.audioContext.currentTime)
     //put this on redux
     
     this.setState({
-      timeStarted: this.props.audioCtx.audioContext.currentTime, //make redux
       canPlay: false, //ehh...
       canPause: true,
       canStop: true
     })
-    source.start(0, start);
+    if (start === null) {
+      source.start(0, this.props.startTime)
+    }
+    else {
+      this.props.setStart(0)
+      source.start(0, start);
+    }
   }               
-  audioPause(event, start, timeAudioStarted) {
+  audioPause(event) {
     event.preventDefault();
+    this.props.setStart(this.props.audioCtx.audioContext.currentTime - this.props.timeStarted + this.props.startTime)
     // move to redux
     this.setState({
-      start: this.props.audioCtx.audioContext.currentTime - timeAudioStarted, //make redux
       canPause: false,
       canPlay: true,
       canStop: true
@@ -130,9 +133,9 @@ class ChatroomPage extends React.Component {
   }
   audioStop(event) {
     event.preventDefault();
+    this.props.setStart(0);
+    this.props.setTime(0);
     this.setState({
-      start: 0,
-      timeStarted: 0,
       canPlay: true,
       canPause: false
     })
@@ -161,7 +164,7 @@ class ChatroomPage extends React.Component {
   }
 
   render() {
-    let { canJoin, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted } = this.state;
+    let { canJoin, canPlay, canPause, canStop, canDrop, } = this.state;
     const { audioStream, audioCtx, webrtc, audioSource, audioBuffers, audioNames, currentSongIndex } = this.props;
     const { audioContext, audioDest, gain } = this.props.audioCtx;
     const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
@@ -185,7 +188,7 @@ class ChatroomPage extends React.Component {
             audioNames.map((name, ind) => {
               return (<div key={ind}>{ind + 1}. {name}
                 <button
-                  onClick={(event) => this.audioPlay(event, start, ind)}
+                  onClick={(event) => this.audioPlay(event, 0, ind)}
                 >Play<i className="material-icons left">play_arrow</i>
                 </button>
               </div>)
@@ -197,10 +200,10 @@ class ChatroomPage extends React.Component {
           onClick={(event) => this.audioPlay(event, 0, currentSongIndex - 1, 'prev')}
         >Previous<i className="material-icons left">skip_previous</i></button>
         <button
-          onClick={(event) => this.audioPlay(event, start, currentSongIndex)}
+          onClick={(event) => this.audioPlay(event, null, currentSongIndex)}
           disabled={!canPlay}>Play<i className="material-icons left">play_arrow</i></button>
         <button
-          onClick={(event) => this.audioPause(event, start, timeStarted)}
+          onClick={(event) => this.audioPause(event)}
           disabled={!canPause}>Pause<i className="material-icons left">pause</i></button>
         <button
           onClick={(event) => this.audioStop(event)}
@@ -252,11 +255,17 @@ class ChatroomPage extends React.Component {
 
 
 /*-------Container-----------*/
+import { joinAndGo } from '../redux/reducers/chatroom.jsx'
+import { setSource } from '../redux/reducers/audioSource.jsx';
+import { addBuffer } from '../redux/reducers/audioBuffers.jsx';
+import { addName } from '../redux/reducers/audioNames.jsx';
+import { setCurrent } from '../redux/reducers/currentSongIndex.jsx';
+import { setTime } from '../redux/reducers/timeStarted.jsx';
+import { setStart } from '../redux/reducers/startTime.jsx';
 
 
 
-
-const mapState = ({ auth, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc }) => ({
+const mapState = ({ auth, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime }) => ({
   auth,
   chatroom,
   audioStream,
@@ -265,10 +274,12 @@ const mapState = ({ auth, chatroom, audioStream, audioBuffers, audioNames, audio
   audioSource,
   currentSongIndex,
   audioCtx,
-  webrtc
+  webrtc,
+  timeStarted,
+  startTime
 });
 
-const mapDispatch = { joinAndGo, setSource, addBuffer, addName, setCurrent }
+const mapDispatch = { joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart }
 
 
 // const mapDispatch = function (dispatch) {
