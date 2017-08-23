@@ -6,8 +6,9 @@ import { setCurrentChatroom, fetchChatrooms, fetchChatroom, joinAndGo, joinAndGo
 import { login, logout, signup, postUserChatroom } from '../redux/reducers/auth';
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
-import {Row, Input} from 'react-materialize'
 import {ToastContainer, ToastMessage} from 'react-toastr'
+import { Row, Col, Input, Navbar, NavItem, Icon, Button } from 'react-materialize';
+import NavBar from './NavBar.jsx'
 
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
@@ -90,43 +91,66 @@ class UserPage extends React.Component {
     
     return (
       <div>
-      
-        <h1>Welcome User {this.props.auth.name}</h1>
         <ToastContainer ref={(input) => {this.container = input;}}
           toastMessageFactory={ToastMessageFactory}
           className="toast-top-right"
         />
-        <button type="submit" onClick={this.props.logout}>Logout</button>
-        <form onSubmit={this.submitCreateHandler}>
-          <input
-            key="chatroom"
-            name="chatroom"
-            placeholder="create a chatroom"
-          />
-          <button type="submit"> Create Room </button>
-        </form>
-        <Row>
-          {this.props.auth.chatrooms &&
-          <Input s={12} type='select' label="Choose from Previous Rooms" onChange={() => this.handleChange(event)}>
-            <option key='default'>Select A Lobby</option>
-            {
-              auth.chatrooms.map((chatroom, ind) => {
-                return (
-                  <option key={chatroom.id}>{chatroom.name}</option>
-                )
-              })
-            }
-          </Input>
-          }
-        </Row>
-        <form onSubmit={this.submitJoinHandler}>
-          <input
-            key="chatroom"
-            name="chatroom"
-            placeholder="join a chatroom"
-          />
-          <button type="submit"> Join Room </button>
-        </form>
+        <NavBar/>
+        <div className="container">
+          <div className="section">
+          <Row>
+            <Col m={9} offset="m3">
+              <h4>Create a New Group</h4>
+              <form onSubmit={this.submitCreateHandler}>
+                <Row>
+                  <Input
+                    s={12}
+                    m={8}
+                    key="chatroom"
+                    name="chatroom"
+                    placeholder="Enter a New Group Name"
+                  />
+                </Row>
+                <Row>
+                  <Col m={10} offset="m2">
+                    <Button className="btn-login" type="submit"> Create Group </Button>
+                  </Col>
+                </Row>
+              </form>
+              <Row/>
+              <h4 className="left-align"> Or Join an Existing Group</h4>
+              <Row>
+                {this.props.auth.chatrooms &&
+                <Input s={12} m={8} type='select' onChange={() => this.handleChange(event)}>
+                  <option key='default'>Select From Previous Groups</option>
+                  {
+                    auth.chatrooms.map((chatroom, ind) => {
+                      return (
+                        <option key={chatroom.id}>{chatroom.name}</option>
+                      )
+                    })
+                  }
+                </Input>
+                }
+              </Row>
+              <form onSubmit={this.submitJoinHandler}>
+                <Row>
+                  <Input
+                    s={12}
+                    m={8}
+                    key="chatroom"
+                    name="chatroom"
+                    placeholder="Enter an Existing Group's Name"
+                  />
+                  <Col m={10} offset="m2">
+                    <Button className="btn-login" type="submit"> Join Group </Button>
+                  </Col>
+                </Row>
+              </form>
+            </Col>
+          </Row>
+          </div>
+        </div>
       </div>
     )
   }

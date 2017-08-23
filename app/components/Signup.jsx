@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { login, logout, signup } from '../redux/reducers/auth';
 import { Link, withRouter } from 'react-router-dom';
 import {ToastContainer, ToastMessage} from 'react-toastr'
+import { Row, Col, Input, Navbar, NavItem, Icon, Button } from 'react-materialize';
+import NavBar from './NavBar.jsx';
 
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
@@ -33,6 +35,7 @@ class Signup extends React.Component {
     render() {
         return (
             <div>
+                <NavBar/>
                 <h1>Signup:</h1>
                 <ToastContainer ref={(input) => {this.container = input;}}
                     toastMessageFactory={ToastMessageFactory}
