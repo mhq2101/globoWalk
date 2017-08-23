@@ -41,6 +41,15 @@
      width: 100%;
    }
  
+.btn-login {
+  width: 185px;
+  margin-left: 3px;
+}
+
+.or-divider {
+  padding-left: 50px;
+}
+
  @media only screen and (max-width : 992px) {
    .parallax-container .section {
      position: absolute;
