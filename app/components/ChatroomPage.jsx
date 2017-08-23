@@ -194,9 +194,9 @@ class ChatroomPage extends React.Component {
         <h5>This is the Audio Section</h5>
         <Row>
           <Col m={6} s={12}>
-          <div onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
-            disabled={!canDrop} className="file-drop card-panel blue lighten-3">Drop<i className="material-icons medium left">music_note</i>
-          </div>
+            <div onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
+              disabled={!canDrop} className="file-drop card-panel blue lighten-3">Drop<i className="material-icons medium left">music_note</i>
+            </div>
           </Col>
         </Row>
 
@@ -215,27 +215,49 @@ class ChatroomPage extends React.Component {
 
         <Row>
           <Col s={12}>
-            <Button className="blue"
-              onClick={(event) => this.audioPlay(event, 0, currentSongIndex - 1, 'prev')}
-            >Previous<Icon left>skip_previous</Icon></Button>
-            <Button className="blue"
-              onClick={(event) => this.audioPlay(event, start, currentSongIndex)}
-              disabled={!canPlay}>Play<Icon left>play_arrow</Icon></Button>
-            <Button className="blue"
-              onClick={(event) => this.audioPause(event, start, timeStarted)}
-              disabled={!canPause}>Pause<Icon left>pause</Icon></Button>
-            <Button className="blue"
-              onClick={(event) => this.audioStop(event)}
-              disabled={!canStop}>Stop<Icon left>stop</Icon></Button>
-            <Button className="blue"
-              onClick={(event) => this.audioPlay(event, 0, currentSongIndex + 1, 'next')}
-            >Next<Icon left>skip_next</Icon></Button>
+            <div className="hide-on-small-only">
+              <Button className="blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex - 1, 'prev')}
+              >Previous<Icon left>skip_previous</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioPlay(event, start, currentSongIndex)}
+                disabled={!canPlay}>Play<Icon left>play_arrow</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioPause(event, start, timeStarted)}
+                disabled={!canPause}>Pause<Icon left>pause</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioStop(event)}
+                disabled={!canStop}>Stop<Icon left>stop</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex + 1, 'next')}
+              >Next<Icon left>skip_next</Icon></Button>
+            </div>
+
+            <div className="hide-on-med-and-up">
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex - 1, 'prev')}><Icon>skip_previous</Icon>
+              </Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPlay(event, start, currentSongIndex)}
+                disabled={!canPlay}
+                ><Icon>play_arrow</Icon>
+              </Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPause(event, start, timeStarted)}
+                disabled={!canPause}
+                ><Icon>pause</Icon>
+              </Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioStop(event)}
+                disabled={!canStop}
+                ><Icon>stop</Icon>
+              </Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex + 1, 'next')}
+                ><Icon>skip_next</Icon>
+              </Button>
+            </div>
           </Col>
-            <Button className="btn-music-mobile blue"><Icon>skip_previous</Icon></Button>
-            <Button className="btn-music-mobile blue"><Icon>play_arrow</Icon></Button>
-            <Button className="btn-music-mobile blue"><Icon>pause</Icon></Button>
-            <Button className="btn-music-mobile blue"><Icon>stop</Icon></Button>
-            <Button className="btn-music-mobile blue"><Icon>skip_next</Icon></Button>
         </Row>
         {
           gain !== null ? (<Gain node={gain} adjustGainValue={this.adjustGainValue} />) : (<div></div>)
