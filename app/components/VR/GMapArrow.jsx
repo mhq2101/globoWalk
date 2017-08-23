@@ -28,6 +28,7 @@ const GMapArrow = props => {
 		>
 			<a-animation
 				attribute={'position'}
+				from={`${arrowX} 1.5 ${arrowZ}`}
 				to={`${arrowX} 1.42 ${arrowZ}`}
 				direction={'alternate'}
 				dur={'2000'}

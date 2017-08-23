@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { login, logout } from '../redux/reducers/auth';
 import { ToastContainer, ToastMessage } from 'react-toastr'
+import { setCurrentChatroom } from '../redux/reducers/chatroom';
 import { Row, Col, Input, Navbar, NavItem, Icon, Button } from 'react-materialize';
+import NavBar from './NavBar.jsx';
 
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
@@ -31,9 +33,16 @@ class Login extends React.Component {
         })
     }
 
+    componentDidMount(){
+        if (!this.props.auth.name){
+            this.props.setCurrentChatroom({})
+        }
+    }
+
     render() {
         return (
             <div>
+                <NavBar/>
                 <div className="container">
                     <div className="section">
                         <Row>
@@ -76,7 +85,10 @@ class Login extends React.Component {
 /*-------Container-----------*/
 
 
-const mapState = null;
+const mapState = ({ auth, chatroom }) => ({
+    auth,
+    chatroom,
+  });
 
 const mapDispatch = dispatch => ({
     login(event) {
@@ -88,6 +100,9 @@ const mapDispatch = dispatch => ({
     },
     logout() {
         dispatch(logout());
+    },
+    setCurrentChatroom(chatroom) {
+        dispatch(setCurrentChatroom(chatroom));
     },
 });
 

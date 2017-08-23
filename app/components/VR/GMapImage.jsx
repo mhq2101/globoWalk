@@ -12,18 +12,24 @@ import Assets from './Assets';
 import MusicControls from './MusicControls';
 import DayDreamController from './DayDreamController';
 import MoveLocations from './MoveLocations';
-import { setCurrentPanoId } from '../../redux/reducers/panoId';
-import { setCurrentPanoImgSrc } from '../../redux/reducers/panoImgSrc';
-import { setCurrentMapData } from '../../redux/reducers/mapData';
-import { joinAndGo } from '../../redux/reducers/chatroom.jsx'
 
 class GMapImage extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { showMenu: false };
+		this.state = {
+			showMenu: false,
+			canPlay: false,
+			canMute: false,
+			canStop: false
+		};
 		this.getPanoramaData = this.getPanoramaData.bind(this);
 		this.loadPanoramaData = this.loadPanoramaData.bind(this);
 		this.showOrHideMenu = this.showOrHideMenu.bind(this);
+    this.audioPlay = this.audioPlay.bind(this);
+    this.audioPause = this.audioPause.bind(this);
+    this.audioStop = this.audioStop.bind(this);
+    this.audioConnect = this.audioConnect.bind(this);
+    this.audioDisconnect = this.audioDisconnect.bind(this);
 	}
 
 	componentWillMount() {
@@ -40,6 +46,93 @@ class GMapImage extends React.Component {
 			this.getPanoramaData(newProps.panoId);
 		}
 	}
+
+	audioPlay(event, start, current) {
+		if (this.props.audioSource !== null) {
+			this.props.audioSource.disconnect();
+		}
+		if (current < 0) {
+			current = 0;
+			this.props.setCurrent(0);
+
+		} else if (current > this.props.audioBuffers.length - 1) {
+			current = 0;
+			this.props.setCurrent(0);
+
+		} else {
+			this.props.setCurrent(current);
+		}
+
+		// start the source playing
+		var source = this.props.audioCtx.audioContext.createBufferSource();
+		// set the buffer in the AudioBufferSourceNode
+		source.buffer = this.props.audioBuffers[current];
+		// connect the AudioBufferSourceNode to the
+		// destination so we can hear the sound
+		source.connect(this.props.audioCtx.gain);
+		this.props.audioCtx.gain.connect(this.props.audioCtx.audioContext.destination);
+		this.props.audioCtx.gain.connect(this.props.audioCtx.audioDest);
+		if (event !== null) {
+			event.preventDefault();
+		}
+
+		this.props.setSource(source);
+		this.props.setTime(this.props.audioCtx.audioContext.currentTime);
+
+		this.setState({
+			canPlay: false,
+			canStop: true
+		});
+
+		if (start === null) {
+			source.start(0, this.props.startTime);
+		}
+		else {
+			this.props.setStart(0);
+			source.start(0, start);
+		}
+	}
+
+	audioPause(event) {
+		event.preventDefault();
+		this.props.setStart(this.props.audioCtx.audioContext.currentTime - this.props.timeStarted + this.props.startTime);
+		this.setState({
+			canPlay: true,
+			canStop: true
+		});
+		this.props.audioSource.disconnect();
+	}
+
+	audioStop(event) {
+		event.preventDefault();
+		this.props.setStart(0);
+		this.props.setTime(0);
+		this.setState({
+			canPlay: true
+		});
+		this.props.audioSource.disconnect();
+	}
+
+  audioConnect(event) {
+    if (this.props.audioStreamSource !== null) {
+      this.props.audioStreamSource.disconnect();
+    }
+    event.preventDefault();
+    const source = this.props.audioStream && this.props.audioCtx.audioContext.createMediaStreamSource(this.props.audioStream);
+    this.props.setStreamSource(source);
+		source.connect(this.props.audioCtx.audioDest);
+		this.setState({
+			canMute: true
+		});
+	}
+
+  audioDisconnect(event) {
+    event.preventDefault();
+		this.props.audioStreamSource.disconnect();
+		this.setState({
+			canMute: false
+		});
+  }
 
 	getPanoramaData(panoId) {
 		if (typeof panoId === 'string') {
@@ -70,15 +163,40 @@ class GMapImage extends React.Component {
 			});
 	}
 
-	showOrHideMenu(){
+	showOrHideMenu() {
 		this.setState({ showMenu: !this.state.showMenu });
 	}
 
 	render() {
-		const { panoImgSrc, mapData } = this.props;
+		const { panoImgSrc, mapData, audioStream, audioCtx, currentSongIndex } = this.props;
 		const state = this.state;
-		const controls = ['pause', 'stop', 'prev', 'next', 'mute', 'menu'];
+    const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
+
+		const pauseOrPlay = state.canPlay ? 'play' : 'pause';
+		const muteOrUnmute = state.canMute ? 'mute' : 'unmute';
+		const controls = [pauseOrPlay, 'stop', 'prev', 'next', muteOrUnmute, 'menu'];
 		const controlEvents = {
+			play: {
+				click: evt => this.audioPlay(evt, null, currentSongIndex)
+			},
+			pause: {
+				click: evt => this.audioPause(evt)
+			},
+			stop: {
+				click: evt => this.audioStop(evt)
+			},
+			prev: {
+				click: evt => this.audioPlay(evt, 0, currentSongIndex - 1)
+			},
+			next: {
+				click: evt => this.audioPlay(evt, 0, currentSongIndex + 1)
+			},
+			mute: {
+				click: evt => this.audioDisconnect(evt, source)
+			},
+			unmute: {
+				click: evt => this.audioConnect(evt, source)
+			},
 			menu: {
 				click: () => this.showOrHideMenu()
 			}
@@ -153,23 +271,21 @@ class GMapImage extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ panoId, mapData, panoImgSrc, chatroom }) => ({ panoId, mapData, panoImgSrc, chatroom });
+import { setCurrentPanoId } from '../../redux/reducers/panoId';
+import { setCurrentPanoImgSrc } from '../../redux/reducers/panoImgSrc';
+import { setCurrentMapData } from '../../redux/reducers/mapData';
+import { joinAndGo } from '../../redux/reducers/chatroom.jsx';
+import { setSource } from '../../redux/reducers/audioSource.jsx';
+import { addBuffer } from '../../redux/reducers/audioBuffers.jsx';
+import { addName } from '../../redux/reducers/audioNames.jsx';
+import { setCurrent } from '../../redux/reducers/currentSongIndex.jsx';
+import { setTime } from '../../redux/reducers/timeStarted.jsx';
+import { setStart } from '../../redux/reducers/startTime.jsx';
+import { setStreamSource } from '../../redux/reducers/audioStreamSource.jsx';
 
-const mapDispatchToProps = function (dispatch) {
-	return {
-		setCurrentPanoId(panoId) {
-			dispatch(setCurrentPanoId(panoId));
-		},
-		setCurrentPanoImgSrc(imgSrc) {
-			dispatch(setCurrentPanoImgSrc(imgSrc));
-		},
-		setCurrentMapData(data) {
-			dispatch(setCurrentMapData(data));
-		},
-		joinAndGo(name) {
-			dispatch(joinAndGo(name))
-		}
-	};
-};
+const mapStateToProps = ({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource }) =>
+	({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource });
+
+const mapDispatchToProps = { setCurrentPanoId, setCurrentPanoImgSrc, setCurrentMapData, joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart, setStreamSource };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GMapImage);
