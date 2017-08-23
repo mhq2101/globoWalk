@@ -50,6 +50,15 @@
   padding-left: 50px;
 }
 
+.file-drop {
+  border: 2px dotted black;
+  min-height: 150px;
+}
+
+.btn-music-mobile {
+  padding: 0 20px;
+}
+
  @media only screen and (max-width : 992px) {
    .parallax-container .section {
      position: absolute;
