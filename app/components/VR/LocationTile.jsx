@@ -43,14 +43,25 @@ const LocationTile = props => {
 			<Entity
 				text={{
 					align: 'left',
-					color: 'red',
+					color: 'black',
 					font: 'roboto',
-					shader: 'msdf',
 					value: location.name,
-					width: scale - (spacing / 2),
-					wrapCount: 11,
+					width: scale + (2 * spacing) / 3,
+					wrapCount: 10
 				}}
-				position={{ x: 0, y: 0, z: 0 }}
+				position={{ x: 0.042, y: 0.012, z: 0 }}
+			/>
+			<Entity
+				text={{
+					align: 'left',
+					color: 'white',
+					font: 'roboto',
+					value: location.name,
+					width: scale + (2 * spacing) / 3,
+					wrapCount: 10,
+					zOffset: 0.002
+				}}
+				position={{ x: 0.03, y: 0, z: 0 }}
 			/>
 		</Entity>
 	);
