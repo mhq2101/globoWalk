@@ -138,13 +138,23 @@ class ChatroomPage extends React.Component {
     this.props.audioSource.disconnect()
   }
 
-  audioConnect(event, source) {
+  audioConnect(event) {
+    //in case youre already connect.. but like dont press it twice you dumdum fuckina' betch
+    if (this.props.audioStreamSource !== null) {
+      this.props.audioStreamSource.disconnect();
+    }
     event.preventDefault();
+    const source = this.props.audioStream && this.props.audioCtx.audioContext.createMediaStreamSource(this.props.audioStream);
+    this.props.setStreamSource(source)
     source.connect(this.props.audioCtx.audioDest);
   }
-  audioDisconnect(event, source) {
+  audioDisconnect(event) {
     event.preventDefault();
+<<<<<<< HEAD
     source.disconnect();
+=======
+    this.props.audioStreamSource.disconnect()
+>>>>>>> 7d0757090e1db744f4f5972c911d98d3b14c6ebd
   }
 
   componentDidMount() {
@@ -161,9 +171,9 @@ class ChatroomPage extends React.Component {
 
   render() {
     let { canJoin, canPlay, canPause, canStop, canDrop, } = this.state;
-    const { audioStream, audioCtx, webrtc, audioSource, audioBuffers, audioNames, currentSongIndex } = this.props;
+    const { audioStream, audioCtx, webrtc, audioSource, audioBuffers, audioNames, currentSongIndex, audioStreamSource } = this.props;
     const { audioContext, audioDest, gain } = this.props.audioCtx;
-    const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
+    // const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
 
     if (audioSource !== null) {
       audioSource.onended = (event) => {
@@ -208,14 +218,12 @@ class ChatroomPage extends React.Component {
           onClick={(event) => this.audioPlay(event, 0, currentSongIndex + 1, 'next')}
         >Next<i className="material-icons left">skip_next</i></button>
 
-
-
         {
           gain !== null ? (<Gain node={gain} adjustGainValue={this.adjustGainValue} />) : (<div></div>)
         }
 
-        <button type="submit" onClick={(event) => this.audioConnect(event, source, audioCtx.audioDest)}>Connect Microphone</button>
-        <button type="submit" onClick={(event) => this.audioDisconnect(event, source, audioCtx.audioDest)}>DisConnect Microphone</button>
+        <button type="submit" onClick={(event) => this.audioConnect(event)}>Connect Microphone</button>
+        <button type="submit" onClick={(event) => this.audioDisconnect(event)}>DisConnect Microphone</button>
 
         <button onClick={() => {
           leaveChatRoom(this.props.chatroom.chatroom.name)
@@ -253,6 +261,7 @@ class ChatroomPage extends React.Component {
 /*-------Container-----------*/
 import { joinAndGo } from '../redux/reducers/chatroom.jsx'
 import { setSource } from '../redux/reducers/audioSource.jsx';
+import { setStreamSource } from '../redux/reducers/audioStreamSource.jsx';
 import { addBuffer } from '../redux/reducers/audioBuffers.jsx';
 import { addName } from '../redux/reducers/audioNames.jsx';
 import { setCurrent } from '../redux/reducers/currentSongIndex.jsx';
@@ -261,7 +270,8 @@ import { setStart } from '../redux/reducers/startTime.jsx';
 
 
 
-const mapState = ({ auth, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime }) => ({
+
+const mapState = ({ auth, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource }) => ({
   auth,
   chatroom,
   audioStream,
@@ -272,10 +282,11 @@ const mapState = ({ auth, chatroom, audioStream, audioBuffers, audioNames, audio
   audioCtx,
   webrtc,
   timeStarted,
-  startTime
+  startTime,
+  audioStreamSource
 });
 
-const mapDispatch = { joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart }
+const mapDispatch = { joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart, setStreamSource }
 
 
 // const mapDispatch = function (dispatch) {

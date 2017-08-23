@@ -14,6 +14,7 @@ import audioSource from './audioSource';
 import currentSongIndex from './currentSongIndex'
 import startTime from './startTime';
 import timeStarted from './timeStarted';
+import audioStreamSource from './audioStreamSource'
 
 const rootReducer = combineReducers({
   auth: auth,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   audioNames: audioNames,
   audioSource: audioSource,
   currentSongIndex: currentSongIndex,
+  audioStreamSource: audioStreamSource,
   startTime: startTime,
   timeStarted: timeStarted,
   webrtc: webRtc,
