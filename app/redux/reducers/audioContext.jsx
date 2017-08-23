@@ -1,11 +1,13 @@
 const audioContext = new AudioContext();
 const audioDest = audioContext.createMediaStreamDestination();
+const gain = audioContext.createGain();
 
 
 
 const initialState = {
   audioContext,
-  audioDest
+  audioDest,
+  gain
 }
 
 
