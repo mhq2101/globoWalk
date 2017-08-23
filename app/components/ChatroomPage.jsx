@@ -5,10 +5,6 @@ import { leaveChatRoom } from '../webRTC/client.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import { NavLink } from 'react-router-dom';
-import { setSource } from '../redux/reducers/audioSource.jsx';
-import { addBuffer } from '../redux/reducers/audioBuffers.jsx';
-import { addName } from '../redux/reducers/audioNames.jsx';
-import { setCurrent } from '../redux/reducers/currentSongIndex.jsx';
 import NavBar from './NavBar.jsx';
 
 /* -------Component--------- */
@@ -148,7 +144,7 @@ class ChatroomPage extends React.Component {
   }
   audioDisconnect(event, source) {
     event.preventDefault();
-    source.disconnect(this.props.audioCtx.audioDest);
+    source.disconnect();
   }
 
   componentDidMount() {
