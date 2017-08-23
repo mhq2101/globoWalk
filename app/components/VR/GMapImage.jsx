@@ -15,6 +15,7 @@ import MoveLocations from './MoveLocations';
 import { setCurrentPanoId } from '../../redux/reducers/panoId';
 import { setCurrentPanoImgSrc } from '../../redux/reducers/panoImgSrc';
 import { setCurrentMapData } from '../../redux/reducers/mapData';
+import { joinAndGo } from '../../redux/reducers/chatroom.jsx'
 
 class GMapImage extends React.Component {
 	constructor(props) {
@@ -26,6 +27,9 @@ class GMapImage extends React.Component {
 	}
 
 	componentWillMount() {
+		if (!this.props.chatroom.chatroom.id) {
+			this.props.joinAndGo(this.props.match.params.name)
+		}
 		if (this.props.panoId) {
 			this.getPanoramaData(this.props.panoId);
 		}
@@ -149,7 +153,7 @@ class GMapImage extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ panoId, mapData, panoImgSrc }) => ({ panoId, mapData, panoImgSrc });
+const mapStateToProps = ({ panoId, mapData, panoImgSrc, chatroom }) => ({ panoId, mapData, panoImgSrc, chatroom });
 
 const mapDispatchToProps = function (dispatch) {
 	return {
@@ -161,6 +165,9 @@ const mapDispatchToProps = function (dispatch) {
 		},
 		setCurrentMapData(data) {
 			dispatch(setCurrentMapData(data));
+		},
+		joinAndGo(name) {
+			dispatch(joinAndGo(name))
 		}
 	};
 };

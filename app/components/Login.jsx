@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { login, logout } from '../redux/reducers/auth';
 import {ToastContainer, ToastMessage} from 'react-toastr'
+
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 /* -------Component--------- */
@@ -17,7 +18,7 @@ class Login extends React.Component {
     addAlert () {
         this.container.error(
           "",
-          "User Information not Found", {
+          "User Information Not Found", {
           timeOut: 6000,
           extendedTimeOut: 1500
         });
@@ -35,7 +36,8 @@ class Login extends React.Component {
                 <h1>Log in to GloboWalk</h1>
                 <ToastContainer ref={(input) => {this.container = input;}}
                     toastMessageFactory={ToastMessageFactory}
-                    className="toast-top-right" />
+                    className="toast-top-right"
+                />
                 <form onSubmit={this.submitHandler}>
                     <div>
                         <input

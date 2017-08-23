@@ -2,11 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { joinChatRoom, leaveChatRoom } from '../webRTC/client.jsx';
-import { setCurrentChatroom, fetchChatrooms, fetchChatroom, joinAndGo, createAndGo } from '../redux/reducers/chatroom';
+import { setCurrentChatroom, fetchChatrooms, fetchChatroom, joinAndGo, joinAndGoNoCatch, createAndGo } from '../redux/reducers/chatroom';
 import { login, logout, signup, postUserChatroom } from '../redux/reducers/auth';
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import {Row, Input} from 'react-materialize'
+import {ToastContainer, ToastMessage} from 'react-toastr'
+
+const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 /* -------Component--------- */
 
@@ -15,6 +18,47 @@ class UserPage extends React.Component {
   constructor() {
     super()
     this.handleChange = this.handleChange.bind(this)
+    this.addCreateAlert = this.addCreateAlert.bind(this)
+    this.submitCreateHandler = this.submitCreateHandler.bind(this)
+    this.submitJoinHandler = this.submitJoinHandler.bind(this)
+  }
+
+  addCreateAlert () {
+    this.container.error(
+      "",
+      "Chatroom Already Exists", {
+      timeOut: 6000,
+      extendedTimeOut: 1500
+    });
+  }
+
+  addJoinAlert () {
+    this.container.error(
+      "",
+      "Chatroom Doesn't Exist", {
+      timeOut: 6000,
+      extendedTimeOut: 1500
+    });
+  }
+
+  submitCreateHandler(event) {
+    event.preventDefault();
+    if(this.props.chatroom.chatrooms){
+      this.props.createAndGo(event.target.chatroom.value).catch(err => {
+        if (err) this.addCreateAlert()
+      })
+      this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
+    }
+  }
+
+  submitJoinHandler(event) {
+    event.preventDefault()
+    if(this.props.chatroom.chatrooms){
+        this.props.joinAndGoNoCatch(event.target.chatroom.value).catch(err => {
+          if (err) this.addJoinAlert()
+        })
+        this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
+    }
   }
 
   handleChange(event) {
@@ -48,14 +92,12 @@ class UserPage extends React.Component {
       <div>
       
         <h1>Welcome User {this.props.auth.name}</h1>
+        <ToastContainer ref={(input) => {this.container = input;}}
+          toastMessageFactory={ToastMessageFactory}
+          className="toast-top-right"
+        />
         <button type="submit" onClick={this.props.logout}>Logout</button>
-        <form onSubmit={(event) => {
-          event.preventDefault()
-          if(this.props.chatroom.chatrooms){
-              this.props.createAndGo(event.target.chatroom.value)
-              this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
-          }
-        }}>
+        <form onSubmit={this.submitCreateHandler}>
           <input
             key="chatroom"
             name="chatroom"
@@ -77,13 +119,7 @@ class UserPage extends React.Component {
           </Input>
           }
         </Row>
-        <form onSubmit={(event) => {
-          event.preventDefault();
-          if(this.props.chatroom.chatrooms){
-            this.props.joinAndGo(event.target.chatroom.value)
-            this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
-          }
-        }}>
+        <form onSubmit={this.submitJoinHandler}>
           <input
             key="chatroom"
             name="chatroom"
@@ -115,7 +151,12 @@ const mapDispatch = function (dispatch) {
     joinAndGo(name) {
       dispatch(joinAndGo(name))
     },
+    joinAndGoNoCatch(name) {
+      return dispatch(joinAndGoNoCatch(name))
+      dispatch(joinAndGoNoCatch(name))
+    },
     createAndGo(name) {
+      return dispatch(createAndGo(name))
       dispatch(createAndGo(name))
     },
     fetchChatrooms() {

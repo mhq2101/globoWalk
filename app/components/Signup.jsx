@@ -2,19 +2,43 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { login, logout, signup } from '../redux/reducers/auth';
 import { Link, withRouter } from 'react-router-dom';
+import {ToastContainer, ToastMessage} from 'react-toastr'
+
+const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 /* -------Component--------- */
 
 class Signup extends React.Component {
     constructor(props) {
         super(props);
+        this.addAlert = this.addAlert.bind(this)
+        this.submitHandler = this.submitHandler.bind(this)
+    }
+
+    addAlert () {
+        this.container.error(
+          "",
+          "Email Already In Use", {
+          timeOut: 6000,
+          extendedTimeOut: 1500
+        });
+      }
+
+    submitHandler(event) {
+        this.props.signup(event).catch(err => {
+            if (err) this.addAlert()
+        })
     }
     
     render() {
         return (
             <div>
                 <h1>Signup:</h1>
-                <form onSubmit={this.props.signup}>
+                <ToastContainer ref={(input) => {this.container = input;}}
+                    toastMessageFactory={ToastMessageFactory}
+                    className="toast-top-right"
+                />
+                <form onSubmit={this.submitHandler}>
                     <div>
                         <input
                             key="name"
@@ -67,6 +91,7 @@ const mapDispatch = dispatch => ({
         const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
+        return dispatch(signup(name, email, password))
         dispatch(signup(name, email, password));
     }
 });
