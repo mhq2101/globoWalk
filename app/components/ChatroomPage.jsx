@@ -150,11 +150,7 @@ class ChatroomPage extends React.Component {
   }
   audioDisconnect(event) {
     event.preventDefault();
-<<<<<<< HEAD
-    source.disconnect();
-=======
     this.props.audioStreamSource.disconnect()
->>>>>>> 7d0757090e1db744f4f5972c911d98d3b14c6ebd
   }
 
   componentDidMount() {

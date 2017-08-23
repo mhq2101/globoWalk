@@ -113,21 +113,26 @@ class GMapImage extends React.Component {
 		this.props.audioSource.disconnect();
 	}
 
-	audioConnect(event, source) {
-		event.preventDefault();
+  audioConnect(event) {
+    if (this.props.audioStreamSource !== null) {
+      this.props.audioStreamSource.disconnect();
+    }
+    event.preventDefault();
+    const source = this.props.audioStream && this.props.audioCtx.audioContext.createMediaStreamSource(this.props.audioStream);
+    this.props.setStreamSource(source);
 		source.connect(this.props.audioCtx.audioDest);
 		this.setState({
 			canMute: true
 		});
 	}
 
-	audioDisconnect(event, source) {
-		event.preventDefault();
-		source.disconnect();
+  audioDisconnect(event) {
+    event.preventDefault();
+		this.props.audioStreamSource.disconnect();
 		this.setState({
 			canMute: false
 		});
-	}
+  }
 
 	getPanoramaData(panoId) {
 		if (typeof panoId === 'string') {
@@ -276,10 +281,11 @@ import { addName } from '../../redux/reducers/audioNames.jsx';
 import { setCurrent } from '../../redux/reducers/currentSongIndex.jsx';
 import { setTime } from '../../redux/reducers/timeStarted.jsx';
 import { setStart } from '../../redux/reducers/startTime.jsx';
+import { setStreamSource } from '../../redux/reducers/audioStreamSource.jsx';
 
-const mapStateToProps = ({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime }) =>
-	({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime });
+const mapStateToProps = ({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource }) =>
+	({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource });
 
-const mapDispatchToProps = { setCurrentPanoId, setCurrentPanoImgSrc, setCurrentMapData, joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart };
+const mapDispatchToProps = { setCurrentPanoId, setCurrentPanoImgSrc, setCurrentMapData, joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart, setStreamSource };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GMapImage);
