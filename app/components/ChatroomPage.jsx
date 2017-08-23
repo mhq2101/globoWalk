@@ -10,6 +10,7 @@ import { setSource } from '../redux/reducers/audioSource.jsx';
 import { addBuffer } from '../redux/reducers/audioBuffers.jsx';
 import { addName } from '../redux/reducers/audioNames.jsx';
 import { setCurrent } from '../redux/reducers/currentSongIndex.jsx';
+import NavBar from './NavBar.jsx';
 
 /* -------Component--------- */
 
@@ -153,6 +154,12 @@ class ChatroomPage extends React.Component {
     }
   }
 
+  componentDidUpdate () {
+    if (!this.props.auth.id) {
+      (this.props.history.push('/login'))
+    }
+  }
+
   render() {
     let { canJoin, start, canPlay, canPause, canStop, canDrop, startTime, timeStarted } = this.state;
     const { audioStream, audioCtx, webrtc, audioSource, audioBuffers, audioNames, currentSongIndex } = this.props;
@@ -166,6 +173,7 @@ class ChatroomPage extends React.Component {
     }
     return (
       <div>
+        <NavBar/>
         <h1>Welcome to Chatroom {this.props.chatroom.chatroom.name}</h1>
         <h2>This is the Audio Section
             <button onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
