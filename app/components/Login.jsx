@@ -38,7 +38,7 @@ class Login extends React.Component {
                     <div className="section">
                         <Row>
                         <h4 className="center-align">Log in to GloboWalk</h4>
-                            <Col m={9} offset="m3">
+                            <Col m={9} s={12} offset="m3">
                                 
                                 <ToastContainer ref={(input) => { this.container = input; }}
                                     toastMessageFactory={ToastMessageFactory}
@@ -46,32 +46,25 @@ class Login extends React.Component {
                                 />
                                 <form onSubmit={this.submitHandler}>
                                     <Row>
-                                        <Input s={12} m={8} key="name" name="email" type="email" label="Email" required />
+                                        <Input m={9} s={12} key="name" name="email" type="email" label="Email" required />
                                     </Row>
                                     <Row>
-                                        <Input s={12} m={8} key="password" name="password" type="password" label="Password" required />
+                                        <Input m={9} s={12} key="password" name="password" type="password" label="Password" required />
                                     </Row>
                                     <Row>
-                                        <Col m={10} offset="m2">
+                                        <Col m={4} s={10} offset="m3 s2">
                                             <Button className="btn-login" type="submit">Log In</Button>
                                             <div>
                                                 <a target="_self" href="/api/auth/google/login">
                                                     <img src="/images/btn_google_signin_dark_normal_web.png" />
                                                 </a>
                                             </div>
+                                            <p className="or-divider">------- OR ------</p>
+                                            <Link className="btn btn-login" to="/signup">Sign Up</Link>
                                         </Col>
                                     </Row>
-                                    
                                 </form>
                             </Col>
-                            <div className="center-align">------- OR ------</div>
-                            <Row>
-                                <Col m={9} offset="m3">
-                                    <Col m={10} offset="m2">
-                                        <Link className="btn btn-login" to="/signup">Sign Up</Link>
-                                    </Col>
-                                </Col>
-                            </Row>
                         </Row>
                     </div>
                 </div>

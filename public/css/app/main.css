@@ -46,9 +46,8 @@
   margin-left: 3px;
 }
 
-.login-spacer {
-  width: 185px;
-  margin: 0 auto;
+.or-divider {
+  padding-left: 50px;
 }
 
  @media only screen and (max-width : 992px) {
