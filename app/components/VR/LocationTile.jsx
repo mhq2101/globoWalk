@@ -67,12 +67,6 @@ const LocationTile = props => {
 	);
 };
 
-const mapDispatchToProps = function (dispatch) {
-	return {
-		setCurrentPanoId(panoId) {
-			dispatch(setCurrentPanoId(panoId));
-		}
-	};
-};
+const mapDispatchToProps = { setCurrentPanoId };
 
 export default connect(null, mapDispatchToProps)(LocationTile);

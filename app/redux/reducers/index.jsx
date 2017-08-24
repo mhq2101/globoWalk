@@ -11,10 +11,12 @@ import chatroom from './chatroom';
 import audioBuffers from './audioBuffers';
 import audioNames from './audioNames';
 import audioSource from './audioSource';
-import currentSongIndex from './currentSongIndex'
+import currentSongIndex from './currentSongIndex';
 import startTime from './startTime';
 import timeStarted from './timeStarted';
-import audioStreamSource from './audioStreamSource'
+import audioStreamSource from './audioStreamSource';
+import micConnected from './micConnected';
+import musicPlaying from './musicPlaying';
 
 const rootReducer = combineReducers({
   auth: auth,
@@ -31,7 +33,9 @@ const rootReducer = combineReducers({
   chatroom: chatroom,
   panoId: panoId,
   panoImgSrc: panoImgSrc,
-  mapData: mapData
+	mapData: mapData,
+	micConnected: micConnected,
+	musicPlaying: musicPlaying
 });
 
 export default rootReducer;
