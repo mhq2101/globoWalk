@@ -17,10 +17,7 @@ class GMapImage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			showMenu: false,
-			canPlay: false,
-			canMute: false,
-			canStop: false
+			showMenu: false
 		};
 		this.getPanoramaData = this.getPanoramaData.bind(this);
 		this.loadPanoramaData = this.loadPanoramaData.bind(this);
@@ -79,11 +76,6 @@ class GMapImage extends React.Component {
 		this.props.setSource(source);
 		this.props.setTime(this.props.audioCtx.audioContext.currentTime);
 
-		this.setState({
-			canPlay: false,
-			canStop: true
-		});
-
 		if (start === null) {
 			source.start(0, this.props.startTime);
 		}
@@ -91,26 +83,22 @@ class GMapImage extends React.Component {
 			this.props.setStart(0);
 			source.start(0, start);
 		}
+		this.props.setMusicPlaying(true);
 	}
 
 	audioPause(event) {
 		event.preventDefault();
 		this.props.setStart(this.props.audioCtx.audioContext.currentTime - this.props.timeStarted + this.props.startTime);
-		this.setState({
-			canPlay: true,
-			canStop: true
-		});
 		this.props.audioSource.disconnect();
+		this.props.setMusicPlaying(false);
 	}
 
 	audioStop(event) {
 		event.preventDefault();
 		this.props.setStart(0);
 		this.props.setTime(0);
-		this.setState({
-			canPlay: true
-		});
 		this.props.audioSource.disconnect();
+		this.props.setMusicPlaying(false);
 	}
 
 	audioConnect(event) {
@@ -121,17 +109,13 @@ class GMapImage extends React.Component {
 		const source = this.props.audioStream && this.props.audioCtx.audioContext.createMediaStreamSource(this.props.audioStream);
 		this.props.setStreamSource(source);
 		source.connect(this.props.audioCtx.audioDest);
-		this.setState({
-			canMute: true
-		});
+		this.props.setMicConnection(true);
 	}
 
 	audioDisconnect(event) {
 		event.preventDefault();
 		this.props.audioStreamSource.disconnect();
-		this.setState({
-			canMute: false
-		});
+		this.props.setMicConnection(false);
 	}
 
 	getPanoramaData(panoId) {
@@ -168,11 +152,11 @@ class GMapImage extends React.Component {
 	}
 
 	render() {
-		const { panoImgSrc, mapData, currentSongIndex } = this.props;
+		const { panoImgSrc, mapData, currentSongIndex, micConnected, musicPlaying } = this.props;
 		const state = this.state;
 
-		const pauseOrPlay = state.canPlay ? 'play' : 'pause';
-		const muteOrUnmute = state.canMute ? 'mute' : 'unmute';
+		const pauseOrPlay = musicPlaying ? 'pause' : 'play';
+		const muteOrUnmute = micConnected ? 'mute' : 'unmute';
 		const controls = [pauseOrPlay, 'stop', 'prev', 'next', muteOrUnmute, 'menu'];
 		const controlEvents = {
 			play: {
@@ -281,10 +265,12 @@ import { setCurrent } from '../../redux/reducers/currentSongIndex.jsx';
 import { setTime } from '../../redux/reducers/timeStarted.jsx';
 import { setStart } from '../../redux/reducers/startTime.jsx';
 import { setStreamSource } from '../../redux/reducers/audioStreamSource.jsx';
+import { setMicConnection } from '../../redux/reducers/micConnected.jsx';
+import { setMusicPlaying } from '../../redux/reducers/musicPlaying.jsx';
 
-const mapStateToProps = ({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource }) =>
-	({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource });
+const mapStateToProps = ({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource, micConnected, musicPlaying }) =>
+	({ panoId, mapData, panoImgSrc, chatroom, audioStream, audioBuffers, audioNames, audioSource, currentSongIndex, audioCtx, webrtc, timeStarted, startTime, audioStreamSource, micConnected, musicPlaying });
 
-const mapDispatchToProps = { setCurrentPanoId, setCurrentPanoImgSrc, setCurrentMapData, joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart, setStreamSource };
+const mapDispatchToProps = { setCurrentPanoId, setCurrentPanoImgSrc, setCurrentMapData, joinAndGo, setSource, addBuffer, addName, setCurrent, setTime, setStart, setStreamSource, setMicConnection, setMusicPlaying };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GMapImage);
