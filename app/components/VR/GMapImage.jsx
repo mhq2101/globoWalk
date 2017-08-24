@@ -25,11 +25,11 @@ class GMapImage extends React.Component {
 		this.getPanoramaData = this.getPanoramaData.bind(this);
 		this.loadPanoramaData = this.loadPanoramaData.bind(this);
 		this.showOrHideMenu = this.showOrHideMenu.bind(this);
-    this.audioPlay = this.audioPlay.bind(this);
-    this.audioPause = this.audioPause.bind(this);
-    this.audioStop = this.audioStop.bind(this);
-    this.audioConnect = this.audioConnect.bind(this);
-    this.audioDisconnect = this.audioDisconnect.bind(this);
+		this.audioPlay = this.audioPlay.bind(this);
+		this.audioPause = this.audioPause.bind(this);
+		this.audioStop = this.audioStop.bind(this);
+		this.audioConnect = this.audioConnect.bind(this);
+		this.audioDisconnect = this.audioDisconnect.bind(this);
 	}
 
 	componentWillMount() {
@@ -113,26 +113,26 @@ class GMapImage extends React.Component {
 		this.props.audioSource.disconnect();
 	}
 
-  audioConnect(event) {
-    if (this.props.audioStreamSource !== null) {
-      this.props.audioStreamSource.disconnect();
-    }
-    event.preventDefault();
-    const source = this.props.audioStream && this.props.audioCtx.audioContext.createMediaStreamSource(this.props.audioStream);
-    this.props.setStreamSource(source);
+	audioConnect(event) {
+		if (this.props.audioStreamSource !== null) {
+			this.props.audioStreamSource.disconnect();
+		}
+		event.preventDefault();
+		const source = this.props.audioStream && this.props.audioCtx.audioContext.createMediaStreamSource(this.props.audioStream);
+		this.props.setStreamSource(source);
 		source.connect(this.props.audioCtx.audioDest);
 		this.setState({
 			canMute: true
 		});
 	}
 
-  audioDisconnect(event) {
-    event.preventDefault();
+	audioDisconnect(event) {
+		event.preventDefault();
 		this.props.audioStreamSource.disconnect();
 		this.setState({
 			canMute: false
 		});
-  }
+	}
 
 	getPanoramaData(panoId) {
 		if (typeof panoId === 'string') {
@@ -168,9 +168,8 @@ class GMapImage extends React.Component {
 	}
 
 	render() {
-		const { panoImgSrc, mapData, audioStream, audioCtx, currentSongIndex } = this.props;
+		const { panoImgSrc, mapData, currentSongIndex } = this.props;
 		const state = this.state;
-    const source = audioStream && audioCtx.audioContext.createMediaStreamSource(audioStream);
 
 		const pauseOrPlay = state.canPlay ? 'play' : 'pause';
 		const muteOrUnmute = state.canMute ? 'mute' : 'unmute';
@@ -192,10 +191,10 @@ class GMapImage extends React.Component {
 				click: evt => this.audioPlay(evt, 0, currentSongIndex + 1)
 			},
 			mute: {
-				click: evt => this.audioDisconnect(evt, source)
+				click: evt => this.audioDisconnect(evt)
 			},
 			unmute: {
-				click: evt => this.audioConnect(evt, source)
+				click: evt => this.audioConnect(evt)
 			},
 			menu: {
 				click: () => this.showOrHideMenu()

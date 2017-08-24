@@ -25,7 +25,6 @@
   "homepage": "https://github.com/mhq2101/globoWalk#readme",
   "dependencies": {
     "aframe": "0.6.1",
-    "aframe-keyboard": "^0.0.1",
     "aframe-mouse-cursor-component": "^0.5.2",
     "aframe-react": "^4.3.0",
     "axios": "^0.16.2",
@@ -72,7 +71,6 @@
     "socket.io-client": "^1.7.2",
     "style-loader": "^0.18.2",
     "volleyball": "^1.4.1",
-    "webpack": "^3.5.3",
-    "yarn": "^0.27.5"
+    "webpack": "^3.5.3"
   }
 }
