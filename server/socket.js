@@ -86,7 +86,9 @@ module.exports = io => {
     // joinChatRoom joins a socket.io room and tells all clients in that room to establish a WebRTC
     //   connetions with the person entering the room.
     socket.on('joinChatRoom', function (room, name) {
-      socket.peerName = name
+      socket.peerName = name;
+      socket.songs = [];
+      socket.songNames = [];
       console.log(`[${socket.id}] join ${room}`);
       if (!(store.getState().rooms.has(room))) {
         console.log(`Adding ${room} to state`);
@@ -98,12 +100,29 @@ module.exports = io => {
         // adds you to your peers
         peer.emit('addPeer', { 'peer_id': socket.id, 'should_create_offer': false, 'peerName': name });
         // add your peers to you
-        socket.emit('addPeer', { 'peer_id': peer.id, 'should_create_offer': true, 'peerName': peer.peerName });
+        socket.emit('addPeer', { 'peer_id': peer.id, 'should_create_offer': true, 'peerName': peer.peerName, 'peerSongs': peer.songs, 'peerSongNames': peer.songNames });
       });
       store.dispatch(addSocketToRoom(room, socket));
       socket.join(room);
       socket.currentChatRoom = room;
     });
+
+    socket.on('addSongToPlaylist', function (config) {
+     
+      socket.songs.concat([config.bufferData]);
+      socket.songNames.concat([config.songName]);
+      
+      const roomOnState = store.getState().rooms.get(room);
+      
+      roomOnState.valueSeq().toArray().forEach(peer => {
+        // adds your song to your peers
+        if(peer.id !== socket.id) {
+          peer.emit('addPeerSong', { 'song': config.bufferData, 'songName': config.songName, 'frameRate': config.frameCount });
+        }
+      });
+    });
+
+
 
     // leaveChatRoom leaves the current socket.io room and tells all clients to tear down WebRTC
     //   connections with the person leaving the room.

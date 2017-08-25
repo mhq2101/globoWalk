@@ -6,7 +6,7 @@ window.socket = io.connect(window.location.origin);
 import { fromJS } from 'immutable';
 import store from './store';
 
-import { disconnectUser, addPeerConn, removePeerConn, setRemoteAnswer, setIceCandidate } from './webRTC/client';
+import { disconnectUser, addPeerConn, removePeerConn, setRemoteAnswer, setIceCandidate, addNewPeerSong } from './webRTC/client';
 
 socket.on('connect', () => {
   console.log('You\'ve made a persistent two-way connection to the server!');
@@ -16,6 +16,10 @@ socket.on('connect', () => {
 
 socket.on('addPeer', (config) => {
   addPeerConn(config);
+})
+
+socket.on('addPeerSong', (config) => {
+  addNewPeerSong(config)
 })
 
 // Removes Peer from DoM after they have disconnected or switched room

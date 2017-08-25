@@ -1,6 +1,9 @@
 import store from '../store.jsx';
 import { setUserMedia, addPeer, deletePeer, clearPeers } from '../redux/reducers/webrtc-reducer';
 import { addUserToChatroom, removeUserFromChatroom, setCurrentChatroom } from '../redux/reducers/chatroom';
+import { addBuffer } from '../redux/reducers/audioBuffers';
+import { addName } from '../redux/reducers/audioNames';
+
 // import io from 'socket.io-client';
 // All A-Frame components need access to the socket instance
 // window.socket = io.connect(window.location.origin);
@@ -36,6 +39,42 @@ let peerMediaElements = {};  // keep track of our <audio> tags, indexed by peer_
 //   --Instructs all clients in the same room to initiate WebRTC peer-to-peer voice connections
 // If the user decides not to share their microphone, they are presented with an error
 //   informing them that voice is unavailable.
+export function addSongToPlaylist (room, song, songName) {
+  if (signalingSocket === null) {
+    signalingSocket = window.socket;
+  }
+  var frameCount = store.getState().audioCtx.audioContext.sampleRate * song.duration;
+  const channelOne = song.getChannelData(0)
+  const channelTwo = song.getChannelData(1)
+  const songArrData = [channelOne, channelTwo]
+  // const myArrayBuffer = store.getState().audioCtx.audioContext.createBuffer(2, frameCount, store.getState().audioCtx.audioContext.sampleRate);
+  // myArrayBuffer.copyToChannel(channelOne,0,0);
+  // myArrayBuffer.copyToChannel(channelTwo,1,0);
+  // console.log(myArrayBuffer)
+  // var source = store.getState().audioCtx.audioContext.createBufferSource();
+
+  // // set the buffer in the AudioBufferSourceNode
+  // source.buffer = myArrayBuffer;
+
+  // // connect the AudioBufferSourceNode to the
+  // // destination so we can hear the sound
+  // source.connect(store.getState().audioCtx.audioContext.destination);
+
+  // // start the source playing
+  // source.start();
+  signalingSocket.emit('addSongToPlaylist', {'room': room, 'bufferData': songArrData, 'frameCount': frameCount, 'songName': songName});
+    return;
+}
+
+
+export function addNewPeerSong (config) {
+  console.log(config.song)
+  const myArrayBuffer = store.getState().audioCtx.audioContext.createBuffer(2, config.frameCount, store.getState().audioCtx.audioContext.sampleRate);
+  myArrayBuffer.copyToChannel(config.song[0],0,0);
+  myArrayBuffer.copyToChannel(config.song[1],1,0);
+  store.dispatch(addBuffer(myArrayBuffer))
+  store.dispatch(addName(config.songName))
+}
 
 export function joinChatRoom (room, errorback) {
   // Get our microphone from the state
@@ -83,6 +122,8 @@ export function addPeerConn (config) {
   const peerId = config.peer_id;
   const peers = store.getState().webrtc.get('peers');
   const peerName = config.peerName;
+  const songs = config.peerSongs;
+  const songNames = config.peerSongNames;
   console.log(peerName)
   // If for some reason, this client aready is connected to the peer, return
   if (peers.has(peerId)) {
@@ -150,7 +191,14 @@ export function addPeerConn (config) {
       }
     );
   }
+  console.log(songs)
   store.dispatch(addPeer(peerId, peerConnection, peerName));
+  songs.forEach(song => {
+    store.dispatch(addBuffer(song))
+  })
+  songNames.forEach(songName => {
+    store.dispatch(addName(songName))
+  })
 }
 
 export function removePeerConn (config) {

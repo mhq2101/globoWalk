@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { leaveChatRoom } from '../webRTC/client.jsx'
+import { leaveChatRoom, addSongToPlaylist } from '../webRTC/client.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import { NavLink } from 'react-router-dom';
@@ -36,6 +36,7 @@ class ChatroomPage extends React.Component {
   }
 
   audioDropHandle(event, context) {
+
     event.preventDefault();
     const gainNode = context.createGain();
     this.setState({
@@ -50,6 +51,7 @@ class ChatroomPage extends React.Component {
         if (AudioDrop.isValidVariableName(name)) {
           window[name] = buffer;
           //REDUX!!!!!!
+          // addSongToPlaylist (thisContext.props.chatroom.chatroom.name, buffer, name)
           thisContext.props.addBuffer(buffer);
           thisContext.props.addName(name)
           thisContext.setState({
