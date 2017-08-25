@@ -13,7 +13,6 @@ module.exports = io => {
 
     let unsubscribe;
 
-    console.log(chalk.yellow(`${socket.id} has connected`));
     // These fix a race condition between scene loaded and user created
     socket.sceneLoaded = false;
     socket.createdUser = false;
@@ -27,7 +26,6 @@ module.exports = io => {
     });
 
     socket.on('sceneLoad', () => {
-      console.log('Scene loaded');
       socket.sceneLoaded = true;
       if (socket.createdUser) {
         const user = store.getState().users.get(socket.id);
@@ -72,9 +70,7 @@ module.exports = io => {
     //   clients, and remove the socket from any socket.io rooms or WebRTC P2P connections
     // Also removes the user from the chatroom they were currently in chatroom
     socket.on('disconnect', () => {
-      console.log(chalk.magenta(`User ${socket.userId} ${socket.id} has disconnected from ${socket.chatroomName}`));
       leaveChatRoom(socket.peerName);
-      console.log(`[${socket.id}] disconnected`);
       store.dispatch(removeSocket(socket));
       if (unsubscribe) {
         // Conditional here to prevent a possible race condition where a user
@@ -87,9 +83,7 @@ module.exports = io => {
     //   connetions with the person entering the room.
     socket.on('joinChatRoom', function (room, name) {
       socket.peerName = name
-      console.log(`[${socket.id}] join ${room}`);
       if (!(store.getState().rooms.has(room))) {
-        console.log(`Adding ${room} to state`);
         store.dispatch(addRoom(room));
       }
       const roomOnState = store.getState().rooms.get(room);
@@ -110,7 +104,6 @@ module.exports = io => {
     function leaveChatRoom (name) {
       const room = socket.currentChatRoom;
       if (room) {
-        console.log(`[${socket.id}] leaveChatRoom ${room}`);
         socket.leave(room);
         store.dispatch(removeSocketFromRoom(room, socket));
         const roomOnState = store.getState().rooms.get(room);
@@ -119,8 +112,6 @@ module.exports = io => {
           socket.emit('removePeer', { 'peer_id': peer.id, 'peerName': peer.peerName} );
         });
         socket.currentChatRoom = null;
-      } else {
-        console.log('Not currently in room, so nothing to leave');
       }
     }
     socket.on('leaveChatRoom', (name) => leaveChatRoom(name));
@@ -129,7 +120,6 @@ module.exports = io => {
     socket.on('relayICECandidate', function (config) {
       const peerId = config.peer_id;
       const iceCandidate = config.ice_candidate;
-      console.log(`[${socket.id}] relaying ICE candidate to [${peerId}] ${iceCandidate}`);
       const sockets = store.getState().sockets;
       if (sockets.has(peerId)) {
         sockets.get(peerId).emit('iceCandidate', { 'peer_id': socket.id, 'ice_candidate': iceCandidate });
@@ -140,7 +130,6 @@ module.exports = io => {
     socket.on('relaySessionDescription', function (config) {
       const peerId = config.peer_id;
       const sessionDescription = config.session_description;
-      console.log(`[${socket.id}] relaying session description to [${peerId}] ${sessionDescription}`);
       const sockets = store.getState().sockets;
 
       if (sockets.has(peerId)) {

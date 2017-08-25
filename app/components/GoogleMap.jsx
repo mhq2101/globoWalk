@@ -53,8 +53,6 @@ export default class GoogleMap extends React.Component {
         if (place) {
           this.addMarker(place);
           this.setInputCoordinates(place);
-        } else {
-          console.log("Unable to get place from click event.");
         }
       }
     });
@@ -73,8 +71,6 @@ export default class GoogleMap extends React.Component {
           if (place) {
             this.addMarker(place);
             this.setInputCoordinates(place);
-          } else {
-            console.log("Unable to get place from click event.");
           }
         }
       });
@@ -88,7 +84,7 @@ export default class GoogleMap extends React.Component {
   }
 
   setDefaultCoordinates(error) {
-    console.log("Unable to get current location: ", error.message);
+    console.error("Unable to get current location: ", error.message);
 
     // Hoboken, NJ
     let hoboken_latitude = 40.7398706;
@@ -105,8 +101,6 @@ export default class GoogleMap extends React.Component {
         if (place) {
           this.addMarker(place);
           this.setInputCoordinates(place);
-        } else {
-          console.log("Problem retrieving place from Lat Lng.");
         }
       }
     });
@@ -180,7 +174,6 @@ export default class GoogleMap extends React.Component {
       let bounds = new google.maps.LatLngBounds();
       places.forEach((place) => {
         if (!place.geometry) {
-          console.log("Returned place contains no geometry");
           return;
         }
 

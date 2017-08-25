@@ -42,7 +42,6 @@ export function joinChatRoom (room, errorback) {
   const localMediaStream = store.getState().audioContext;
 
   if (!room) {
-    console.log('No room was provided');
     return;
   }
   if (signalingSocket === null) {
@@ -53,20 +52,15 @@ export function joinChatRoom (room, errorback) {
     return;
   }
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-  console.log('Requesting access to local audio / video inputs');
   navigator.getUserMedia({ 'audio': true, 'video': false },
     // On Success
     function (stream) {
-      console.log('Access granted to audio');
       store.dispatch(setUserMedia(stream));
       signalingSocket.emit('joinChatRoom', room, store.getState().auth.name);
     },
     // On Failure... likely because user denied access to a/v
-    function () {
-      console.log('Access denied for audio/video');
-      window.alert('You chose not to provide access to your microphone, so real-time voice chat is unavailable.');
-      
-      if (errorback) errorback();
+    function (err) {      
+      if (err) console.error(err);
     });
 }
 
@@ -79,14 +73,11 @@ export function leaveChatRoom () {
 
 // accepts conifg
 export function addPeerConn (config) {
-  console.log('Signaling server said to add peer:', config);
   const peerId = config.peer_id;
   const peers = store.getState().webrtc.get('peers');
   const peerName = config.peerName;
-  console.log(peerName)
   // If for some reason, this client aready is connected to the peer, return
   if (peers.has(peerId)) {
-    console.log('Already connected to peer ', peerId);
     return;
   }
 
@@ -115,7 +106,6 @@ export function addPeerConn (config) {
   // When we recieve a peer's WebRTC stream, add an audio tag to the DOM with
   //   an ID equal to the peerID, and set it to autoplay.
   peerConnection.onaddstream = function (event) {
-    console.log('onAddStream', event);
     const remoteAudio = document.createElement('audio');
     const bodyTag = document.getElementsByTagName('body')[0];
     bodyTag.appendChild(remoteAudio);
@@ -132,21 +122,18 @@ export function addPeerConn (config) {
   * create an offer, then send back an answer 'sessionDescription' to us
   */
   if (config.should_create_offer) {
-    console.log('Creating RTC offer to ', peerId);
     peerConnection.createOffer(
       function (localDescription) {
-        console.log('Local offer description is: ', localDescription);
         peerConnection.setLocalDescription(localDescription,
           function () {
             signalingSocket.emit('relaySessionDescription',
               { 'peer_id': peerId, 'session_description': localDescription });
-            console.log('Offer setLocalDescription succeeded');
           },
-          function () { window.alert('Offer setLocalDescription failed!'); }
+          function () {}
         );
       },
       function (error) {
-        console.log('Error sending offer: ', error);
+        console.error('Error sending offer: ', error);
       }
     );
   }
@@ -155,7 +142,6 @@ export function addPeerConn (config) {
 
 export function removePeerConn (config) {
   const peerName = config.peerName
-  console.log('Signaling server said to remove peer:', config);
   const peerId = config.peer_id;
   if (peerId in peerMediaElements) {
     peerMediaElements[peerId].remove();
@@ -169,41 +155,33 @@ export function removePeerConn (config) {
 }
 
 export function setRemoteAnswer (config) {
-  console.log('Remote description received: ', config);
   const peerId = config.peer_id;
   const peer = store.getState().webrtc.getIn(['peers', peerId]);
   const remoteDescription = config.session_description;
-  console.log(config.session_description);
   const desc = new RTCSessionDescription(remoteDescription);
   const stuff = peer.setRemoteDescription(desc,
     function () {
-      console.log('setRemoteDescription succeeded');
       if (remoteDescription.type === 'offer') {
-        console.log('Creating answer');
         peer.createAnswer(
           function (localDescription) {
-            console.log('Answer description is: ', localDescription);
             peer.setLocalDescription(localDescription,
               function () {
                 signalingSocket.emit('relaySessionDescription',
                   { 'peer_id': peerId, 'session_description': localDescription });
-                console.log('Answer setLocalDescription succeeded');
               },
-              function () { window.alert('Answer setLocalDescription failed!'); }
+              function () {}
             );
           },
           function (error) {
-            console.log('Error creating answer: ', error);
-            console.log(peer);
+            console.error('Error creating answer: ', error);
           }
         );
       }
     },
     function (error) {
-      console.log('setRemoteDescription error: ', error);
+      console.error('setRemoteDescription error: ', error);
     }
   );
-  console.log('Description Object: ', desc);
 }
 
 export function setIceCandidate (config) {

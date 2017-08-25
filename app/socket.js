@@ -8,10 +8,6 @@ import store from './store';
 
 import { disconnectUser, addPeerConn, removePeerConn, setRemoteAnswer, setIceCandidate } from './webRTC/client';
 
-socket.on('connect', () => {
-  console.log('You\'ve made a persistent two-way connection to the server!');
-});
-
 // Adds a Peer to our DoM as their own Audio Element
 
 socket.on('addPeer', (config) => {

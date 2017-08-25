@@ -18,17 +18,13 @@ export const setUserMedia = (stream) => {
 export const fetchAudio = () => dispatch => {
 
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-  console.log('Requesting access to local audio');
   navigator.getUserMedia({ 'audio': true },
     // On Success
     function (stream) {
-      console.log('Access granted to audio');
       dispatch(setUserMedia(stream));
     },
     // On Failure
-    function () {
-      console.log('Access denied for audio/video');
-    });
+    function () {});
 }
 
 

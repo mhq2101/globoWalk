@@ -46,7 +46,7 @@ class LocationSelection extends React.Component {
 
     panorama(location, options, (err, result) => {
       if (err) {
-        console.log("Panorama Error: ", err);
+        console.error("Panorama Error: ", err);
         this.setState({ error_message: "Street View not available for location" });
 
         return;
@@ -89,7 +89,6 @@ class LocationSelection extends React.Component {
 
     if (latitude !== '' && longitude !== '') {
       let location = [Number(this.state.suggested_latitude), Number(this.state.suggested_longitude)];
-      console.log("Location: ", location);
       this.callPanorama(location);
     } else {
       this.setState({ suggested_error_message: "" })

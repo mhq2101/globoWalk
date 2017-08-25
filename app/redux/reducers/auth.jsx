@@ -23,8 +23,6 @@ export const signup = (name, email, password) => {
  return dispatch =>
    axios.post('/api/auth/signup', { name, email, password })
      .then(response => dispatch(login(email, password)))
-     // error will be caught on the signup page
-     //.catch(err => console.log(err.message));
 };
 
 export const login = (email, password) => {
@@ -34,10 +32,6 @@ export const login = (email, password) => {
            const user = response.data;
            dispatch(authenticated(user));
        })
-      // error will be caught on the login page
-      //  .catch(err => {
-      //      console.error(err)
-      //  });
 };
 
 export const logout = () =>

@@ -39,10 +39,6 @@ class ChatroomPage extends React.Component {
 
   audioDropHandle(event, context) {
     event.preventDefault();
-    // const gainNode = context.createGain();
-    // this.setState({
-    // 	gain: gainNode
-    // })
     const thisContext = this;
     AudioDrop({
       context: context,
@@ -57,10 +53,8 @@ class ChatroomPage extends React.Component {
           thisContext.setState({
             canPlay: true // ehh...
           })
-          console.log('Added the variable "' + name + '"" to the window.');
         } else {
           window[name + '-sample'] = buffer;
-          console.log('Added the variable window["' + name + '-sample"] to the window.');
         }
       }
     });
@@ -178,13 +172,8 @@ class ChatroomPage extends React.Component {
             //REDUX!!!!!!
             thisContext.props.addBuffer(buffer);
             thisContext.props.addName(name)
-            // thisContext.setState({
-            //   canPlay: true // ehh...
-            // })
-            console.log('Added the variable "' + name + '"" to the window.');
           } else {
             window[name + '-sample'] = buffer;
-            console.log('Added the variable window["' + name + '-sample"] to the window.');
           }
         }
       });
