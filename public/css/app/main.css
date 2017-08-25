@@ -74,6 +74,11 @@
   border-radius: 10px;
 }
 
+.centered-form {
+  width: 600px;
+  margin: 0 auto;
+}
+
  @media only screen and (max-width : 992px) {
    .parallax-container .section {
      position: absolute;
@@ -90,7 +95,8 @@
    }
 
    .centered-login-form,
-   .centered-signup-form {
+   .centered-signup-form,
+   .centered-form {
      width: 300px;
    }
  }
