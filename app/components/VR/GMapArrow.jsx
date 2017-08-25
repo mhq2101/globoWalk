@@ -12,7 +12,7 @@ const GMapArrow = props => {
 	let heading = linkData.heading - headingOffset - 90;
 	heading *= (Math.PI / 180);
 	const arrowX = 5 * Math.sin(heading);
-	const arrowZ = 5 * Math.cos(heading);
+	const arrowZ = -5 * Math.cos(heading);
 
 	return (
 		<Entity
