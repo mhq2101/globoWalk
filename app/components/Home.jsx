@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
 import Footer from './Footer';
 
-export default class Future_Home extends React.Component {
+export default class Home extends React.Component {
 
   componentDidMount() {
     // Needed for materialize

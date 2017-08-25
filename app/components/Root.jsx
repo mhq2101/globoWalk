@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import Audio from './Audio';
-import Future_Home from './Future_Home';
+import Home from './Home';
 import LocationSelection from './LocationSelection';
 import Login from './Login';
 import UserPage from './UserPage';
@@ -32,7 +32,7 @@ class Root extends React.Component {
 		return (
 			<div>
 				<Switch>
-					<Route exact path='/' component={Future_Home} />
+					<Route exact path='/' component={Home} />
 					<Route exact path='/user' component={UserPage} />
 					<Route exact path='/login' render={() => (
 						(this.props.auth.id) ? (
