@@ -42,12 +42,41 @@
    }
  
 .btn-login {
-  width: 185px;
-  margin-left: 3px;
+  width: 100%;
+  margin-top: 3px;
 }
 
-.or-divider {
-  padding-left: 50px;
+.btn-google-login {
+  background-color: #DB4A37;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-google-icon {
+  margin-right: 10px;
+}
+
+.file-drop {
+  border: 2px dotted black;
+  min-height: 150px;
+}
+
+.btn-music-mobile {
+  padding: 0 16px;
+  margin: 2px;
+  text-align: center;
+}
+
+.centered-login-form,
+.centered-signup-form {
+  width: 450px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.centered-form {
+  width: 600px;
+  margin: 0 auto;
 }
 
  @media only screen and (max-width : 992px) {
@@ -64,8 +93,15 @@
    #index-banner .section {
      top: 0;
    }
+
+   .centered-login-form,
+   .centered-signup-form,
+   .centered-form {
+     width: 300px;
+   }
  }
- 
+
+
  .icon-block {
    padding: 0 15px;
  }

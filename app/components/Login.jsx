@@ -33,8 +33,8 @@ class Login extends React.Component {
         })
     }
 
-    componentDidMount(){
-        if (!this.props.auth.name){
+    componentDidMount() {
+        if (!this.props.auth.name) {
             this.props.setCurrentChatroom({})
         }
     }
@@ -42,39 +42,50 @@ class Login extends React.Component {
     render() {
         return (
             <div>
-                <NavBar/>
-                <div className="container">
-                    <div className="section">
-                        <Row>
-                        <h4 className="center-align">Log in to GloboWalk</h4>
-                            <Col m={9} s={12} offset="m3">
-                                
-                                <ToastContainer ref={(input) => { this.container = input; }}
-                                    toastMessageFactory={ToastMessageFactory}
-                                    className="toast-top-right"
-                                />
-                                <form onSubmit={this.submitHandler}>
-                                    <Row>
-                                        <Input m={9} s={12} key="name" name="email" type="email" label="Email" required />
-                                    </Row>
-                                    <Row>
-                                        <Input m={9} s={12} key="password" name="password" type="password" label="Password" required />
-                                    </Row>
-                                    <Row>
-                                        <Col m={4} s={10} offset="m3 s2">
-                                            <Button className="btn-login" type="submit">Log In</Button>
-                                            <div>
-                                                <a target="_self" href="/api/auth/google/login">
-                                                    <img src="/images/btn_google_signin_dark_normal_web.png" />
-                                                </a>
-                                            </div>
-                                            <p className="or-divider">------- OR ------</p>
-                                            <Link className="btn btn-login" to="/signup">Sign Up</Link>
-                                        </Col>
-                                    </Row>
-                                </form>
-                            </Col>
-                        </Row>
+                {/* <NavBar/> */}
+                <div className="valign-wrapper blue lighten-2" style={{ height: "100%" }}>
+                    <div className="centered-login-form white">
+                        <h4 className="center-align">Log In</h4>
+                        <ToastContainer ref={(input) => { this.container = input; }}
+                            toastMessageFactory={ToastMessageFactory}
+                            className="toast-top-right"
+                        />
+                        <form onSubmit={this.submitHandler}>
+                            <Row>
+                                <Input s={12}
+                                    key="name"
+                                    name="email"
+                                    type="email"
+                                    label="Email"
+                                    required
+                                >
+                                    <Icon>email</Icon>
+                                </Input>
+                            </Row>
+                            <Row>
+                                <Input s={12}
+                                    key="password"
+                                    name="password"
+                                    type="password"
+                                    label="Password"
+                                    required
+                                >
+                                    <Icon>lock</Icon>
+                                </Input>
+                            </Row>
+                            <Row>
+                                <Col s={12}>
+                                    <Button className="btn-login blue lighten-1" type="submit">Log In</Button>
+                                    <div>
+                                        <a target="_self" href="/api/auth/google/login" className="btn btn-login btn-google-login">
+                                            <i className="fa fa-google btn-google-icon" aria-hidden="true"></i>Google
+                                        </a>
+                                    </div>
+                                    <p className="center">------- OR ------</p>
+                                    <Link className="btn btn-login blue lighten-1" to="/signup">Sign Up</Link>
+                                </Col>
+                            </Row>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -88,7 +99,7 @@ class Login extends React.Component {
 const mapState = ({ auth, chatroom }) => ({
     auth,
     chatroom,
-  });
+});
 
 const mapDispatch = dispatch => ({
     login(event) {

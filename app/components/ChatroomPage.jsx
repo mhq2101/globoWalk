@@ -5,6 +5,8 @@ import { leaveChatRoom } from '../webRTC/client.jsx'
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
 import { NavLink } from 'react-router-dom';
+import { Row, Col, Button, Input, Icon, Table } from 'react-materialize'
+
 import NavBar from './NavBar.jsx';
 
 /* -------Component--------- */
@@ -182,61 +184,96 @@ class ChatroomPage extends React.Component {
 			}
 		}
 		return (
-			<div>
-				<NavBar />
-				<h1>Welcome to Chatroom {this.props.chatroom.chatroom.name}</h1>
-				<h2>This is the Audio Section
-            <button onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
-						disabled={!canDrop}> Drop<i className="material-icons medium left">music_note</i></button>
-				</h2>
+      <div>
+      <NavBar />
+			<div className="container">
+        <div className="section">
+				<h4>Welcome to Chatroom: {this.props.chatroom.chatroom.name}</h4>
+				<h5>Audio Section</h5>
+        <Button className="blue" onClick={(event) => this.audioDropHandle(event, audioCtx.audioContext)}
+        disabled={!canDrop}> Drop <Icon medium left>music_note</Icon></Button>
 
-				<h6> Your Playlist ({audioBuffers.length} Songs)
+				<p>Your Playlist ({audioBuffers.length} Songs)
             {
 						audioNames.map((name, ind) => {
 							return (<div key={ind}>{ind + 1}. {name}
-								<button
+								<Button
 									onClick={(event) => this.audioPlay(event, 0, ind)}
-								>Play<i className="material-icons left">play_arrow</i>
-								</button>
+								>Play<Icon left>play_arrow</Icon>
+								</Button>
 							</div>)
 						})
 					}
-				</h6>
+				</p>
 
-				<button
-					onClick={(event) => this.audioPlay(event, 0, currentSongIndex - 1, 'prev')}
-				>Previous<i className="material-icons left">skip_previous</i></button>
-				<button
-					onClick={(event) => this.audioPlay(event, null, currentSongIndex)}
-					disabled={!canPlay}>Play<i className="material-icons left">play_arrow</i></button>
-				<button
-					onClick={(event) => this.audioPause(event)}
-					disabled={!canPause}>Pause<i className="material-icons left">pause</i></button>
-				<button
-					onClick={(event) => this.audioStop(event)}
-					disabled={!canStop}>Stop<i className="material-icons left">stop</i></button>
-				<button
-					onClick={(event) => this.audioPlay(event, 0, currentSongIndex + 1, 'next')}
-				>Next<i className="material-icons left">skip_next</i></button>
+        <Row>
+          <Col s={12}>
+            <div className="hide-on-small-only">
+              <Button className="blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex - 1, 'prev')}
+              >Previous<Icon left>skip_previous</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioPlay(event, null, currentSongIndex)}
+                disabled={!canPlay}>Play<Icon left>play_arrow</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioPause(event)}
+                disabled={!canPause}>Pause<Icon left>pause</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioStop(event)}
+                disabled={!canStop}>Stop<Icon left>stop</Icon></Button>
+              <Button className="blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex + 1, 'next')}
+              >Next<Icon left>skip_next</Icon></Button>
+            </div>
+
+            <div className="hide-on-med-and-up">
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex - 1, 'prev')}
+              ><Icon>skip_previous</Icon></Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPlay(event, null, currentSongIndex)}
+                disabled={!canPlay}><Icon>play_arrow</Icon></Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPause(event)}
+                disabled={!canPause}><Icon>pause</Icon></Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioStop(event)}
+                disabled={!canStop}><Icon>stop</Icon></Button>
+              <Button className="btn-music-mobile blue"
+                onClick={(event) => this.audioPlay(event, 0, currentSongIndex + 1, 'next')}
+              ><Icon>skip_next</Icon></Button>
+            </div>
+          </Col>
+        </Row>
 
 				{
 					gain !== null ? (<Gain node={gain} adjustGainValue={this.adjustGainValue} />) : (<div></div>)
 				}
 
-				<button type="submit" onClick={(event) => this.audioConnect(event)}>Connect Microphone</button>
-				<button type="submit" onClick={(event) => this.audioDisconnect(event)}>DisConnect Microphone</button>
+        <Row>
+          <Col>
+            <Button type="submit" className="blue" onClick={(event) => this.audioConnect(event)}>Connect Microphone</Button>
+            <Button type="submit" className="blue" onClick={(event) => this.audioDisconnect(event)}>DisConnect Microphone</Button>
+          </Col>
+        </Row>
 
-				<button onClick={() => {
-					leaveChatRoom(this.props.chatroom.chatroom.name)
-					this.setState({
-						canJoin: true
-					})
-					this.props.history.push('/user')
-				}} disabled={canJoin} > Leave Room </button>
+        <Row>
+          <Col>
+				<Button className="blue" onClick={() => {
+            leaveChatRoom(this.props.chatroom.chatroom.name)
+            this.setState({
+              canJoin: true
+            })
+            this.props.history.push('/user')
+          }} disabled={canJoin}>Leave Room<Icon left>chevron_left</Icon>
+        </Button>
 
-				<button type="submit" onClick={() => this.props.history.push(`/${this.props.chatroom.chatroom.name}/location-selection`)}>Select Your Location</button>
-				<h3>The users currently in this lobby are: {this.props.chatroom.name}</h3>
-				<table className="table table-responsive table-striped table-hover table-sm">
+				<Button type="submit" className="blue" onClick={() => this.props.history.push(`/${this.props.chatroom.chatroom.name}/location-selection`)}>Select Your Location</Button>
+          </Col>
+        </Row>
+
+				<h5>Users In Room: {this.props.chatroom.name}</h5>
+				<Table responsive striped hoverable>
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -251,8 +288,10 @@ class ChatroomPage extends React.Component {
 							)
 						})}
 					</tbody>
-				</table>
+				</Table>
+        </div>
 			</div>
+      </div>
 		)
 	}
 }
