@@ -6,7 +6,7 @@ import { setCurrentChatroom, fetchChatrooms, fetchChatroom, joinAndGo, joinAndGo
 import { login, logout, signup, postUserChatroom } from '../redux/reducers/auth';
 import AudioDrop from '../webRTC/audioDrop.js';
 import Gain from './Gain';
-import {ToastContainer, ToastMessage} from 'react-toastr'
+import { ToastContainer, ToastMessage } from 'react-toastr'
 import { Row, Col, Input, Navbar, NavItem, Icon, Button } from 'react-materialize';
 import NavBar from './NavBar.jsx'
 
@@ -24,27 +24,27 @@ class UserPage extends React.Component {
     this.submitJoinHandler = this.submitJoinHandler.bind(this)
   }
 
-  addCreateAlert () {
+  addCreateAlert() {
     this.container.error(
       "",
       "Chatroom Already Exists", {
-      timeOut: 6000,
-      extendedTimeOut: 1500
-    });
+        timeOut: 6000,
+        extendedTimeOut: 1500
+      });
   }
 
-  addJoinAlert () {
+  addJoinAlert() {
     this.container.error(
       "",
       "Chatroom Doesn't Exist", {
-      timeOut: 6000,
-      extendedTimeOut: 1500
-    });
+        timeOut: 6000,
+        extendedTimeOut: 1500
+      });
   }
 
   submitCreateHandler(event) {
     event.preventDefault();
-    if(this.props.chatroom.chatrooms){
+    if (this.props.chatroom.chatrooms) {
       this.props.createAndGo(event.target.chatroom.value).catch(err => {
         if (err) this.addCreateAlert()
       })
@@ -54,29 +54,29 @@ class UserPage extends React.Component {
 
   submitJoinHandler(event) {
     event.preventDefault()
-    if(this.props.chatroom.chatrooms){
-        this.props.joinAndGoNoCatch(event.target.chatroom.value).catch(err => {
-          if (err) this.addJoinAlert()
-        })
-        this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
+    if (this.props.chatroom.chatrooms) {
+      this.props.joinAndGoNoCatch(event.target.chatroom.value).catch(err => {
+        if (err) this.addJoinAlert()
+      })
+      this.props.chatroom && this.props.postUserChatroom(event.target.chatroom.value)
     }
   }
 
   handleChange(event) {
     event.preventDefault()
-    if(this.props.chatroom.chatrooms && event.target.innerHTML !== "Select A Lobby"){
+    if (this.props.chatroom.chatrooms && event.target.innerHTML !== "Select A Lobby") {
       this.props.joinAndGo(event.target.innerHTML)
     }
   }
 
- componentDidMount () {
+  componentDidMount() {
     this.props.fetchChatrooms()
-    if (this.props.chatroom.chatroom.id){
+    if (this.props.chatroom.chatroom.id) {
       this.props.setCurrentChatroom({})
     }
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     if (this.props.chatroom.chatroom.id) {
       (this.props.history.push(`/user/chatroom/${this.props.chatroom.chatroom.name}`))
     }
@@ -88,67 +88,65 @@ class UserPage extends React.Component {
   render() {
     const { auth, chatroom } = this.props;
     const { chatrooms } = this.props.chatroom
-    
+
     return (
       <div>
-        <ToastContainer ref={(input) => {this.container = input;}}
-          toastMessageFactory={ToastMessageFactory}
-          className="toast-top-right"
-        />
-        <NavBar/>
-        <div className="container">
-          <div className="section">
-          <Row>
-            <Col m={9} offset="m3">
-              <h4>Create a New Group</h4>
-              <form onSubmit={this.submitCreateHandler}>
+        <NavBar />
+        <div className="valign-wrapper" style={{ height: "100%"}}>
+          <div className="centered-form white">
+            <ToastContainer ref={(input) => { this.container = input; }}
+              toastMessageFactory={ToastMessageFactory}
+              className="toast-top-right"
+            />
+            <Row>
+              <Col s={12}>
+                <h5 className="center-align">Create A New Group</h5>
+                <form onSubmit={this.submitCreateHandler}>
+                  <Row>
+                    <Input
+                      s={12}
+                      key="chatroom"
+                      name="chatroom"
+                      label="Enter a New Group Name"
+                    />
+                  </Row>
+                  <Row>
+                    <Col s={12}>
+                      <Button className="btn-login blue" type="submit">Create Group </Button>
+                    </Col>
+                  </Row>
+                </form>
+                <Row />
+                <h5 className="center-align">Join A Group</h5>
                 <Row>
-                  <Input
-                    s={12}
-                    m={8}
-                    key="chatroom"
-                    name="chatroom"
-                    placeholder="Enter a New Group Name"
-                  />
-                </Row>
-                <Row>
-                  <Col m={10} offset="m2">
-                    <Button className="btn-login" type="submit"> Create Group </Button>
-                  </Col>
-                </Row>
-              </form>
-              <Row/>
-              <h4 className="left-align"> Or Join an Existing Group</h4>
-              <Row>
-                {this.props.auth.chatrooms &&
-                <Input s={12} m={8} type='select' onChange={() => this.handleChange(event)}>
-                  <option key='default'>Select From Previous Groups</option>
-                  {
-                    auth.chatrooms.map((chatroom, ind) => {
-                      return (
-                        <option key={chatroom.id}>{chatroom.name}</option>
-                      )
-                    })
+                  {this.props.auth.chatrooms &&
+                    <Input s={12} type='select' onChange={() => this.handleChange(event)}>
+                      <option key='default'>Select From Previous Groups</option>
+                      {
+                        auth.chatrooms.map((chatroom, ind) => {
+                          return (
+                            <option key={chatroom.id}>{chatroom.name}</option>
+                          )
+                        })
+                      }
+                    </Input>
                   }
-                </Input>
-                }
-              </Row>
-              <form onSubmit={this.submitJoinHandler}>
-                <Row>
-                  <Input
-                    s={12}
-                    m={8}
-                    key="chatroom"
-                    name="chatroom"
-                    placeholder="Enter an Existing Group's Name"
-                  />
-                  <Col m={10} offset="m2">
-                    <Button className="btn-login" type="submit"> Join Group </Button>
-                  </Col>
                 </Row>
-              </form>
-            </Col>
-          </Row>
+                <form onSubmit={this.submitJoinHandler}>
+                  <Row>
+                    <Input
+                      s={12}
+                      key="chatroom"
+                      name="chatroom"
+                      label="Enter an Existing Group's Name"
+                    />
+                    <Col s={12}>
+                      <Button className="btn-login blue" type="submit"> Join Group </Button>
+                    </Col>
+                  </Row>
+                </form>
+              </Col>
+            </Row>
           </div>
         </div>
       </div>
@@ -190,7 +188,7 @@ const mapDispatch = function (dispatch) {
       dispatch(setCurrentChatroom(chatroom));
     },
     postUserChatroom(name) {
-     dispatch(postUserChatroom(name))
+      dispatch(postUserChatroom(name))
     },
     logout() {
       dispatch(logout())

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { login, logout, signup } from '../redux/reducers/auth';
 import { Link, withRouter } from 'react-router-dom';
-import {ToastContainer, ToastMessage} from 'react-toastr'
+import { ToastContainer, ToastMessage } from 'react-toastr'
 import { Row, Col, Input, Navbar, NavItem, Icon, Button } from 'react-materialize';
 import NavBar from './NavBar.jsx';
 
@@ -17,67 +17,81 @@ class Signup extends React.Component {
         this.submitHandler = this.submitHandler.bind(this)
     }
 
-    addAlert () {
+    addAlert() {
         this.container.error(
-          "",
-          "Email Already In Use", {
-          timeOut: 6000,
-          extendedTimeOut: 1500
-        });
-      }
+            "",
+            "Email Already In Use", {
+                timeOut: 6000,
+                extendedTimeOut: 1500
+            });
+    }
 
     submitHandler(event) {
         this.props.signup(event).catch(err => {
             if (err) this.addAlert()
         })
     }
-    
+
     render() {
         return (
             <div>
-                <NavBar/>
-                <h1>Signup:</h1>
-                <ToastContainer ref={(input) => {this.container = input;}}
-                    toastMessageFactory={ToastMessageFactory}
-                    className="toast-top-right"
-                />
-                <form onSubmit={this.submitHandler}>
-                    <div>
-                        <input
-                            key="name"
-                            name="name"
-                            type="name"
-                            placeholder="name"
-                            required
+                {/* <NavBar/> */}
+                <div className="valign-wrapper blue lighten-2" style={{ height: "100%" }}>
+                    <div className="centered-signup-form white">
+                        <h4 className="center-align">Sign Up</h4>
+                        <ToastContainer ref={(input) => { this.container = input; }}
+                            toastMessageFactory={ToastMessageFactory}
+                            className="toast-top-right"
                         />
+                        <form onSubmit={this.submitHandler}>
+                            <Row>
+                                <Input s={12}
+                                    key="name"
+                                    name="name"
+                                    type="text"
+                                    label="Name"
+                                    required
+                                >
+                                    <Icon>person</Icon>
+                                </Input>
+                            </Row>
+                            <Row>
+                                <Input s={12}
+                                    key="email"
+                                    name="email"
+                                    type="email"
+                                    label="Email"
+                                    required
+                                >
+                                    <Icon>email</Icon>
+                                </Input>
+                            </Row>
+                            <Row>
+                                <Input s={12}
+                                    key="password"
+                                    name="password"
+                                    type="password"
+                                    label="Password"
+                                    required
+                                >
+                                    <Icon>lock</Icon>
+                                </Input>
+                            </Row>
+                            <Row>
+                                <Col s={12}>
+                                    <Button className="btn-login blue lighten-1" type="submit">Sign Up</Button>
+                                    <div>
+                                        <a target="_self" href="/api/auth/google/login" className="btn btn-login btn-google-login">
+                                            <i className="fa fa-google btn-google-icon" aria-hidden="true"></i>Google
+                                        </a>
+                                    </div>
+                                    <p className="center">------- OR ------</p>
+                                    <Link className="btn btn-login blue lighten-1" to="/login">Login</Link>
+                                </Col>
+                            </Row>
+                        </form>
                     </div>
-                    <div>
-                        <input
-                            key="email"
-                            name="email"
-                            type="email"
-                            placeholder="email"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            key="password"
-                            name="password"
-                            type="password"
-                            placeholder="password"
-                            required
-                        />
-                        <button type="submit">Signup for GloboWalk </button>
-                    </div>
-                </form>
-                <div>
-                    <a target="_self" href="/api/auth/google/login">
-                        <span className="fa fa-google" ></span>
-                        Signup with Google
-                    </a>
                 </div>
-                <Link to ="/login"> Login </Link>
             </div>
         )
     }
