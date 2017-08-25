@@ -12,7 +12,7 @@ const GMapArrow = props => {
 	let heading = linkData.heading - headingOffset - 90;
 	heading *= (Math.PI / 180);
 	const arrowX = 5 * Math.sin(heading);
-	const arrowZ = 5 * Math.cos(heading);
+	const arrowZ = -5 * Math.cos(heading);
 
 	return (
 		<Entity
@@ -25,25 +25,10 @@ const GMapArrow = props => {
 			events={{
 				click: () => props.setCurrentPanoId(linkData.pano),
 			}}
-		>
-			<a-animation
-				attribute={'position'}
-				from={`${arrowX} 1.5 ${arrowZ}`}
-				to={`${arrowX} 1.42 ${arrowZ}`}
-				direction={'alternate'}
-				dur={'2000'}
-				repeat={'indefinite'}
-			/>
-		</Entity>
+		/>
 	);
 };
 
-const mapDispatchToProps = function (dispatch) {
-	return {
-		setCurrentPanoId(panoId) {
-			dispatch(setCurrentPanoId(panoId));
-		}
-	};
-};
+const mapDispatchToProps = { setCurrentPanoId };
 
 export default connect(null, mapDispatchToProps)(GMapArrow);

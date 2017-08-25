@@ -1,7 +1,7 @@
 (function($){
   $(function(){
 
-    $('.parallax').parallax();
+    // $('.parallax').parallax();
     $('select').material_select();
     
   }); // end of document ready

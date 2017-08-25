@@ -116,7 +116,7 @@ module.exports = io => {
         const roomOnState = store.getState().rooms.get(room);
         roomOnState.valueSeq().forEach(peer => {
           peer.emit('removePeer', { 'peer_id': socket.id, 'peerName': name });
-          socket.emit('removePeer', { 'peer_id': peer.id, 'peerName': peer.peerName}, );
+          socket.emit('removePeer', { 'peer_id': peer.id, 'peerName': peer.peerName} );
         });
         socket.currentChatRoom = null;
       } else {
