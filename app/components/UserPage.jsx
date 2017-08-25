@@ -105,7 +105,6 @@ class UserPage extends React.Component {
                   <Row>
                     <Input
                       s={12}
-                      m={8}
                       key="chatroom"
                       name="chatroom"
                       label="Enter a New Group Name"
