@@ -17,6 +17,7 @@ import timeStarted from './timeStarted';
 import audioStreamSource from './audioStreamSource';
 import micConnected from './micConnected';
 import musicPlaying from './musicPlaying';
+import canDrop from './canDrop';
 
 const rootReducer = combineReducers({
   auth: auth,
@@ -35,7 +36,8 @@ const rootReducer = combineReducers({
   panoImgSrc: panoImgSrc,
 	mapData: mapData,
 	micConnected: micConnected,
-	musicPlaying: musicPlaying
+	musicPlaying: musicPlaying,
+  canDrop: canDrop
 });
 
 export default rootReducer;
