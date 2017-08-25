@@ -26,6 +26,9 @@ class NavBar extends React.Component {
   render() {
 
     return (
+      // <Navbar brand="Globo Walk" right>
+
+      // </Navbar>      
       // <nav className="white" role="navigation">
         <nav className="nav-wrapper blue">
           <div className="container">

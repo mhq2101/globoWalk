@@ -6,6 +6,11 @@ import Footer from './Footer';
 
 export default class Future_Home extends React.Component {
 
+  componentDidMount() {
+    // Needed for materialize
+    $('.parallax').parallax();
+  }
+
   render() {
 
     return (
