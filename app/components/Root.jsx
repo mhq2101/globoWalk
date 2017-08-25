@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import Audio from './Audio';
-import Home from './Home';
 import Future_Home from './Future_Home';
 import LocationSelection from './LocationSelection';
 import Login from './Login';
@@ -33,16 +32,6 @@ class Root extends React.Component {
 		return (
 			<div>
 				<Switch>
-					{/* <Route exact path='/' render={() => (
-						(this.props.auth.id) ? (
-							<div>
-								<Redirect to="/user" />
-							</div>
-						) : (
-								<Home />
-							)
-					)}
-					/> */}
 					<Route exact path='/' component={Future_Home} />
 					<Route exact path='/user' component={UserPage} />
 					<Route exact path='/login' render={() => (
