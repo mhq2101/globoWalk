@@ -50,15 +50,6 @@ class NavBar extends React.Component {
                       : <a href="/login">Login</a>
                     }
                 </li>
-                {/* <li>
-                    {
-                      this.props.auth && this.props.auth.name
-                      ? <span>{"Welcome, " + this.props.auth.name} 
-                          <a onClick={this.handleSubmitLogout}> Logout </a>
-                        </span>
-                      : <a href="/login">Login</a>
-                    }
-                </li> */}
               </ul>
 
               <ul className="side-nav blue" id="mobile-menu">
