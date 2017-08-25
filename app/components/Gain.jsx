@@ -10,7 +10,7 @@ export default class Gain extends React.Component {
       <div>
         <Row>
           <Col m={4} s={12}>
-            <h4>Volume</h4>
+            <h5>Volume</h5>
             <h5 className="tucked-list">
               <form>
                 <Input id="gain" s={12} type="range" defaultValue=".5" step=".01" min='0' max='1' onInput={(evt) => adjustGainValue(node, evt)}></Input>
