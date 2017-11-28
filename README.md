@@ -3,12 +3,12 @@
 
 VR app created by Mikhail Qader, David Geiss, Shaun Elabdouni, and Daniel Meisel
 
-Google Street View and A-Frame for Virtual Reality
-React for front-end development
-Redux for both client-side and server-side state management
-PostgreSQL for database querying and management
-Express for server-side RESTful api routing
-Web Sockets, WebRTC and the Web Audio Api for real time voice chatting and music experience sharing
+- Google Street View and A-Frame for Virtual Reality
+- React for front-end development
+- Redux for both client-side and server-side state management
+- PostgreSQL for database querying and management
+- Express for server-side RESTful api routing
+- Web Sockets, WebRTC and the Web Audio Api for real time voice chatting and music experience sharing
 
 visit globowalk.herokuapp.com to access the deployed version of our website!
 
